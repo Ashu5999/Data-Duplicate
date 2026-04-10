@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DDAS Dashboard - Duplicate Alert</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-container": "#c1e5f5",
+                        "inverse-on-surface": "#edf1f4",
+                        "tertiary-container": "#ca8531",
+                        "primary-fixed-dim": "#6ed3f7",
+                        "on-tertiary-fixed": "#2c1700",
+                        "outline": "#6e797e",
+                        "on-tertiary-fixed-variant": "#683d00",
+                        "surface-container-highest": "#dfe3e6",
+                        "surface-bright": "#f6fafd",
+                        "surface": "#f6fafd",
+                        "on-primary-fixed-variant": "#004d61",
+                        "background": "#f6fafd",
+                        "surface-container-high": "#e5e9eb",
+                        "surface-container-low": "#f0f4f7",
+                        "on-secondary-container": "#456775",
+                        "secondary-fixed": "#c4e8f8",
+                        "primary-fixed": "#b8eaff",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed": "#001f28",
+                        "surface-variant": "#dfe3e6",
+                        "secondary": "#416371",
+                        "on-surface-variant": "#3e484d",
+                        "tertiary-fixed-dim": "#ffb86a",
+                        "surface-tint": "#006780",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-container": "#30a0c2",
+                        "primary": "#006780",
+                        "inverse-surface": "#2c3133",
+                        "secondary-fixed-dim": "#a8ccdb",
+                        "on-secondary-fixed-variant": "#284b58",
+                        "error-container": "#ffdad6",
+                        "tertiary": "#895200",
+                        "surface-dim": "#d6dbdd",
+                        "on-primary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "on-surface": "#181c1e",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed": "#ffdcbc",
+                        "on-background": "#181c1e",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "inverse-primary": "#6ed3f7",
+                        "surface-container": "#eaeef1",
+                        "on-tertiary-container": "#442600",
+                        "on-secondary-fixed": "#001f28",
+                        "on-primary-container": "#00323f",
+                        "outline-variant": "#bdc8ce"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #f6fafd; }
+        .font-headline { font-family: 'Space Grotesk', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .glass-panel { backdrop-filter: blur(12px); background: rgba(246, 250, 253, 0.7); }
+        .modal-overlay { background: rgba(24, 28, 30, 0.6); backdrop-filter: blur(8px); }
+    </style>
+</head>
+<body class="overflow-hidden">
+<!-- Dashboard Content (Blurred behind Modal) -->
+<div class="flex h-screen bg-background">
+<!-- SideNavBar from JSON Shell -->
+<aside class="fixed left-0 top-0 h-full flex flex-col pt-4 bg-[#1A2340] w-64 shadow-2xl z-10">
+<div class="px-6 mb-8">
+<h1 class="text-2xl font-bold text-white font-headline">DDAS</h1>
+<p class="text-slate-400 text-[10px] uppercase tracking-widest font-bold">Data Engine</p>
+</div>
+<nav class="flex-1">
+<ul class="space-y-1">
+<li class="px-4">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-white/5 transition-all" href="Dashboard.html">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-xs font-bold uppercase tracking-widest font-label">Dashboard</span>
+</a>
+</li>
+<li class="px-4">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-white/5 transition-all" href="Upload.html">
+<span class="material-symbols-outlined">folder_open</span>
+<span class="text-xs font-bold uppercase tracking-widest font-label">Upload/Download</span>
+</a>
+</li>
+<li class="px-4">
+<a class="flex items-center gap-3 px-4 py-3 bg-[#028dae]/10 text-[#028dae] border-r-4 border-[#028dae] transition-all translate-x-1 duration-200" href="Alert.html">
+<span class="material-symbols-outlined">report_problem</span>
+<span class="text-xs font-bold uppercase tracking-widest font-label">Alerts</span>
+</a>
+</li>
+<li class="px-4">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-white/5 transition-all" href="Admin.html">
+<span class="material-symbols-outlined">admin_panel_settings</span>
+<span class="text-xs font-bold uppercase tracking-widest font-label">Admin Panel</span>
+</a>
+</li>
+<li class="px-4 mt-auto pt-6 border-t border-white/10">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-white/5 transition-all" href="Index.html">
+<span class="material-symbols-outlined">logout</span>
+<span class="text-xs font-bold uppercase tracking-widest font-label">Logout</span>
+</a>
+</li>
+</ul>
+</nav>
+</aside>
+<!-- Main Canvas Area -->
+<main class="ml-64 flex-1 flex flex-col relative overflow-hidden">
+<!-- TopNavBar from JSON Shell -->
+<header class="flex justify-between items-center px-6 w-full h-16 bg-white dark:bg-[#73787a] docked full-width top-0 z-20">
+<div class="flex items-center gap-4 flex-1">
+<span class="text-xl font-bold text-[#028dae] font-headline">DDAS Dashboard</span>
+<div class="relative w-64 ml-4">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+<input class="w-full pl-10 pr-4 py-1.5 bg-slate-50 border-none rounded-lg text-sm focus:ring-1 focus:ring-[#028dae]" placeholder="Search data points..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-500 hover:bg-slate-100 rounded-full transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-slate-500 hover:bg-slate-100 rounded-full transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-slate-200 overflow-hidden ml-2">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="Close-up professional portrait of a male researcher in a modern office environment with soft natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkC1kEysSq4f-GCoEFXBJcagCB93qTlyGayPOPQRvODEXiUbudJ5kYQX1Fd8wWps1GvPMk8PF4dcUtkrq9PF0AOdXrs9a27KIuCPnwTPtjdEymuoaxSTk6eSsIGl9606IglAS66MiwQErSy9ac5Js-pNWXs_DRR6FNSqgHrNdOvXrVx3Uf8dZPHeG-WNNjYSBZQu_oQ60RAEiAAtB3ODD5Vb9ZcpAQ81oa_GsEy-TdPJJy5Ep__lTzO30m5oxfA2LvJWsO_I-gNT4"/>
+</div>
+</div>
+</header>
+<!-- Dashboard Mockup Content (Bento Grid) -->
+<section class="p-8 space-y-8 opacity-50 select-none pointer-events-none">
+<div class="grid grid-cols-12 gap-6">
+<div class="col-span-8 bg-white p-6 rounded-xl border border-outline-variant/15">
+<div class="flex justify-between items-center mb-6">
+<h2 class="font-headline text-lg font-medium text-on-surface">Data Processing Streams</h2>
+<span class="text-xs font-label text-primary font-bold uppercase tracking-widest">Live Updates</span>
+</div>
+<div class="h-48 bg-slate-50 rounded-lg flex items-end p-4 gap-2">
+<!-- Mock Bars -->
+<div class="flex-1 bg-primary/20 h-[40%] rounded-sm"></div>
+<div class="flex-1 bg-primary/40 h-[60%] rounded-sm"></div>
+<div class="flex-1 bg-primary/60 h-[50%] rounded-sm"></div>
+<div class="flex-1 bg-primary/80 h-[80%] rounded-sm"></div>
+<div class="flex-1 bg-primary h-[95%] rounded-sm"></div>
+</div>
+</div>
+<div class="col-span-4 bg-white p-6 rounded-xl border border-outline-variant/15 flex flex-col justify-center items-center">
+<div class="w-32 h-32 rounded-full border-8 border-secondary-container border-t-primary animate-spin-slow"></div>
+<p class="mt-4 font-headline text-2xl font-bold text-on-surface">87.4%</p>
+<p class="text-on-surface-variant text-sm">Storage Capacity</p>
+</div>
+</div>
+<div class="grid grid-cols-4 gap-6">
+<div class="bg-white p-5 rounded-xl border border-outline-variant/15">
+<p class="text-on-surface-variant text-xs font-bold uppercase">Files Processed</p>
+<h3 class="font-headline text-2xl font-bold text-on-surface mt-1">1,284</h3>
+</div>
+<div class="bg-white p-5 rounded-xl border border-outline-variant/15">
+<p class="text-on-surface-variant text-xs font-bold uppercase">Active Nodes</p>
+<h3 class="font-headline text-2xl font-bold text-on-surface mt-1">12</h3>
+</div>
+<div class="bg-white p-5 rounded-xl border border-outline-variant/15">
+<p class="text-on-surface-variant text-xs font-bold uppercase">Uptime</p>
+<h3 class="font-headline text-2xl font-bold text-on-surface mt-1">99.98%</h3>
+</div>
+<div class="bg-white p-5 rounded-xl border border-outline-variant/15">
+<p class="text-on-surface-variant text-xs font-bold uppercase">Security Score</p>
+<h3 class="font-headline text-2xl font-bold text-on-surface mt-1">A+</h3>
+</div>
+</div>
+</section>
+</main>
+</div>
+<!-- Duplicate Detected Alert Modal Overlay -->
+<div class="fixed inset-0 z-50 flex items-center justify-center modal-overlay">
+<div class="w-[520px] bg-white rounded-xl shadow-2xl overflow-hidden flex flex-col border-t-4 border-[#DC2626]">
+<!-- Top Section -->
+<div class="pt-10 pb-6 px-8 flex flex-col items-center text-center">
+<div class="w-16 h-16 bg-[#FEF2F2] rounded-full flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-[#DC2626] text-4xl" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<h2 class="text-2xl font-bold text-[#1A2340] font-headline">Duplicate Detected!</h2>
+<p class="text-[#64748B] text-sm mt-1">This dataset already exists in the institute repository</p>
+</div>
+<!-- File Details Box -->
+<div class="mx-8 mb-8 bg-[#F1F5F9] border-l-[3px] border-[#00E5FF] rounded-r-lg p-5">
+<div class="space-y-3">
+<div class="flex justify-between text-xs">
+<span class="text-[#64748B]">File Name</span>
+<span class="text-[#1A2340] font-semibold">climate_data_2024_Q1.nc</span>
+</div>
+<div class="flex justify-between text-xs">
+<span class="text-[#64748B]">File Size</span>
+<span class="text-[#1A2340] font-semibold">2.3 GB</span>
+</div>
+<div class="flex justify-between text-xs">
+<span class="text-[#64748B]">Uploaded By</span>
+<span class="text-[#1A2340] font-semibold">Dr. Sharma</span>
+</div>
+<div class="flex justify-between text-xs">
+<span class="text-[#64748B]">Department</span>
+<span class="text-[#1A2340] font-semibold">Research and Development</span>
+</div>
+<div class="flex justify-between text-xs">
+<span class="text-[#64748B]">Upload Date</span>
+<span class="text-[#1A2340] font-semibold">April 1 2024</span>
+</div>
+<div class="flex justify-between text-xs">
+<span class="text-[#64748B]">Location</span>
+<span class="text-[#1A2340] font-semibold font-mono">/institute/repo/climate/2024/Q1/</span>
+</div>
+<div class="flex justify-between text-xs">
+<span class="text-[#64748B]">Spatial Domain</span>
+<span class="text-[#1A2340] font-semibold">South Asia</span>
+</div>
+<div class="flex justify-between text-xs">
+<span class="text-[#64748B]">Time Period</span>
+<span class="text-[#1A2340] font-semibold">Jan - Mar 2024</span>
+</div>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex gap-4 px-8 pb-10">
+<button class="flex-1 h-12 bg-white border border-[#E2E8F5] text-[#1A2340] font-semibold rounded-lg hover:bg-slate-50 transition-colors">
+                    Cancel Download
+                </button>
+<button class="flex-1 h-12 bg-[#00E5FF] text-[#1A2340] font-bold rounded-lg flex items-center justify-center gap-2 hover:bg-[#00cce3] transition-colors">
+                    Proceed Anyway
+                    <span class="material-symbols-outlined text-xl">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</body></html>

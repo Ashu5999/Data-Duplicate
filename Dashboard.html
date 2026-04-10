@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DDAS Console - Enterprise Dashboard</title>
+<!-- Fonts & Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline": "#6b7a7d",
+                        "primary": "#006875",
+                        "on-error-container": "#93000a",
+                        "background": "#f8f9ff",
+                        "secondary-container": "#d0d9ff",
+                        "on-tertiary-container": "#4f5878",
+                        "surface-tint": "#006875",
+                        "on-primary-fixed": "#001f24",
+                        "on-background": "#171c23",
+                        "surface-variant": "#dee2ed",
+                        "on-surface": "#171c23",
+                        "on-surface-variant": "#3b494c",
+                        "on-primary-fixed-variant": "#004f58",
+                        "primary-container": "#00e5ff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error": "#ffffff",
+                        "tertiary": "#545d7d",
+                        "inverse-surface": "#2c3139",
+                        "surface-container": "#eaeef9",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed-dim": "#bdc5ea",
+                        "secondary": "#545d7d",
+                        "error": "#ba1a1a",
+                        "on-secondary": "#ffffff",
+                        "surface": "#f8f9ff",
+                        "secondary-fixed-dim": "#bdc5ea",
+                        "inverse-primary": "#00daf3",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#3d4665",
+                        "outline-variant": "#bac9cc",
+                        "surface-container-highest": "#dee2ed",
+                        "inverse-on-surface": "#edf1fc",
+                        "on-secondary-container": "#555e7e",
+                        "on-primary-container": "#00626e",
+                        "primary-fixed": "#9cf0ff",
+                        "secondary-fixed": "#dbe1ff",
+                        "surface-container-low": "#eff3fe",
+                        "surface-dim": "#d6dae5",
+                        "surface-bright": "#f8f9ff",
+                        "on-secondary-fixed": "#111a37",
+                        "surface-container-high": "#e4e8f3",
+                        "tertiary-container": "#c6cff5",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed-dim": "#00daf3",
+                        "on-secondary-fixed-variant": "#3d4665",
+                        "tertiary-fixed": "#dbe1ff",
+                        "on-tertiary-fixed": "#111a37"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface antialiased overflow-hidden">
+<!-- SideNavBar Shell -->
+<aside class="fixed left-0 top-0 h-screen w-[220px] bg-[#1A2340] shadow-xl z-50 flex flex-col h-full py-6">
+<div class="px-6 mb-10">
+<h1 class="text-xl font-bold text-white tracking-tighter">DDAS Enterprise</h1>
+<p class="text-[10px] text-slate-400 font-medium tracking-widest uppercase mt-1">Platform v2.4</p>
+</div>
+<nav class="flex-1 px-3 space-y-1">
+<!-- Active Navigation -->
+<a class="bg-[#00E5FF]/10 text-[#00E5FF] border-r-4 border-[#00E5FF] font-manrope text-sm font-medium tracking-wide flex items-center gap-3 px-4 py-3 scale-95 duration-150" href="Dashboard.html">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="text-slate-400 font-manrope text-sm font-medium tracking-wide flex items-center gap-3 px-4 py-3 hover:bg-white/5 hover:text-white transition-colors" href="Upload.html">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span>Analytics</span>
+</a>
+<a class="text-slate-400 font-manrope text-sm font-medium tracking-wide flex items-center gap-3 px-4 py-3 hover:bg-white/5 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+<span>Operations</span>
+</a>
+<a class="text-slate-400 font-manrope text-sm font-medium tracking-wide flex items-center gap-3 px-4 py-3 hover:bg-white/5 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span>Resources</span>
+</a>
+<a class="text-slate-400 font-manrope text-sm font-medium tracking-wide flex items-center gap-3 px-4 py-3 hover:bg-white/5 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+<a class="text-slate-400 font-manrope text-sm font-medium tracking-wide flex items-center gap-3 px-4 py-3 hover:bg-white/5 hover:text-white transition-colors" href="Admin.html">
+<span class="material-symbols-outlined" data-icon="admin_panel_settings">admin_panel_settings</span>
+<span>Admin Panel</span>
+</a>
+</nav>
+<div class="px-4 mt-auto">
+<button class="w-full bg-gradient-to-r from-[#006875] to-[#00E5FF] text-white py-3 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-[#00E5FF]/20">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+                New Initiative
+            </button>
+</div>
+</aside>
+<!-- Main Content Wrapper -->
+<div class="ml-[220px] h-screen flex flex-col relative overflow-y-auto">
+<!-- TopNavBar Shell -->
+<header class="fixed top-0 right-0 w-[calc(100%-220px)] h-16 bg-[#F0F4FF]/80 backdrop-blur-md z-40 flex justify-between items-center px-8 border-none">
+<div class="flex items-center flex-1 max-w-xl">
+<div class="w-full relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+<input class="w-full bg-white border-none rounded-full py-2 pl-10 pr-4 text-sm font-inter focus:ring-2 focus:ring-[#00E5FF] transition-all shadow-sm" placeholder="Search enterprise data..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6 ml-4">
+<button class="relative text-on-surface-variant opacity-80 hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full border-2 border-[#F0F4FF]"></span>
+</button>
+<button class="text-on-surface-variant opacity-80 hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+</button>
+<div class="h-8 w-[1px] bg-outline-variant/30"></div>
+<div class="flex items-center gap-3">
+<div class="text-right">
+<p class="text-xs font-bold text-on-surface leading-none">Alex Sterling</p>
+<p class="text-[10px] text-on-surface-variant">Admin Level 4</p>
+</div>
+<img class="w-10 h-10 rounded-full border-2 border-white shadow-md object-cover" data-alt="Professional executive headshot with soft studio lighting and corporate background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDC7x3RJFzPHM0KaNOuWKheoXRtEK1-SdAccg-UIdqa4gr3ZeMqHO9MWiOg0KJnixsMy4dDWUIjfmUqP6m_8jOyZlWwyljP65pClrLTWDfjNSWRMslLwV-MW0AkwYbInBpljF4uPwyJZz6X8Bm6-7Vc6eB3fH9mbkGTveGvUIrmwz38WwCKHQkqfCMMOT7r4QvtVz-LBpeXXP5hjJCnp-9SeCq8EvSyjkKyPxOeuLVXeoG0tnhNR_gihWgDtNxDNVz9nMTzzIgIV5Y"/>
+</div>
+</div>
+</header>
+<!-- Page Content -->
+<main class="mt-16 p-8 bg-[#F0F4FF] flex-1 min-h-full">
+<!-- Initialize Sample Data and Load History -->
+<script>
+// Initialize sample datasets in localStorage
+function initializeSampleData() {
+    const datasets = [
+        {
+            name: 'climate_data_2024_Q1.nc',
+            size: '2.3 GB',
+            uploadedBy: 'Dr. Sharma',
+            date: '2024-04-01',
+            spatial: 'South Asia',
+            period: 'Jan-Mar 2024',
+            location: '/institute/repo/climate/2024/',
+            hash: 'a1b2c3d4e5f6a1b2c3d4e5f6'
+        },
+        {
+            name: 'satellite_imagery_india.tif',
+            size: '4.1 GB',
+            uploadedBy: 'Priya Patel',
+            date: '2024-03-28',
+            spatial: 'India',
+            period: '2023-2024',
+            location: '/institute/repo/satellite/',
+            hash: 'f6e5d4c3b2a1f6e5d4c3b2a1'
+        },
+        {
+            name: 'rainfall_data_2023.csv',
+            size: '45 MB',
+            uploadedBy: 'Amit Kumar',
+            date: '2024-03-25',
+            spatial: 'India',
+            period: '2023',
+            location: '/institute/repo/rainfall/',
+            hash: 'abc123def456abc123def456'
+        }
+    ];
+    
+    if (!localStorage.getItem('ddas_datasets')) {
+        localStorage.setItem('ddas_datasets', JSON.stringify(datasets));
+    }
+}
+
+// Load and display download history
+function loadDownloadHistory() {
+    const datasets = JSON.parse(localStorage.getItem('ddas_datasets') || '[]');
+    const table = document.querySelector('tbody');
+    
+    if (table && datasets.length > 0) {
+        // Clear existing rows and populate with sample data
+        table.innerHTML = '';
+        
+        datasets.forEach((dataset, index) => {
+            const row = document.createElement('tr');
+            row.className = 'hover:bg-surface-container-low transition-colors group';
+            
+            const iconClass = dataset.name.includes('.nc') ? 'picture_as_pdf' : 
+                            dataset.name.includes('.tif') ? 'description' : 'table_chart';
+            const colorClass = dataset.name.includes('.nc') ? 'bg-red-100 text-red-600' : 
+                             dataset.name.includes('.tif') ? 'bg-blue-100 text-blue-600' : 'bg-amber-100 text-amber-600';
+            const statusClass = dataset.name.includes('.nc') ? 'bg-green-50 text-green-600 border-green-100' :
+                              dataset.name.includes('.tif') ? 'bg-green-50 text-green-600 border-green-100' : 'bg-green-50 text-green-600 border-green-100';
+            
+            row.innerHTML = `
+                <td class="px-6 py-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded ${colorClass} flex items-center justify-center">
+                            <span class="material-symbols-outlined text-lg" data-icon="${iconClass}">${iconClass}</span>
+                        </div>
+                        <div>
+                            <p class="text-sm font-semibold text-on-surface">${dataset.name}</p>
+                            <p class="text-[10px] text-on-surface-variant">${dataset.size} • Updated ${dataset.date}</p>
+                        </div>
+                    </div>
+                </td>
+                <td class="px-6 py-4">
+                    <span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${statusClass} uppercase">Clean</span>
+                </td>
+                <td class="px-6 py-4">
+                    <p class="text-xs text-on-surface font-medium">${dataset.uploadedBy}</p>
+                </td>
+                <td class="px-6 py-4 text-right">
+                    <button class="text-on-surface-variant hover:text-primary transition-colors">
+                        <span class="material-symbols-outlined" data-icon="download">download</span>
+                    </button>
+                </td>
+            `;
+            table.appendChild(row);
+        });
+    }
+    
+    // Update stats
+    updateStats(datasets);
+}
+
+function updateStats(datasets) {
+    // Update total downloads (would be based on real download count)
+    // For now using dataset count as proxy
+    const downloadCount = datasets.length * 5; // Mock calculation
+    const duplicatesBlocked = datasets.length * 2; // Mock calculation
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    initializeSampleData();
+    loadDownloadHistory();
+});
+</script>
+<!-- Breadcrumbs -->
+<div class="flex items-center gap-2 mb-6 text-on-surface-variant text-xs">
+<span class="font-medium">Home</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="font-bold text-primary">Enterprise Dashboard</span>
+</div>
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+<!-- Stat Card 1 -->
+<div class="bg-white p-6 rounded-xl shadow-[0_8px_30px_rgb(208,217,255,0.2)] border-none flex items-center justify-between group hover:translate-y-[-4px] transition-transform duration-300">
+<div>
+<p class="text-label-sm uppercase font-bold text-on-surface-variant tracking-wider text-[10px]">Total Assets</p>
+<h3 class="text-2xl font-extrabold text-[#171c23] mt-1">2,482</h3>
+<p class="text-xs text-primary font-semibold mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+                            +12.5%
+                        </p>
+</div>
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+</div>
+</div>
+<!-- Stat Card 2 -->
+<div class="bg-white p-6 rounded-xl shadow-[0_8px_30px_rgb(208,217,255,0.2)] border-none flex items-center justify-between group hover:translate-y-[-4px] transition-transform duration-300">
+<div>
+<p class="text-label-sm uppercase font-bold text-on-surface-variant tracking-wider text-[10px]">Active Cycles</p>
+<h3 class="text-2xl font-extrabold text-[#171c23] mt-1">142</h3>
+<p class="text-xs text-error font-semibold mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">trending_down</span>
+                            -3.2%
+                        </p>
+</div>
+<div class="w-12 h-12 rounded-full bg-secondary-container/30 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" data-icon="sync">sync</span>
+</div>
+</div>
+<!-- Stat Card 3 -->
+<div class="bg-white p-6 rounded-xl shadow-[0_8px_30px_rgb(208,217,255,0.2)] border-none flex items-center justify-between group hover:translate-y-[-4px] transition-transform duration-300">
+<div>
+<p class="text-label-sm uppercase font-bold text-on-surface-variant tracking-wider text-[10px]">Security Score</p>
+<h3 class="text-2xl font-extrabold text-[#171c23] mt-1">98.4</h3>
+<p class="text-xs text-primary font-semibold mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">verified_user</span>
+                            Optimal
+                        </p>
+</div>
+<div class="w-12 h-12 rounded-full bg-primary-container/20 flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+</div>
+</div>
+<!-- Stat Card 4 -->
+<div class="bg-white p-6 rounded-xl shadow-[0_8px_30px_rgb(208,217,255,0.2)] border-none flex items-center justify-between group hover:translate-y-[-4px] transition-transform duration-300">
+<div>
+<p class="text-label-sm uppercase font-bold text-on-surface-variant tracking-wider text-[10px]">Resource Utilization</p>
+<h3 class="text-2xl font-extrabold text-[#171c23] mt-1">84%</h3>
+<div class="w-24 h-1.5 bg-surface-container rounded-full mt-4 overflow-hidden">
+<div class="bg-[#00E5FF] h-full w-[84%]"></div>
+</div>
+</div>
+<div class="w-12 h-12 rounded-full bg-tertiary-container/30 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined" data-icon="bar_chart">bar_chart</span>
+</div>
+</div>
+</div>
+<!-- Bento Grid Main Content -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Large Table Section -->
+<div class="lg:col-span-2 bg-white rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] overflow-hidden flex flex-col">
+<div class="p-6 flex justify-between items-center border-none">
+<div>
+<h2 class="text-lg font-bold text-on-surface">Recent Downloads &amp; Transfers</h2>
+<p class="text-sm text-on-surface-variant">Global tracking of all initiative data</p>
+</div>
+<button class="text-primary text-sm font-semibold hover:bg-primary/5 px-4 py-2 rounded-lg transition-colors">View All Archive</button>
+</div>
+<div class="flex-1">
+<table class="w-full text-left">
+<thead class="bg-[#F1F5F9]">
+<tr>
+<th class="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Resource Name</th>
+<th class="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Status</th>
+<th class="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Origin</th>
+<th class="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container/50">
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-red-100 flex items-center justify-center text-red-600">
+<span class="material-symbols-outlined text-lg" data-icon="picture_as_pdf">picture_as_pdf</span>
+</div>
+<div>
+<p class="text-sm font-semibold text-on-surface">Q3_Strategic_Review.pdf</p>
+<p class="text-[10px] text-on-surface-variant">4.2 MB • Updated 2h ago</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-green-50 text-green-600 border border-green-100 uppercase">Clean</span>
+</td>
+<td class="px-6 py-4">
+<p class="text-xs text-on-surface font-medium">Node_Alpha_7</p>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="download">download</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-blue-100 flex items-center justify-center text-blue-600">
+<span class="material-symbols-outlined text-lg" data-icon="description">description</span>
+</div>
+<div>
+<p class="text-sm font-semibold text-on-surface">Compliance_Manifesto_V2.doc</p>
+<p class="text-[10px] text-on-surface-variant">1.8 MB • Updated 5h ago</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-red-50 text-red-600 border border-red-100 uppercase">Duplicate</span>
+</td>
+<td class="px-6 py-4">
+<p class="text-xs text-on-surface font-medium">Cloud_Proxy_West</p>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-amber-100 flex items-center justify-center text-amber-600">
+<span class="material-symbols-outlined text-lg" data-icon="table_chart">table_chart</span>
+</div>
+<div>
+<p class="text-sm font-semibold text-on-surface">Annual_Budget_2024.xls</p>
+<p class="text-[10px] text-on-surface-variant">12.5 MB • Updated Yesterday</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-green-50 text-green-600 border border-green-100 uppercase">Clean</span>
+</td>
+<td class="px-6 py-4">
+<p class="text-xs text-on-surface font-medium">Mainframe_Secure</p>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="share">share</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-purple-100 flex items-center justify-center text-purple-600">
+<span class="material-symbols-outlined text-lg" data-icon="folder_zip">folder_zip</span>
+</div>
+<div>
+<p class="text-sm font-semibold text-on-surface">Project_X_Protocols.zip</p>
+<p class="text-[10px] text-on-surface-variant">245 MB • Updated 2 days ago</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-green-50 text-green-600 border border-green-100 uppercase">Clean</span>
+</td>
+<td class="px-6 py-4">
+<p class="text-xs text-on-surface font-medium">Remote_Site_B</p>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="download">download</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Side Panel Insights -->
+<div class="space-y-6">
+<!-- Productivity Card -->
+<div class="bg-white p-6 rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,0.04)]">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-bold text-on-surface">Operational Status</h3>
+<span class="material-symbols-outlined text-primary" data-icon="info">info</span>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between items-center text-sm">
+<span class="text-on-surface-variant">CPU Load</span>
+<span class="font-bold">42%</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[42%]"></div>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="text-on-surface-variant">Memory Usage</span>
+<span class="font-bold">68%</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="bg-tertiary h-full w-[68%]"></div>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="text-on-surface-variant">Network Throughput</span>
+<span class="font-bold">91%</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="bg-[#00E5FF] h-full w-[91%]"></div>
+</div>
+</div>
+<button class="w-full mt-6 py-3 border border-outline-variant/30 rounded-xl text-sm font-semibold text-on-surface hover:bg-surface-container-low transition-colors">
+                            Full Health Report
+                        </button>
+</div>
+<!-- Promo/Action Card -->
+<div class="bg-[#1A2340] p-6 rounded-2xl relative overflow-hidden text-white shadow-xl">
+<div class="absolute -right-8 -top-8 w-32 h-32 bg-[#00E5FF]/10 rounded-full blur-2xl"></div>
+<div class="relative z-10">
+<span class="material-symbols-outlined text-[#00E5FF] text-3xl mb-4" data-icon="auto_awesome">auto_awesome</span>
+<h3 class="text-lg font-bold mb-2 leading-tight">Automate Initiatives</h3>
+<p class="text-xs text-slate-300 mb-6 leading-relaxed">Let our AI agent handle the boring data classification for your team.</p>
+<button class="w-full bg-[#00E5FF] text-[#1A2340] py-3 rounded-xl font-bold text-sm hover:brightness-110 transition-all">Enable Automation</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

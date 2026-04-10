@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DDAS Pro - Upload / Download</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-tint": "#006875",
+                        "primary-container": "#00e5ff",
+                        "on-primary": "#ffffff",
+                        "surface-bright": "#f8f9ff",
+                        "surface": "#f8f9ff",
+                        "on-surface-variant": "#3b494c",
+                        "primary-fixed": "#9cf0ff",
+                        "outline": "#6b7a7d",
+                        "tertiary": "#765a00",
+                        "secondary-fixed-dim": "#bdc5ea",
+                        "error-container": "#ffdad6",
+                        "surface-container-low": "#eff3fe",
+                        "inverse-primary": "#00daf3",
+                        "on-secondary-fixed": "#111a37",
+                        "on-secondary-fixed-variant": "#3d4665",
+                        "background": "#f8f9ff",
+                        "surface-container": "#eaeef9",
+                        "inverse-on-surface": "#edf1fc",
+                        "on-tertiary-fixed-variant": "#594400",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-tertiary-container": "#6f5500",
+                        "on-primary-container": "#00626e",
+                        "on-error-container": "#93000a",
+                        "surface-container-highest": "#dee2ed",
+                        "surface-container-high": "#e4e8f3",
+                        "outline-variant": "#bac9cc",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error": "#ffffff",
+                        "surface-dim": "#d6dae5",
+                        "secondary-fixed": "#dbe1ff",
+                        "on-primary-fixed": "#001f24",
+                        "on-secondary-container": "#555e7e",
+                        "on-surface": "#171c23",
+                        "tertiary-fixed": "#ffdf96",
+                        "on-primary-fixed-variant": "#004f58",
+                        "on-background": "#171c23",
+                        "tertiary-fixed-dim": "#f3bf26",
+                        "primary": "#006875",
+                        "on-tertiary-fixed": "#251a00",
+                        "inverse-surface": "#2c3139",
+                        "primary-fixed-dim": "#00daf3",
+                        "surface-variant": "#dee2ed",
+                        "secondary-container": "#d0d9ff",
+                        "tertiary-container": "#fec931",
+                        "secondary": "#545d7d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #F8F9FF; }
+        .font-headline { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+.custom-shadow { 
+  box-shadow: 0px 12px 32px rgba(26,35,64,0.06); 
+}
+    </style>
+</head>
+<body class="text-on-surface">
+<!-- SideNavBar -->
+<aside class="bg-[#1A2340] h-screen w-64 fixed left-0 top-0 flex flex-col h-full py-6 z-50">
+<div class="px-6 mb-10">
+<h1 class="text-[#00E5FF] font-black text-xl font-headline tracking-tight">DDAS Pro</h1>
+<p class="text-slate-400 text-xs font-label uppercase tracking-widest mt-1">Management Console</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center px-6 py-3 transition-colors duration-200 text-slate-400 hover:text-white hover:bg-white/5 group font-headline font-bold text-sm tracking-tight" href="Dashboard.html">
+<span class="material-symbols-outlined mr-3">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center px-6 py-3 transition-colors duration-200 bg-[#00E5FF]/10 text-[#00E5FF] border-r-4 border-[#00E5FF] font-headline font-bold text-sm tracking-tight" href="Upload.html">
+<span class="material-symbols-outlined mr-3">sync_alt</span>
+                Upload/Download
+            </a>
+<a class="flex items-center px-6 py-3 transition-colors duration-200 text-slate-400 hover:text-white hover:bg-white/5 group font-headline font-bold text-sm tracking-tight" href="#">
+<span class="material-symbols-outlined mr-3">history</span>
+                History
+            </a>
+<a class="flex items-center px-6 py-3 transition-colors duration-200 text-slate-400 hover:text-white hover:bg-white/5 group font-headline font-bold text-sm tracking-tight" href="Alert.html">
+<span class="material-symbols-outlined mr-3">notifications</span>
+                Alerts
+            </a>
+<a class="flex items-center px-6 py-3 transition-colors duration-200 text-slate-400 hover:text-white hover:bg-white/5 group font-headline font-bold text-sm tracking-tight" href="#">
+<span class="material-symbols-outlined mr-3">person</span>
+                Profile
+            </a>
+<a class="flex items-center px-6 py-3 transition-colors duration-200 text-slate-400 hover:text-white hover:bg-white/5 group font-headline font-bold text-sm tracking-tight" href="#">
+<span class="material-symbols-outlined mr-3">settings</span>
+                Settings
+            </a>
+<a class="flex items-center px-6 py-3 transition-colors duration-200 text-slate-400 hover:text-white hover:bg-white/5 group font-headline font-bold text-sm tracking-tight" href="Admin.html">
+<span class="material-symbols-outlined mr-3">admin_panel_settings</span>
+                Admin Panel
+            </a>
+</nav>
+<div class="px-6 pt-6 mt-auto border-t border-white/10">
+<a class="flex items-center py-3 text-slate-400 hover:text-white transition-colors duration-200 font-headline font-bold text-sm tracking-tight" href="Index.html">
+<span class="material-symbols-outlined mr-3">logout</span>
+                Logout
+            </a>
+</div>
+</aside>
+<!-- Main Content Shell -->
+<div class="ml-64 min-h-screen">
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] h-16 bg-white flex items-center justify-between px-8 z-40 transition-all duration-300">
+<div class="flex items-center gap-4">
+<div class="flex flex-col">
+<h2 class="text-[#1A2340] font-headline font-extrabold text-lg leading-tight">Upload / Download</h2>
+<p class="text-slate-500 text-xs font-body">Register or request datasets</p>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative group">
+<span class="absolute inset-y-0 left-3 flex items-center text-slate-400 group-focus-within:text-[#006875]">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-low border-none rounded-xl text-sm w-64 focus:ring-2 focus:ring-[#00E5FF]/20 focus:bg-white transition-all outline-none" placeholder="Search catalog..." type="text"/>
+</div>
+<div class="flex items-center gap-3">
+<button class="p-2 text-slate-500 hover:text-[#00E5FF] transition-colors">
+<span class="material-symbols-outlined">help</span>
+</button>
+<button class="p-2 text-slate-500 hover:text-[#00E5FF] transition-colors">
+<span class="material-symbols-outlined">apps</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-slate-200 overflow-hidden ml-2">
+<img alt="User Avatar" class="w-full h-full object-cover" data-alt="close up headshot of a professional man in a dark suite with a neutral background and clean lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC04NTskJxxADAsj14Xw7F7Vqgj6432Nzqw_k5LBY-ZJXcTCYypuGCqaQG4ImRMxAdMcHDxAz8reBXulLnRnebN4_SG7gqXx-_ZIqdxKlRWZSYUMoOzIk_nqHLghFhZk7-CYErcDVgGviZ9GoL3qK47b7aPcLf-TUkCYfB_AUAN9by7qtHwSCmUMZCL1KJFvD87NVQ09tRGqjgvx8EsrJrrlY0enC5_-wPTORKNX0BPGv_yBeUa1kkhQeEeSsPUIi17B4Nb9MviQXE"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Page Canvas -->
+<main class="mt-16 p-8 bg-[#F8F9FF]">
+<div class="grid grid-cols-12 gap-8 max-w-7xl mx-auto">
+<!-- LEFT CARD: Register a Dataset -->
+<section class="col-span-12 lg:col-span-7 bg-white rounded-xl shadow-[0px_12px_32px_rgba(26,35,64,0.06)] p-8">
+<div class="flex items-center gap-3 mb-8">
+<span class="material-symbols-outlined text-[#00E5FF] text-3xl" style="font-variation-settings: 'FILL' 1;">upload_file</span>
+<h3 class="text-xl font-headline font-extrabold text-[#1A2340]">Register a Dataset</h3>
+</div>
+<div class="mb-8">
+<div class="w-full h-48 border-2 border-dashed border-[#00E5FF]/40 bg-[#EFF8FF] rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-[#00E5FF] hover:bg-[#E1F3FF] transition-all group">
+<span class="material-symbols-outlined text-4xl text-[#00E5FF] mb-3 group-hover:scale-110 transition-transform">cloud_upload</span>
+<p class="text-[#006875] font-bold font-headline">Click to browse or drag and drop</p>
+<p class="text-slate-500 text-xs mt-1">Supports all file types (Max 2GB)</p>
+</div>
+</div>
+<div class="space-y-6">
+<div class="grid grid-cols-2 gap-6">
+<div class="col-span-2">
+<label class="block text-[10px] font-label font-bold text-slate-400 uppercase tracking-widest mb-1">Dataset Name</label>
+<input class="w-full bg-white border-b-2 border-slate-100 focus:border-[#006875] outline-none py-2 text-sm font-medium transition-colors" placeholder="e.g. Regional Satellite Imagery 2024" type="text"/>
+</div>
+<div class="col-span-2">
+<label class="block text-[10px] font-label font-bold text-slate-400 uppercase tracking-widest mb-1">Description</label>
+<textarea class="w-full bg-white border-b-2 border-slate-100 focus:border-[#006875] outline-none py-2 text-sm font-medium transition-colors resize-none" placeholder="Provide a detailed overview of the dataset contents..." rows="3"></textarea>
+</div>
+<div>
+<label class="block text-[10px] font-label font-bold text-slate-400 uppercase tracking-widest mb-1">Spatial Domain</label>
+<div class="relative">
+<span class="absolute left-0 top-2 material-symbols-outlined text-slate-400 text-lg">location_on</span>
+<input class="w-full bg-white border-b-2 border-slate-100 focus:border-[#006875] outline-none py-2 pl-7 text-sm font-medium transition-colors" placeholder="Lat/Long or Region" type="text"/>
+</div>
+</div>
+<div>
+<label class="block text-[10px] font-label font-bold text-slate-400 uppercase tracking-widest mb-1">Time Period</label>
+<div class="relative">
+<span class="absolute left-0 top-2 material-symbols-outlined text-slate-400 text-lg">calendar_today</span>
+<input class="w-full bg-white border-b-2 border-slate-100 focus:border-[#006875] outline-none py-2 pl-7 text-sm font-medium transition-colors" placeholder="Jan 2024 - Dec 2024" type="text"/>
+</div>
+</div>
+</div>
+<div class="bg-slate-50 p-4 rounded-lg flex items-center justify-between border border-slate-100">
+<div>
+<p class="text-[10px] font-label font-bold text-slate-400 uppercase tracking-widest mb-1">SHA-256 Hash</p>
+<p class="text-[#006875] font-mono text-xs truncate max-w-xs md:max-w-md" id="hashDisplay">Pending file selection...</p>
+</div>
+<span class="material-symbols-outlined text-slate-300">lock</span>
+</div>
+<button class="w-full bg-gradient-to-r from-[#006875] to-[#00E5FF] text-white py-4 rounded-xl font-headline font-extrabold flex items-center justify-center gap-2 shadow-lg shadow-[#00E5FF]/20 hover:shadow-xl hover:scale-[1.01] active:scale-95 transition-all">
+                            Register Dataset
+                            <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</section>
+<!-- RIGHT CARD: Check Before Download -->
+<section class="col-span-12 lg:col-span-5 bg-white rounded-xl shadow-[0px_12px_32px_rgba(26,35,64,0.06)] p-8 h-fit">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-[#00E5FF] text-3xl" style="font-variation-settings: 'FILL' 1;">find_in_page</span>
+<h3 class="text-xl font-headline font-extrabold text-[#1A2340]">Check Before Download</h3>
+</div>
+<p class="text-slate-500 text-sm mb-8 font-body leading-relaxed">
+                        Enter details to check if dataset already exists before downloading to prevent duplication and save bandwidth.
+                    </p>
+<div class="space-y-6">
+<div>
+<label class="block text-[10px] font-label font-bold text-slate-400 uppercase tracking-widest mb-1">Dataset Name or Keywords</label>
+<input class="w-full bg-white border-b-2 border-slate-100 focus:border-[#006875] outline-none py-2 text-sm font-medium transition-colors" placeholder="e.g. High-res imagery" type="text"/>
+</div>
+<div>
+<label class="block text-[10px] font-label font-bold text-slate-400 uppercase tracking-widest mb-1">Spatial Domain</label>
+<input class="w-full bg-white border-b-2 border-slate-100 focus:border-[#006875] outline-none py-2 text-sm font-medium transition-colors" placeholder="Region filter" type="text"/>
+</div>
+<div class="pb-4">
+<label class="block text-[10px] font-label font-bold text-slate-400 uppercase tracking-widest mb-1">Time Period</label>
+<input class="w-full bg-white border-b-2 border-slate-100 focus:border-[#006875] outline-none py-2 text-sm font-medium transition-colors" placeholder="Date range" type="text"/>
+</div>
+<button class="w-full border-2 border-[#00E5FF] text-[#006875] py-4 rounded-xl font-headline font-extrabold flex items-center justify-center gap-2 hover:bg-[#00E5FF]/10 transition-all active:scale-95">
+<span class="material-symbols-outlined text-[20px]">search</span>
+                            Check for Duplicates
+                        </button>
+</div>
+</section>
+<!-- RESULTS SECTION -->
+<div class="col-span-12 space-y-6">
+<!-- Alert Banner -->
+<div class="bg-[#FFE4E6] border-l-4 border-[#DC2626] p-4 rounded-lg flex items-center gap-4 shadow-sm">
+<span class="material-symbols-outlined text-[#DC2626]">warning</span>
+<p class="text-[#DC2626] font-bold font-headline">Duplicate Found</p>
+<p class="text-[#DC2626]/80 text-sm ml-auto font-medium">1 existing record matches your parameters.</p>
+</div>
+<!-- Result Card -->
+<div class="bg-white rounded-xl shadow-[0px_12px_32px_rgba(26,35,64,0.06)] border-l-8 border-[#00E5FF] overflow-hidden">
+<div class="p-6">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+<div>
+<h4 class="text-lg font-headline font-extrabold text-[#1A2340]">S_Imagery_North_Region_2023_Final.zip</h4>
+<p class="text-[#00E5FF] text-xs font-mono mt-1">/vol1/shared/imagery/2023/northern_sector/S_Imagery_North_Region_2023_Final.zip</p>
+</div>
+<div class="flex gap-2">
+<span class="bg-[#EFF8FF] text-[#006875] px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Spatial: 42°N, 12°E</span>
+<span class="bg-[#EFF8FF] text-[#006875] px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Time: Q4 2023</span>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-8 pt-6 border-t border-slate-50">
+<div>
+<p class="text-[10px] font-label font-bold text-slate-400 uppercase tracking-widest mb-1">File Size</p>
+<p class="text-[#1A2340] font-bold">1.42 GB</p>
+</div>
+<div>
+<p class="text-[10px] font-label font-bold text-slate-400 uppercase tracking-widest mb-1">Uploaded By</p>
+<p class="text-[#1A2340] font-bold">Sarah Jenkins</p>
+</div>
+<div>
+<p class="text-[10px] font-label font-bold text-slate-400 uppercase tracking-widest mb-1">Date Registered</p>
+<p class="text-[#1A2340] font-bold">Oct 14, 2023</p>
+</div>
+<div class="flex justify-end">
+<button class="bg-[#1A2340] text-white px-6 py-2 rounded-lg font-headline font-bold text-sm hover:bg-[#2C3139] transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">download</span>
+                                        Access File
+                                    </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Contextual HUD -->
+<div class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-white/80 backdrop-blur-xl border border-slate-200 px-6 py-3 rounded-full shadow-2xl flex items-center gap-8 z-50">
+<div class="flex items-center gap-2 text-[#006875] font-bold text-xs uppercase tracking-widest">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+            System Ready
+        </div>
+<div class="h-4 w-[1px] bg-slate-200"></div>
+<div class="flex items-center gap-6">
+<button class="text-slate-500 hover:text-[#00E5FF] transition-colors text-xs font-bold uppercase tracking-widest flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">info</span>
+                Help
+            </button>
+<button class="text-slate-500 hover:text-[#00E5FF] transition-colors text-xs font-bold uppercase tracking-widest flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">history</span>
+                Log
+            </button>
+</div>
+</div>
+<script>
+// Compute SHA-256 hash for uploaded file
+async function computeFileHash(file) {
+    const buffer = await file.arrayBuffer();
+    const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return hashHex;
+}
+
+// Handle file upload and hash computation
+async function handleFileUpload(file) {
+    if (!file) return;
+    
+    try {
+        const hash = await computeFileHash(file);
+        document.getElementById('hashDisplay').textContent = hash;
+        
+        // Check localStorage for duplicate
+        const existingDatasets = JSON.parse(localStorage.getItem('ddas_datasets') || '[]');
+        const isDuplicate = existingDatasets.some(d => d.hash === hash);
+        
+        if (isDuplicate) {
+            showDuplicateAlert(file);
+        } else {
+            // Save to localStorage if not duplicate
+            const newDataset = {
+                name: file.name,
+                size: formatFileSize(file.size),
+                uploadedBy: 'Current User',
+                date: new Date().toISOString().split('T')[0],
+                spatial: document.querySelector('input[placeholder="Lat/Long or Region"]')?.value || 'N/A',
+                period: document.querySelector('input[placeholder="Jan 2024 - Dec 2024"]')?.value || 'N/A',
+                location: '/institute/repo/uploads/',
+                hash: hash
+            };
+            existingDatasets.push(newDataset);
+            localStorage.setItem('ddas_datasets', JSON.stringify(existingDatasets));
+        }
+    } catch (error) {
+        console.error('Error computing hash:', error);
+    }
+}
+
+function formatFileSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes, k));
+    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+}
+
+function showDuplicateAlert(file) {
+    const existingDatasets = JSON.parse(localStorage.getItem('ddas_datasets') || '[]');
+    const hash = document.getElementById('hashDisplay').textContent;
+    const duplicate = existingDatasets.find(d => d.hash === hash);
+    
+    if (duplicate) {
+        alert(`Duplicate Detected!\n\nFile: ${duplicate.name}\nSize: ${duplicate.size}\nUploaded By: ${duplicate.uploadedBy}\nDate: ${duplicate.date}\nLocation: ${duplicate.location}`);
+    }
+}
+
+// Attach file upload handler
+document.addEventListener('DOMContentLoaded', function() {
+    const dropZone = document.querySelector('[class*="border-dashed"]');
+    if (dropZone) {
+        dropZone.addEventListener('click', function() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.onchange = (e) => handleFileUpload(e.target.files[0]);
+            input.click();
+        });
+        
+        // Drag and drop support
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('border-[#00E5FF]', 'bg-[#E1F3FF]');
+        });
+        
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('border-[#00E5FF]', 'bg-[#E1F3FF]');
+        });
+        
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('border-[#00E5FF]', 'bg-[#E1F3FF]');
+            if (e.dataTransfer.files[0]) {
+                handleFileUpload(e.dataTransfer.files[0]);
+            }
+        });
+    }
+});
+</script>
