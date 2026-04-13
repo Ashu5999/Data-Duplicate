@@ -3,7 +3,7 @@
 <html class="light" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>DDAS Console - Sign In</title>
+<title>DDAS - Sign In</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -17,28 +17,28 @@
                     "outline": "#6b7a7d",
                     "primary": "#006875",
                     "on-error-container": "#93000a",
-                    "background": "#f8f9ff",
+                    "background": "var(--background)",
                     "secondary-container": "#d0d9ff",
                     "on-tertiary-container": "#4f5878",
                     "surface-tint": "#006875",
                     "on-primary-fixed": "#001f24",
-                    "on-background": "#171c23",
+                    "on-background": "var(--on-background)",
                     "surface-variant": "#dee2ed",
-                    "on-surface": "#171c23",
-                    "on-surface-variant": "#3b494c",
+                    "on-surface": "var(--on-surface)",
+                    "on-surface-variant": "var(--on-surface-variant)",
                     "on-primary-fixed-variant": "#004f58",
                     "primary-container": "#00e5ff",
-                    "surface-container-lowest": "#ffffff",
+                    "surface-container-lowest": "var(--surface-container-lowest)",
                     "on-error": "#ffffff",
                     "tertiary": "#545d7d",
                     "inverse-surface": "#2c3139",
-                    "surface-container": "#eaeef9",
+                    "surface-container": "var(--surface-container)",
                     "on-primary": "#ffffff",
                     "tertiary-fixed-dim": "#bdc5ea",
                     "secondary": "#545d7d",
                     "error": "#ba1a1a",
                     "on-secondary": "#ffffff",
-                    "surface": "#f8f9ff",
+                    "surface": "var(--surface)",
                     "secondary-fixed-dim": "#bdc5ea",
                     "inverse-primary": "#00daf3",
                     "error-container": "#ffdad6",
@@ -50,11 +50,11 @@
                     "on-primary-container": "#00626e",
                     "primary-fixed": "#9cf0ff",
                     "secondary-fixed": "#dbe1ff",
-                    "surface-container-low": "#eff3fe",
+                    "surface-container-low": "var(--surface-container-low)",
                     "surface-dim": "#d6dae5",
-                    "surface-bright": "#f8f9ff",
+                    "surface-bright": "var(--surface-bright)",
                     "on-secondary-fixed": "#111a37",
-                    "surface-container-high": "#e4e8f3",
+                    "surface-container-high": "var(--surface-container-high)",
                     "tertiary-container": "#c6cff5",
                     "on-tertiary": "#ffffff",
                     "primary-fixed-dim": "#00daf3",
@@ -78,6 +78,18 @@
       }
     </script>
 <style>
+        :root {
+            --background: #f8f9ff;
+            --surface-container-lowest: #ffffff;
+            --surface-container: #eaeef9;
+            --surface-container-low: #eff3fe;
+            --surface-container-high: #e4e8f3;
+            --surface: #f8f9ff;
+            --surface-bright: #f8f9ff;
+            --on-surface: #171c23;
+            --on-surface-variant: #3b494c;
+            --on-background: #171c23;
+        }
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
             display: inline-block;
@@ -89,6 +101,17 @@
                 linear-gradient(to right, rgba(0, 104, 117, 0.05) 1px, transparent 1px),
                 linear-gradient(to bottom, rgba(0, 104, 117, 0.05) 1px, transparent 1px);
         }
+        .glass-effect {
+            backdrop-filter: blur(24px);
+            background: rgba(255, 255, 255, 0.8);
+        }
+        .dark main { background-color: #0A0F1E !important; }
+        .dark section { background-color: #141B2D !important; }
+        .dark .bg-white { background-color: #141B2D !important; }
+        .dark h2,.dark h3,.dark h4 { color: #FFFFFF !important; }
+        .dark p { color: #94A3B8 !important; }
+        .dark input { background-color: #1E2B42 !important; color: #E8EDF5 !important; }
+        .dark textarea { background-color: #1E2B42 !important; color: #E8EDF5 !important; }
         .glass-effect {
             backdrop-filter: blur(24px);
             background: rgba(255, 255, 255, 0.8);
@@ -108,7 +131,7 @@
 <span class="material-symbols-outlined text-on-primary-container text-4xl" data-icon="waves" style="font-variation-settings: 'FILL' 1;">waves</span>
 </div>
 <h1 class="font-headline text-3xl font-extrabold text-on-background tracking-tight mb-2">
-                DDAS Enterprise
+                DDAS
             </h1>
 <p class="text-on-surface-variant font-medium text-center max-w-[280px]">
                 Preventing duplicate downloads across your institute.
@@ -135,7 +158,7 @@
 <label class="block font-label text-[11px] font-bold uppercase tracking-wider text-on-surface-variant" for="password">
                             Security Key
                         </label>
-<a class="text-[11px] font-bold uppercase tracking-wider text-primary hover:text-primary-fixed-dim transition-colors" href="#">
+<a class="text-[11px] font-bold uppercase tracking-wider text-primary hover:text-primary-fixed-dim transition-colors" href="#" onclick="showForgotKeyAlert(event)">
                             Forgot Key?
                         </a>
 </div>
@@ -158,10 +181,11 @@
   class="w-full bg-gradient-to-r 
   from-primary to-primary-container 
   text-on-primary font-headline font-bold 
-  py-4 px-6 rounded-lg shadow-lg 
+  py-4 px-6 rounded-lg shadow-lg
+  onclick="window.location.href='Dashboard.html'" 
   shadow-primary/20 hover:shadow-xl 
   hover:shadow-primary/30 
-  active:scale-[0.98] transition-all 
+  active:scale-[0.98] transition-all  
   flex items-center justify-center gap-3"
   type="button"
   onclick="validateLogin()">
@@ -185,12 +209,12 @@
 <div class="mt-12 flex flex-col items-center gap-4">
 <div class="flex items-center gap-2 bg-surface-container py-2 px-4 rounded-full border border-outline-variant/10">
 <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
-<span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Systems Operational: Platform v2.4</span>
+<span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Systems Operational: Data Duplication Alert System</span>
 </div>
 <div class="flex gap-6 text-[11px] font-medium text-outline">
-<a class="hover:text-on-surface transition-colors" href="#">Privacy Protocol</a>
-<a class="hover:text-on-surface transition-colors" href="#">Data Compliance</a>
-<a class="hover:text-on-surface transition-colors" href="#">Enterprise Support</a>
+<a class="hover:text-on-surface transition-colors" href="#" onclick="showComingSoon(event)">Privacy Protocol</a>
+<a class="hover:text-on-surface transition-colors" href="#" onclick="showComingSoon(event)">Data Compliance</a>
+<a class="hover:text-on-surface transition-colors" href="#" onclick="showComingSoon(event)">Enterprise Support</a>
 </div>
 </div>
 </main>
@@ -225,5 +249,58 @@ function validateLogin() {
         window.location.href = 'Dashboard.html';
     }
 }
+
+function showForgotKeyAlert(event) {
+    event.preventDefault();
+    alert('Please contact your administrator');
+}
+
+function showComingSoon(event) {
+    event.preventDefault();
+    alert('Coming Soon!');
+}
+
+document.getElementById('darkModeToggle').addEventListener('click', function() {
+    document.documentElement.classList.toggle('dark');
+    const icon = document.getElementById('darkModeIcon');
+    if (document.documentElement.classList.contains('dark')) {
+        icon.textContent = 'light_mode';
+    } else {
+        icon.textContent = 'dark_mode';
+    }
+});
+</script>
+<!-- Dark Mode Toggle Button -->
+<div class="absolute top-4 right-4">
+    <button id="darkModeToggle" class="w-10 h-10 rounded-full flex items-center justify-center bg-surface-container hover:bg-surface-container-high transition-colors">
+        <span class="material-symbols-outlined text-on-surface-variant" id="darkModeIcon">dark_mode</span>
+    </button>
+</div>
+<script>
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const darkModeIcon = document.getElementById('darkModeIcon');
+    const html = document.documentElement;
+
+    const applyTheme = (theme) => {
+        if (theme === 'dark') {
+            html.classList.add('dark');
+            darkModeIcon.textContent = 'light_mode';
+        } else {
+            html.classList.remove('dark');
+            darkModeIcon.textContent = 'dark_mode';
+        }
+    };
+
+    darkModeToggle.addEventListener('click', () => {
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        localStorage.setItem('theme', newTheme);
+        applyTheme(newTheme);
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        applyTheme(savedTheme);
+    });
 </script>
 </body></html>

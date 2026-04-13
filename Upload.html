@@ -3,7 +3,7 @@
 <html class="light" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>DDAS Pro - Upload / Download</title>
+<title>DDAS - Upload / Download</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -17,20 +17,20 @@
                         "surface-tint": "#006875",
                         "primary-container": "#00e5ff",
                         "on-primary": "#ffffff",
-                        "surface-bright": "#f8f9ff",
-                        "surface": "#f8f9ff",
-                        "on-surface-variant": "#3b494c",
+                        "surface-bright": "var(--surface-bright)",
+                        "surface": "var(--surface)",
+                        "on-surface-variant": "var(--on-surface-variant)",
                         "primary-fixed": "#9cf0ff",
                         "outline": "#6b7a7d",
                         "tertiary": "#765a00",
                         "secondary-fixed-dim": "#bdc5ea",
                         "error-container": "#ffdad6",
-                        "surface-container-low": "#eff3fe",
+                        "surface-container-low": "var(--surface-container-low)",
                         "inverse-primary": "#00daf3",
                         "on-secondary-fixed": "#111a37",
                         "on-secondary-fixed-variant": "#3d4665",
-                        "background": "#f8f9ff",
-                        "surface-container": "#eaeef9",
+                        "background": "var(--background)",
+                        "surface-container": "var(--surface-container)",
                         "inverse-on-surface": "#edf1fc",
                         "on-tertiary-fixed-variant": "#594400",
                         "on-tertiary": "#ffffff",
@@ -40,18 +40,18 @@
                         "on-primary-container": "#00626e",
                         "on-error-container": "#93000a",
                         "surface-container-highest": "#dee2ed",
-                        "surface-container-high": "#e4e8f3",
+                        "surface-container-high": "var(--surface-container-high)",
                         "outline-variant": "#bac9cc",
-                        "surface-container-lowest": "#ffffff",
+                        "surface-container-lowest": "var(--surface-container-lowest)",
                         "on-error": "#ffffff",
-                        "surface-dim": "#d6dae5",
+                        "surface-dim": "var(--surface-dim)",
                         "secondary-fixed": "#dbe1ff",
                         "on-primary-fixed": "#001f24",
                         "on-secondary-container": "#555e7e",
-                        "on-surface": "#171c23",
+                        "on-surface": "var(--on-surface)",
                         "tertiary-fixed": "#ffdf96",
                         "on-primary-fixed-variant": "#004f58",
-                        "on-background": "#171c23",
+                        "on-background": "var(--on-background)",
                         "tertiary-fixed-dim": "#f3bf26",
                         "primary": "#006875",
                         "on-tertiary-fixed": "#251a00",
@@ -78,56 +78,49 @@
         }
     </script>
 <style>
-        body { font-family: 'Inter', sans-serif; background-color: #F8F9FF; }
+        :root {
+            --background: #f8f9ff;
+            --surface-container-lowest: #ffffff;
+            --surface-container: #eaeef9;
+            --surface-container-low: #eff3fe;
+            --surface-container-high: #e4e8f3;
+            --surface: #f8f9ff;
+            --surface-bright: #f8f9ff;
+            --surface-dim: #d6dae5;
+            --on-surface: #171c23;
+            --on-surface-variant: #3b494c;
+            --on-background: #171c23;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: var(--background); }
         .font-headline { font-family: 'Manrope', sans-serif; }
         .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-.custom-shadow { 
-  box-shadow: 0px 12px 32px rgba(26,35,64,0.06); 
-}
+        .custom-shadow { 
+          box-shadow: 0px 12px 32px rgba(26,35,64,0.06); 
+        }
     </style>
 </head>
 <body class="text-on-surface">
 <!-- SideNavBar -->
 <aside class="bg-[#1A2340] h-screen w-64 fixed left-0 top-0 flex flex-col h-full py-6 z-50">
 <div class="px-6 mb-10">
-<h1 class="text-[#00E5FF] font-black text-xl font-headline tracking-tight">DDAS Pro</h1>
+<h1 class="text-[#00E5FF] font-black text-xl font-headline tracking-tight">DDAS</h1>
 <p class="text-slate-400 text-xs font-label uppercase tracking-widest mt-1">Management Console</p>
 </div>
 <nav class="flex-1 space-y-1">
-<a class="flex items-center px-6 py-3 transition-colors duration-200 text-slate-400 hover:text-white hover:bg-white/5 group font-headline font-bold text-sm tracking-tight" href="Dashboard.html">
+<a class="flex items-center px-6 py-3 transition-colors duration-200 text-slate-400 hover:text-white hover:bg-white/5 font-headline font-bold text-sm tracking-tight" href="Dashboard.html">
 <span class="material-symbols-outlined mr-3">dashboard</span>
-                Dashboard
-            </a>
+Dashboard
+</a>
 <a class="flex items-center px-6 py-3 transition-colors duration-200 bg-[#00E5FF]/10 text-[#00E5FF] border-r-4 border-[#00E5FF] font-headline font-bold text-sm tracking-tight" href="Upload.html">
 <span class="material-symbols-outlined mr-3">sync_alt</span>
-                Upload/Download
-            </a>
-<a class="flex items-center px-6 py-3 transition-colors duration-200 text-slate-400 hover:text-white hover:bg-white/5 group font-headline font-bold text-sm tracking-tight" href="#">
-<span class="material-symbols-outlined mr-3">history</span>
-                History
-            </a>
-<a class="flex items-center px-6 py-3 transition-colors duration-200 text-slate-400 hover:text-white hover:bg-white/5 group font-headline font-bold text-sm tracking-tight" href="Alert.html">
-<span class="material-symbols-outlined mr-3">notifications</span>
-                Alerts
-            </a>
-<a class="flex items-center px-6 py-3 transition-colors duration-200 text-slate-400 hover:text-white hover:bg-white/5 group font-headline font-bold text-sm tracking-tight" href="#">
-<span class="material-symbols-outlined mr-3">person</span>
-                Profile
-            </a>
-<a class="flex items-center px-6 py-3 transition-colors duration-200 text-slate-400 hover:text-white hover:bg-white/5 group font-headline font-bold text-sm tracking-tight" href="#">
-<span class="material-symbols-outlined mr-3">settings</span>
-                Settings
-            </a>
-<a class="flex items-center px-6 py-3 transition-colors duration-200 text-slate-400 hover:text-white hover:bg-white/5 group font-headline font-bold text-sm tracking-tight" href="Admin.html">
-<span class="material-symbols-outlined mr-3">admin_panel_settings</span>
-                Admin Panel
-            </a>
+Upload/Download
+</a>
 </nav>
 <div class="px-6 pt-6 mt-auto border-t border-white/10">
-<a class="flex items-center py-3 text-slate-400 hover:text-white transition-colors duration-200 font-headline font-bold text-sm tracking-tight" href="Index.html">
+<a class="flex items-center px-6 py-3 transition-colors duration-200 text-slate-400 hover:text-white font-headline font-bold text-sm tracking-tight" href="Index.html">
 <span class="material-symbols-outlined mr-3">logout</span>
-                Logout
-            </a>
+Logout
+</a>
 </div>
 </aside>
 <!-- Main Content Shell -->
@@ -147,16 +140,8 @@
 </span>
 <input class="pl-10 pr-4 py-2 bg-surface-container-low border-none rounded-xl text-sm w-64 focus:ring-2 focus:ring-[#00E5FF]/20 focus:bg-white transition-all outline-none" placeholder="Search catalog..." type="text"/>
 </div>
-<div class="flex items-center gap-3">
-<button class="p-2 text-slate-500 hover:text-[#00E5FF] transition-colors">
-<span class="material-symbols-outlined">help</span>
-</button>
-<button class="p-2 text-slate-500 hover:text-[#00E5FF] transition-colors">
-<span class="material-symbols-outlined">apps</span>
-</button>
 <div class="h-8 w-8 rounded-full bg-slate-200 overflow-hidden ml-2">
 <img alt="User Avatar" class="w-full h-full object-cover" data-alt="close up headshot of a professional man in a dark suite with a neutral background and clean lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC04NTskJxxADAsj14Xw7F7Vqgj6432Nzqw_k5LBY-ZJXcTCYypuGCqaQG4ImRMxAdMcHDxAz8reBXulLnRnebN4_SG7gqXx-_ZIqdxKlRWZSYUMoOzIk_nqHLghFhZk7-CYErcDVgGviZ9GoL3qK47b7aPcLf-TUkCYfB_AUAN9by7qtHwSCmUMZCL1KJFvD87NVQ09tRGqjgvx8EsrJrrlY0enC5_-wPTORKNX0BPGv_yBeUa1kkhQeEeSsPUIi17B4Nb9MviQXE"/>
-</div>
 </div>
 </div>
 </header>
@@ -170,34 +155,36 @@
 <h3 class="text-xl font-headline font-extrabold text-[#1A2340]">Register a Dataset</h3>
 </div>
 <div class="mb-8">
-<div class="w-full h-48 border-2 border-dashed border-[#00E5FF]/40 bg-[#EFF8FF] rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-[#00E5FF] hover:bg-[#E1F3FF] transition-all group">
+<div class="w-full h-48 border-2 border-dashed border-[#00E5FF]/40 bg-[#EFF8FF] rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-[#00E5FF] hover:bg-[#E1F3FF] transition-all group" id="dropZone" onclick="document.getElementById('fileInput').click()">
 <span class="material-symbols-outlined text-4xl text-[#00E5FF] mb-3 group-hover:scale-110 transition-transform">cloud_upload</span>
 <p class="text-[#006875] font-bold font-headline">Click to browse or drag and drop</p>
 <p class="text-slate-500 text-xs mt-1">Supports all file types (Max 2GB)</p>
+<p class="text-[#006875] font-mono text-xs mt-2" id="fileName" style="display:none;"></p>
 </div>
+<input type="file" id="fileInput" style="display:none;" onchange="handleFileSelect(event)"/>
 </div>
 <div class="space-y-6">
 <div class="grid grid-cols-2 gap-6">
 <div class="col-span-2">
 <label class="block text-[10px] font-label font-bold text-slate-400 uppercase tracking-widest mb-1">Dataset Name</label>
-<input class="w-full bg-white border-b-2 border-slate-100 focus:border-[#006875] outline-none py-2 text-sm font-medium transition-colors" placeholder="e.g. Regional Satellite Imagery 2024" type="text"/>
+<input class="w-full bg-white border-b-2 border-slate-100 focus:border-[#006875] outline-none py-2 text-sm font-medium transition-colors" placeholder="e.g. Regional Satellite Imagery 2024" type="text" id="datasetName"/>
 </div>
 <div class="col-span-2">
 <label class="block text-[10px] font-label font-bold text-slate-400 uppercase tracking-widest mb-1">Description</label>
-<textarea class="w-full bg-white border-b-2 border-slate-100 focus:border-[#006875] outline-none py-2 text-sm font-medium transition-colors resize-none" placeholder="Provide a detailed overview of the dataset contents..." rows="3"></textarea>
+<textarea class="w-full bg-white border-b-2 border-slate-100 focus:border-[#006875] outline-none py-2 text-sm font-medium transition-colors resize-none" placeholder="Provide a detailed overview of the dataset contents..." rows="3" id="datasetDesc"></textarea>
 </div>
 <div>
 <label class="block text-[10px] font-label font-bold text-slate-400 uppercase tracking-widest mb-1">Spatial Domain</label>
 <div class="relative">
 <span class="absolute left-0 top-2 material-symbols-outlined text-slate-400 text-lg">location_on</span>
-<input class="w-full bg-white border-b-2 border-slate-100 focus:border-[#006875] outline-none py-2 pl-7 text-sm font-medium transition-colors" placeholder="Lat/Long or Region" type="text"/>
+<input class="w-full bg-white border-b-2 border-slate-100 focus:border-[#006875] outline-none py-2 pl-7 text-sm font-medium transition-colors" placeholder="Lat/Long or Region" type="text" id="spatialDomain"/>
 </div>
 </div>
 <div>
 <label class="block text-[10px] font-label font-bold text-slate-400 uppercase tracking-widest mb-1">Time Period</label>
 <div class="relative">
 <span class="absolute left-0 top-2 material-symbols-outlined text-slate-400 text-lg">calendar_today</span>
-<input class="w-full bg-white border-b-2 border-slate-100 focus:border-[#006875] outline-none py-2 pl-7 text-sm font-medium transition-colors" placeholder="Jan 2024 - Dec 2024" type="text"/>
+<input class="w-full bg-white border-b-2 border-slate-100 focus:border-[#006875] outline-none py-2 pl-7 text-sm font-medium transition-colors" placeholder="Jan 2024 - Dec 2024" type="text" id="timePeriod"/>
 </div>
 </div>
 </div>
@@ -208,7 +195,8 @@
 </div>
 <span class="material-symbols-outlined text-slate-300">lock</span>
 </div>
-<button class="w-full bg-gradient-to-r from-[#006875] to-[#00E5FF] text-white py-4 rounded-xl font-headline font-extrabold flex items-center justify-center gap-2 shadow-lg shadow-[#00E5FF]/20 hover:shadow-xl hover:scale-[1.01] active:scale-95 transition-all">
+<div id="registerError" class="text-red-600 text-xs font-semibold hidden">Please fill in all fields</div>
+<button class="w-full bg-gradient-to-r from-[#006875] to-[#00E5FF] text-white py-4 rounded-xl font-headline font-extrabold flex items-center justify-center gap-2 shadow-lg shadow-[#00E5FF]/20 hover:shadow-xl hover:scale-[1.01] active:scale-95 transition-all" onclick="registerDataset()">
                             Register Dataset
                             <span class="material-symbols-outlined">arrow_forward</span>
 </button>
@@ -226,20 +214,21 @@
 <div class="space-y-6">
 <div>
 <label class="block text-[10px] font-label font-bold text-slate-400 uppercase tracking-widest mb-1">Dataset Name or Keywords</label>
-<input class="w-full bg-white border-b-2 border-slate-100 focus:border-[#006875] outline-none py-2 text-sm font-medium transition-colors" placeholder="e.g. High-res imagery" type="text"/>
+<input class="w-full bg-white border-b-2 border-slate-100 focus:border-[#006875] outline-none py-2 text-sm font-medium transition-colors" placeholder="e.g. High-res imagery" type="text" id="searchKeyword"/>
 </div>
 <div>
 <label class="block text-[10px] font-label font-bold text-slate-400 uppercase tracking-widest mb-1">Spatial Domain</label>
-<input class="w-full bg-white border-b-2 border-slate-100 focus:border-[#006875] outline-none py-2 text-sm font-medium transition-colors" placeholder="Region filter" type="text"/>
+<input class="w-full bg-white border-b-2 border-slate-100 focus:border-[#006875] outline-none py-2 text-sm font-medium transition-colors" placeholder="Region filter" type="text" id="searchSpatial"/>
 </div>
 <div class="pb-4">
 <label class="block text-[10px] font-label font-bold text-slate-400 uppercase tracking-widest mb-1">Time Period</label>
-<input class="w-full bg-white border-b-2 border-slate-100 focus:border-[#006875] outline-none py-2 text-sm font-medium transition-colors" placeholder="Date range" type="text"/>
+<input class="w-full bg-white border-b-2 border-slate-100 focus:border-[#006875] outline-none py-2 text-sm font-medium transition-colors" placeholder="Date range" type="text" id="searchPeriod"/>
 </div>
-<button class="w-full border-2 border-[#00E5FF] text-[#006875] py-4 rounded-xl font-headline font-extrabold flex items-center justify-center gap-2 hover:bg-[#00E5FF]/10 transition-all active:scale-95">
+<button class="w-full border-2 border-[#00E5FF] text-[#006875] py-4 rounded-xl font-headline font-extrabold flex items-center justify-center gap-2 hover:bg-[#00E5FF]/10 transition-all active:scale-95" onclick="checkForDuplicates()">
 <span class="material-symbols-outlined text-[20px]">search</span>
                             Check for Duplicates
                         </button>
+<div id="searchResults" class="text-sm mt-4 hidden bg-green-50 p-3 rounded text-green-700">No duplicates found! Safe to download</div>
 </div>
 </section>
 <!-- RESULTS SECTION -->
@@ -399,4 +388,108 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+</script>
+<script>
+// File handling and hash computation
+async function handleFileSelect(event) {
+    const file = event.target.files[0];
+    if (file) {
+        document.getElementById('fileName').textContent = 'Selected: ' + file.name;
+        document.getElementById('fileName').style.display = 'block';
+        await computeAndDisplayHash(file);
+    }
+}
+
+async function computeAndDisplayHash(file) {
+    try {
+        const buffer = await file.arrayBuffer();
+        const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        document.getElementById('hashDisplay').textContent = hashHex;
+    } catch (error) {
+        console.error('Error computing hash:', error);
+    }
+}
+
+function registerDataset() {
+    const name = document.getElementById('datasetName').value;
+    const desc = document.getElementById('datasetDesc').value;
+    const spatial = document.getElementById('spatialDomain').value;
+    const period = document.getElementById('timePeriod').value;
+    const hash = document.getElementById('hashDisplay').textContent;
+    const errorDiv = document.getElementById('registerError');
+    
+    if (!name || !desc || !spatial || !period || hash === 'Pending file selection...') {
+        errorDiv.classList.remove('hidden');
+        return;
+    }
+    
+    errorDiv.classList.add('hidden');
+    
+    // Save to localStorage
+    const datasets = JSON.parse(localStorage.getItem('ddas_datasets') || '[]');
+    const newDataset = {
+        name: name,
+        size: 'New',
+        uploadedBy: 'Current User',
+        date: new Date().toISOString().split('T')[0],
+        spatial: spatial,
+        period: period,
+        location: '/institute/repo/uploads/',
+        hash: hash
+    };
+    datasets.push(newDataset);
+    localStorage.setItem('ddas_datasets', JSON.stringify(datasets));
+    
+    alert('Dataset registered successfully!');
+    
+    // Clear form
+    document.getElementById('datasetName').value = '';
+    document.getElementById('datasetDesc').value = '';
+    document.getElementById('spatialDomain').value = '';
+    document.getElementById('timePeriod').value = '';
+    document.getElementById('hashDisplay').textContent = 'Pending file selection...';
+    document.getElementById('fileName').style.display = 'none';
+}
+
+function checkForDuplicates() {
+    const keyword = document.getElementById('searchKeyword').value.toLowerCase();
+    const spatial = document.getElementById('searchSpatial').value.toLowerCase();
+    const period = document.getElementById('searchPeriod').value.toLowerCase();
+    const resultDiv = document.getElementById('searchResults');
+    
+    if (!keyword && !spatial && !period) {
+        alert('Please enter at least one search criterion');
+        return;
+    }
+    
+    const datasets = JSON.parse(localStorage.getItem('ddas_datasets') || '[]');
+    const matches = datasets.filter(d => {
+        const nameMatch = !keyword || d.name.toLowerCase().includes(keyword);
+        const spatialMatch = !spatial || d.spatial.toLowerCase().includes(spatial);
+        const periodMatch = !period || d.period.toLowerCase().includes(period);
+        return nameMatch && spatialMatch && periodMatch;
+    });
+    
+    if (matches.length > 0) {
+        let resultText = `Found ${matches.length} matching dataset(s):\n\n`;
+        matches.forEach(m => {
+            resultText += `• ${m.name} (${m.size})\n`;
+        });
+        alert(resultText);
+        resultDiv.textContent = `Found ${matches.length} matching dataset(s)`;
+        resultDiv.className = 'text-sm mt-4 bg-yellow-50 p-3 rounded text-yellow-700';
+    } else {
+        alert('No duplicates found! Safe to download');
+        resultDiv.textContent = 'No duplicates found! Safe to download';
+        resultDiv.className = 'text-sm mt-4 hidden bg-green-50 p-3 rounded text-green-700';
+    }
+    resultDiv.classList.remove('hidden');
+}
+
+function showComingSoon(event) {
+    event.preventDefault();
+    alert('Coming Soon!');
+}
 </script>
