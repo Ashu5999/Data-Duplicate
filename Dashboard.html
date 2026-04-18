@@ -79,12 +79,12 @@
     </script>
 <style>
         :root {
-            --bg: #F8F9FF;
+            --bg: #f0f4ff;
             --card: #ffffff;
             --text: #171c23;
             --text2: #3b494c;
             --border: #dee2ed;
-            --top-nav: #F0F4FF;
+            --top-nav: #f0f4ff;
             --icon-bg: #e0f7fa;
             --progress-bg: #e0e0e0;
         }
@@ -99,13 +99,61 @@
         .progress-bg { background-color: var(--progress-bg); }
         .table-header th { color: var(--text2); }
         .table-row { background-color: var(--card); }
-        .table-row:hover { background-color: #f0f0f0; }
+        .table-row:hover { background-color: #f0f8ff; transition: background 0.2s; }
         .table-text { color: var(--text); }
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
         body { font-family: 'Inter', sans-serif; }
         h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+        /* Page entrance animation */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        main { animation: fadeInUp 0.5s cubic-bezier(0.16,1,0.3,1) both; }
+        /* Stat card hover glow */
+        .stat-card {
+            transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s;
+        }
+        .stat-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0,104,117,0.12);
+        }
+        /* Sidebar gradient */
+        aside {
+            background: linear-gradient(160deg, #0f1c38 0%, #1A2340 60%, #0d2233 100%) !important;
+        }
+        /* Top nav glass */
+        header {
+            background: rgba(240,244,255,0.85) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(186,201,204,0.2);
+        }
+        /* Shimmer button */
+        @keyframes shimmer {
+            0%   { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+        .btn-teal {
+            background: linear-gradient(90deg,#006875 0%,#00daf3 40%,#006875 80%,#00daf3 100%);
+            background-size: 200% auto;
+            transition: background-position 0.6s, box-shadow 0.3s;
+        }
+        .btn-teal:hover {
+            animation: shimmer 1.5s linear infinite;
+            box-shadow: 0 8px 30px rgba(0,218,243,0.35);
+        }
+        /* Animated background orbs */
+        @keyframes float1 {
+            0%,100% { transform: translate(0,0) scale(1); }
+            50% { transform: translate(30px,-20px) scale(1.06); }
+        }
+        @keyframes float2 {
+            0%,100% { transform: translate(0,0) scale(1); }
+            50% { transform: translate(-20px,30px) scale(1.04); }
+        }
     </style>
 </head>
 <body class="antialiased overflow-hidden">
@@ -149,8 +197,8 @@
 <div class="h-8 w-[1px] bg-border"></div>
 <div class="flex items-center gap-3">
 <div class="text-right">
-<p class="text-xs font-bold text-main leading-none">Alex Sterling</p>
-<p class="text-[10px] text-secondary">Admin Level 4</p>
+<p class="text-xs font-bold text-main leading-none">DDAS User</p>
+<p class="text-[10px] text-secondary">Registered User</p>
 </div>
 <img class="w-10 h-10 rounded-full border-2 border-white shadow-md object-cover" data-alt="Professional executive headshot with soft studio lighting and corporate background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDC7x3RJFzPHM0KaNOuWKheoXRtEK1-SdAccg-UIdqa4gr3ZeMqHO9MWiOg0KJnixsMy4dDWUIjfmUqP6m_8jOyZlWwyljP65pClrLTWDfjNSWRMslLwV-MW0AkwYbInBpljF4uPwyJZz6X8Bm6-7Vc6eB3fH9mbkGTveGvUIrmwz38WwCKHQkqfCMMOT7r4QvtVz-LBpeXXP5hjJCnp-9SeCq8EvSyjkKyPxOeuLVXeoG0tnhNR_gihWgDtNxDNVz9nMTzzIgIV5Y"/>
 </div>
@@ -158,141 +206,94 @@
 </header>
 <!-- Page Content -->
 <main class="mt-16 p-8 flex-1 min-h-full">
-<!-- Initialize Sample Data and Load History -->
+<!-- Load real files from backend -->
 <script>
-// Initialize sample datasets in localStorage
-function initializeSampleData() {
-    const datasets = [
-        {
-            name: 'climate_data_2024_Q1.nc',
-            size: '2.3 GB',
-            uploadedBy: 'Dr. Sharma',
-            date: '2024-04-01',
-            spatial: 'South Asia',
-            period: 'Jan-Mar 2024',
-            location: '/institute/repo/climate/2024/',
-            hash: 'a1b2c3d4e5f6a1b2c3d4e5f6'
-        },
-        {
-            name: 'satellite_imagery_india.tif',
-            size: '4.1 GB',
-            uploadedBy: 'Priya Patel',
-            date: '2024-03-28',
-            spatial: 'India',
-            period: '2023-2024',
-            location: '/institute/repo/satellite/',
-            hash: 'f6e5d4c3b2a1f6e5d4c3b2a1'
-        },
-        {
-            name: 'rainfall_data_2023.csv',
-            size: '45 MB',
-            uploadedBy: 'Amit Kumar',
-            date: '2024-03-25',
-            spatial: 'India',
-            period: '2023',
-            location: '/institute/repo/rainfall/',
-            hash: 'abc123def456abc123def456'
-        }
-    ];
-    
-    if (!localStorage.getItem('ddas_datasets')) {
-        localStorage.setItem('ddas_datasets', JSON.stringify(datasets));
+async function loadFilesFromBackend() {
+    try {
+        const response = await fetch('http://localhost:8080/api/files');
+        if (!response.ok) throw new Error('Server error');
+        const files = await response.json();
+        renderTable(files);
+        updateStats(files);
+        setStatus('online');
+    } catch (err) {
+        showEmpty('Cannot reach backend. Make sure the server is running.');
+        setStatus('offline');
+        console.error(err);
     }
 }
 
-// Load and display download history
-function loadDownloadHistory() {
-    const datasets = JSON.parse(localStorage.getItem('ddas_datasets') || '[]');
-    const table = document.querySelector('tbody');
-    
-    if (table && datasets.length > 0) {
-        // Clear existing rows and populate with sample data
-        table.innerHTML = '';
-        
-        datasets.forEach((dataset, index) => {
-            const row = document.createElement('tr');
-            row.className = 'hover:bg-surface-container-low transition-colors group';
-            
-            const iconClass = dataset.name.includes('.nc') ? 'picture_as_pdf' : 
-                            dataset.name.includes('.tif') ? 'description' : 'table_chart';
-            const colorClass = dataset.name.includes('.nc') ? 'bg-red-100 text-red-600' : 
-                             dataset.name.includes('.tif') ? 'bg-blue-100 text-blue-600' : 'bg-amber-100 text-amber-600';
-            const statusClass = dataset.name.includes('.nc') ? 'bg-green-50 text-green-600 border-green-100' :
-                              dataset.name.includes('.tif') ? 'bg-green-50 text-green-600 border-green-100' : 'bg-green-50 text-green-600 border-green-100';
-            
-            row.innerHTML = `
-                <td class="px-6 py-4">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded ${colorClass} flex items-center justify-center">
-                            <span class="material-symbols-outlined text-lg" data-icon="${iconClass}">${iconClass}</span>
-                        </div>
-                        <div>
-                            <p class="text-sm font-semibold text-on-surface">${dataset.name}</p>
-                            <p class="text-[10px] text-on-surface-variant">${dataset.size} • Updated ${dataset.date}</p>
-                        </div>
-                    </div>
-                </td>
-                <td class="px-6 py-4">
-                    <span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${statusClass} uppercase">Clean</span>
-                </td>
-                <td class="px-6 py-4">
-                    <p class="text-xs text-on-surface font-medium">${dataset.uploadedBy}</p>
-                </td>
-                <td class="px-6 py-4 text-right">
-                    <button class="text-on-surface-variant hover:text-primary transition-colors">
-                        <span class="material-symbols-outlined" data-icon="download">download</span>
-                    </button>
-                </td>
-            `;
-            table.appendChild(row);
-        });
+function renderTable(files) {
+    const tbody = document.getElementById('filesTableBody');
+    tbody.innerHTML = '';
+    if (files.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" class="px-6 py-12 text-center text-secondary text-sm">
+            No files registered yet.
+            <a href="Upload.html" class="text-primary font-semibold hover:underline ml-1">Register your first dataset →</a>
+        </td></tr>`;
+        return;
     }
-    
-    // Update stats
-    updateStats(datasets);
-}
-
-function updateStats(datasets) {
-    // Update total downloads (would be based on real download count)
-    // For now using dataset count as proxy
-    const downloadCount = datasets.length * 5; // Mock calculation
-    const duplicatesBlocked = datasets.length * 2; // Mock calculation
-}
-
-// Initialize on page load
-document.addEventListener('DOMContentLoaded', function() {
-    initializeSampleData();
-    loadDownloadHistory();
-});
-
-function filterTable() {
-    const input = document.getElementById('searchInput').value.toLowerCase();
-    const table = document.querySelector('tbody');
-    const rows = table.querySelectorAll('tr');
-    
-    rows.forEach(row => {
-        const text = row.textContent.toLowerCase();
-        row.style.display = text.includes(input) ? '' : 'none';
+    const iconMap = { pdf:'picture_as_pdf', tif:'description', tiff:'description', csv:'table_chart', zip:'folder_zip', nc:'cloud', xlsx:'table_chart', xls:'table_chart', doc:'description', docx:'description' };
+    const colorMap = { pdf:'bg-red-100 text-red-600', tif:'bg-blue-100 text-blue-600', csv:'bg-amber-100 text-amber-600', zip:'bg-purple-100 text-purple-600', nc:'bg-cyan-100 text-cyan-600' };
+    files.forEach(file => {
+        const ext = (file.fileName || '').split('.').pop().toLowerCase();
+        const icon = iconMap[ext] || 'insert_drive_file';
+        const color = colorMap[ext] || 'bg-slate-100 text-slate-600';
+        const hash = file.fileHash ? file.fileHash.substring(0, 16) + '...' : '—';
+        const row = document.createElement('tr');
+        row.className = 'table-row';
+        row.innerHTML = `
+            <td class="px-6 py-4"><div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded ${color} flex items-center justify-center">
+                    <span class="material-symbols-outlined text-lg">${icon}</span>
+                </div>
+                <div>
+                    <p class="text-sm font-semibold table-text">${file.fileName}</p>
+                    <p class="text-[10px] text-secondary font-mono">${hash}</p>
+                </div>
+            </div></td>
+            <td class="px-6 py-4"><span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-green-50 text-green-600 border border-green-100 uppercase">Clean</span></td>
+            <td class="px-6 py-4"><p class="text-xs table-text font-medium">${file.uploadedBy || 'User'}</p></td>
+            <td class="px-6 py-4 text-right"><button class="text-secondary hover:text-primary transition-colors"><span class="material-symbols-outlined">download</span></button></td>
+        `;
+        tbody.appendChild(row);
     });
 }
 
-function showAllArchive() {
-    const datasets = JSON.parse(localStorage.getItem('ddas_datasets') || '[]');
-    alert('Archive contains ' + datasets.length + ' datasets');
+function updateStats(files) {
+    document.getElementById('statTotal').textContent = files.length;
+    document.getElementById('statClean').textContent = files.length;
 }
 
-function showHealthReport() {
-    alert('Health Report: All systems normal');
+function setStatus(s) {
+    const dot = document.getElementById('statusDot');
+    const txt = document.getElementById('statusText');
+    if (s === 'online') {
+        dot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse';
+        txt.textContent = 'Backend Online'; txt.className = 'text-sm font-bold text-emerald-600';
+    } else {
+        dot.className = 'w-2.5 h-2.5 rounded-full bg-red-500';
+        txt.textContent = 'Backend Offline'; txt.className = 'text-sm font-bold text-red-500';
+    }
 }
 
-function showAutomateAlert() {
-    alert('Feature coming soon!');
+function showEmpty(msg) {
+    document.getElementById('filesTableBody').innerHTML =
+        `<tr><td colspan="4" class="px-6 py-12 text-center text-red-500 text-sm font-medium">${msg}</td></tr>`;
 }
 
-function showComingSoon(event) {
-    event.preventDefault();
-    alert('Coming Soon!');
+function filterTable() {
+    const q = document.getElementById('searchInput').value.toLowerCase();
+    document.querySelectorAll('#filesTableBody tr').forEach(r => {
+        r.style.display = r.textContent.toLowerCase().includes(q) ? '' : 'none';
+    });
 }
+
+function showHealthReport() { alert('Health Report: All systems normal'); }
+function showAutomateAlert() { alert('Feature coming soon!'); }
+function showComingSoon(e) { e.preventDefault(); alert('Coming Soon!'); }
+
+document.addEventListener('DOMContentLoaded', loadFilesFromBackend);
 </script>
 <!-- Breadcrumbs -->
 <div class="flex items-center gap-2 mb-6 text-secondary text-xs">
@@ -302,59 +303,56 @@ function showComingSoon(event) {
 </div>
 <!-- Stats Grid -->
 <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-<!-- Stat Card 1 -->
+<!-- Stat Card 1: Total Files -->
 <div class="bg-card p-6 rounded-xl shadow-[0_8px_30px_rgb(208,217,255,0.2)] border-none flex items-center justify-between group hover:translate-y-[-4px] transition-transform duration-300">
 <div>
-<p class="text-label-sm uppercase font-bold text-secondary tracking-wider text-[10px]">Total Assets</p>
-<h3 class="text-2xl font-extrabold text-main mt-1">2,482</h3>
+<p class="text-label-sm uppercase font-bold text-secondary tracking-wider text-[10px]">Total Files Registered</p>
+<h3 class="text-2xl font-extrabold text-main mt-1" id="statTotal">—</h3>
 <p class="text-xs text-primary font-semibold mt-2 flex items-center gap-1">
-<span class="material-symbols-outlined text-[14px]">trending_up</span>
-                            +12.5%
-                        </p>
+<span class="material-symbols-outlined text-[14px]">upload_file</span> From backend
+</p>
 </div>
 <div class="w-12 h-12 rounded-full bg-icon flex items-center justify-center text-primary">
-<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="material-symbols-outlined">inventory_2</span>
 </div>
 </div>
-<!-- Stat Card 2 -->
+<!-- Stat Card 2: Clean Files -->
 <div class="bg-card p-6 rounded-xl shadow-[0_8px_30px_rgb(208,217,255,0.2)] border-none flex items-center justify-between group hover:translate-y-[-4px] transition-transform duration-300">
 <div>
-<p class="text-label-sm uppercase font-bold text-secondary tracking-wider text-[10px]">Active Cycles</p>
-<h3 class="text-2xl font-extrabold text-main mt-1">142</h3>
-<p class="text-xs text-error font-semibold mt-2 flex items-center gap-1">
-<span class="material-symbols-outlined text-[14px]">trending_down</span>
-                            -3.2%
-                        </p>
+<p class="text-label-sm uppercase font-bold text-secondary tracking-wider text-[10px]">Clean Files</p>
+<h3 class="text-2xl font-extrabold text-main mt-1" id="statClean">—</h3>
+<p class="text-xs text-primary font-semibold mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">verified</span> No duplicates
+</p>
 </div>
 <div class="w-12 h-12 rounded-full bg-icon flex items-center justify-center text-secondary">
-<span class="material-symbols-outlined" data-icon="sync">sync</span>
+<span class="material-symbols-outlined">verified_user</span>
 </div>
 </div>
-<!-- Stat Card 3 -->
+<!-- Stat Card 3: Duplicates Blocked -->
 <div class="bg-card p-6 rounded-xl shadow-[0_8px_30px_rgb(208,217,255,0.2)] border-none flex items-center justify-between group hover:translate-y-[-4px] transition-transform duration-300">
 <div>
-<p class="text-label-sm uppercase font-bold text-secondary tracking-wider text-[10px]">Security Score</p>
-<h3 class="text-2xl font-extrabold text-main mt-1">98.4</h3>
+<p class="text-label-sm uppercase font-bold text-secondary tracking-wider text-[10px]">Duplicates Blocked</p>
+<h3 class="text-2xl font-extrabold text-main mt-1">0</h3>
 <p class="text-xs text-primary font-semibold mt-2 flex items-center gap-1">
-<span class="material-symbols-outlined text-[14px]">verified_user</span>
-                            Optimal
-                        </p>
+<span class="material-symbols-outlined text-[14px]">block</span> Hash-based detection
+</p>
 </div>
 <div class="w-12 h-12 rounded-full bg-icon flex items-center justify-center text-on-primary-container">
-<span class="material-symbols-outlined" data-icon="security">security</span>
+<span class="material-symbols-outlined">security</span>
 </div>
 </div>
-<!-- Stat Card 4 -->
+<!-- Stat Card 4: Backend Status -->
 <div class="bg-card p-6 rounded-xl shadow-[0_8px_30px_rgb(208,217,255,0.2)] border-none flex items-center justify-between group hover:translate-y-[-4px] transition-transform duration-300">
 <div>
-<p class="text-label-sm uppercase font-bold text-secondary tracking-wider text-[10px]">Resource Utilization</p>
-<h3 class="text-2xl font-extrabold text-main mt-1">84%</h3>
-<div class="w-24 h-1.5 progress-bg rounded-full mt-4 overflow-hidden">
-<div class="bg-[#00E5FF] h-full w-[84%]"></div>
-</div>
+<p class="text-label-sm uppercase font-bold text-secondary tracking-wider text-[10px]">System Status</p>
+<h3 class="text-2xl font-extrabold text-main mt-1">Live</h3>
+<p class="text-xs text-primary font-semibold mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">wifi</span> Connected
+</p>
 </div>
 <div class="w-12 h-12 rounded-full bg-icon flex items-center justify-center text-tertiary">
-<span class="material-symbols-outlined" data-icon="bar_chart">bar_chart</span>
+<span class="material-symbols-outlined">cloud_done</span>
 </div>
 </div>
 </div>
@@ -379,103 +377,8 @@ function showComingSoon(event) {
 <th class="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-right">Actions</th>
 </tr>
 </thead>
-<tbody class="divide-y border-custom">
-<tr class="table-row">
-<td class="px-6 py-4">
-<div class="flex items-center gap-3">
-<div class="w-8 h-8 rounded bg-red-100 flex items-center justify-center text-red-600">
-<span class="material-symbols-outlined text-lg" data-icon="picture_as_pdf">picture_as_pdf</span>
-</div>
-<div>
-<p class="text-sm font-semibold table-text">Q3_Strategic_Review.pdf</p>
-<p class="text-[10px] text-secondary">4.2 MB • Updated 2h ago</p>
-</div>
-</div>
-</td>
-<td class="px-6 py-4">
-<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-green-50 text-green-600 border border-green-100 uppercase">Clean</span>
-</td>
-<td class="px-6 py-4">
-<p class="text-xs table-text font-medium">Node_Alpha_7</p>
-</td>
-<td class="px-6 py-4 text-right">
-<button class="text-secondary hover:text-primary transition-colors">
-<span class="material-symbols-outlined" data-icon="download">download</span>
-</button>
-</td>
-</tr>
-<tr class="table-row">
-<td class="px-6 py-4">
-<div class="flex items-center gap-3">
-<div class="w-8 h-8 rounded bg-blue-100 flex items-center justify-center text-blue-600">
-<span class="material-symbols-outlined text-lg" data-icon="description">description</span>
-</div>
-<div>
-<p class="text-sm font-semibold table-text">Compliance_Manifesto_V2.doc</p>
-<p class="text-[10px] text-secondary">1.8 MB • Updated 5h ago</p>
-</div>
-</div>
-</td>
-<td class="px-6 py-4">
-<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-red-50 text-red-600 border border-red-100 uppercase">Duplicate</span>
-</td>
-<td class="px-6 py-4">
-<p class="text-xs table-text font-medium">Cloud_Proxy_West</p>
-</td>
-<td class="px-6 py-4 text-right">
-<button class="text-secondary hover:text-primary transition-colors">
-<span class="material-symbols-outlined" data-icon="history">history</span>
-</button>
-</td>
-</tr>
-<tr class="table-row">
-<td class="px-6 py-4">
-<div class="flex items-center gap-3">
-<div class="w-8 h-8 rounded bg-amber-100 flex items-center justify-center text-amber-600">
-<span class="material-symbols-outlined text-lg" data-icon="table_chart">table_chart</span>
-</div>
-<div>
-<p class="text-sm font-semibold table-text">Annual_Budget_2024.xls</p>
-<p class="text-[10px] text-secondary">12.5 MB • Updated Yesterday</p>
-</div>
-</div>
-</td>
-<td class="px-6 py-4">
-<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-green-50 text-green-600 border border-green-100 uppercase">Clean</span>
-</td>
-<td class="px-6 py-4">
-<p class="text-xs table-text font-medium">Mainframe_Secure</p>
-</td>
-<td class="px-6 py-4 text-right">
-<button class="text-secondary hover:text-primary transition-colors">
-<span class="material-symbols-outlined" data-icon="share">share</span>
-</button>
-</td>
-</tr>
-<tr class="table-row">
-<td class="px-6 py-4">
-<div class="flex items-center gap-3">
-<div class="w-8 h-8 rounded bg-purple-100 flex items-center justify-center text-purple-600">
-<span class="material-symbols-outlined text-lg" data-icon="folder_zip">folder_zip</span>
-</div>
-<div>
-<p class="text-sm font-semibold table-text">Project_X_Protocols.zip</p>
-<p class="text-[10px] text-secondary">245 MB • Updated 2 days ago</p>
-</div>
-</div>
-</td>
-<td class="px-6 py-4">
-<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-green-50 text-green-600 border border-green-100 uppercase">Clean</span>
-</td>
-<td class="px-6 py-4">
-<p class="text-xs table-text font-medium">Remote_Site_B</p>
-</td>
-<td class="px-6 py-4 text-right">
-<button class="text-secondary hover:text-primary transition-colors">
-<span class="material-symbols-outlined" data-icon="download">download</span>
-</button>
-</td>
-</tr>
+<tbody id="filesTableBody" class="divide-y border-custom">
+<tr><td colspan="4" class="px-6 py-12 text-center text-secondary text-sm">Loading files...</td></tr>
 </tbody>
 </table>
 </div>
@@ -488,27 +391,22 @@ function showComingSoon(event) {
 <h3 class="font-bold text-main">Operational Status</h3>
 <span class="material-symbols-outlined text-primary" data-icon="info">info</span>
 </div>
-<div class="space-y-4">
-<div class="flex justify-between items-center text-sm">
-<span class="text-secondary">CPU Load</span>
-<span class="font-bold text-main">42%</span>
-</div>
-<div class="w-full h-1.5 progress-bg rounded-full overflow-hidden">
-<div class="bg-primary h-full w-[42%]"></div>
+<div class="space-y-5">
+<div class="flex items-center gap-3">
+<span id="statusDot" class="w-2.5 h-2.5 rounded-full bg-slate-300"></span>
+<span id="statusText" class="text-sm font-bold text-secondary">Connecting...</span>
 </div>
 <div class="flex justify-between items-center text-sm">
-<span class="text-secondary">Memory Usage</span>
-<span class="font-bold text-main">68%</span>
-</div>
-<div class="w-full h-1.5 progress-bg rounded-full overflow-hidden">
-<div class="bg-tertiary h-full w-[68%]"></div>
+<span class="text-secondary">Total Files</span>
+<span class="font-bold text-main" id="sideStatTotal">—</span>
 </div>
 <div class="flex justify-between items-center text-sm">
-<span class="text-secondary">Network Throughput</span>
-<span class="font-bold text-main">91%</span>
+<span class="text-secondary">Duplicate Detection</span>
+<span class="font-bold text-emerald-600">Active</span>
 </div>
-<div class="w-full h-1.5 progress-bg rounded-full overflow-hidden">
-<div class="bg-[#00E5FF] h-full w-[91%]"></div>
+<div class="flex justify-between items-center text-sm">
+<span class="text-secondary">Hash Algorithm</span>
+<span class="font-bold text-main">SHA-256</span>
 </div>
 </div>
 <button class="w-full mt-6 py-3 border border-custom rounded-xl text-sm font-semibold text-main bg-icon hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors" onclick="showHealthReport()">

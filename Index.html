@@ -79,12 +79,12 @@
     </script>
 <style>
         :root {
-            --background: #f8f9ff;
+            --background: #f0f4ff;
             --surface-container-lowest: #ffffff;
             --surface-container: #eaeef9;
             --surface-container-low: #eff3fe;
             --surface-container-high: #e4e8f3;
-            --surface: #f8f9ff;
+            --surface: #f0f4ff;
             --surface-bright: #f8f9ff;
             --on-surface: #171c23;
             --on-surface-variant: #3b494c;
@@ -95,39 +95,79 @@
             display: inline-block;
             vertical-align: middle;
         }
+        /* Animated grid */
         .bg-grid-pattern {
-            background-size: 40px 40px;
-            background-image: 
-                linear-gradient(to right, rgba(0, 104, 117, 0.05) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(0, 104, 117, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            background-image:
+                linear-gradient(to right, rgba(0,104,117,0.07) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0,104,117,0.07) 1px, transparent 1px);
         }
-        .glass-effect {
+        /* Floating gradient orbs */
+        @keyframes float1 {
+            0%, 100% { transform: translate(0,0) scale(1); }
+            50% { transform: translate(40px, -30px) scale(1.08); }
+        }
+        @keyframes float2 {
+            0%, 100% { transform: translate(0,0) scale(1); }
+            50% { transform: translate(-30px, 40px) scale(1.05); }
+        }
+        .orb-1 { animation: float1 8s ease-in-out infinite; }
+        .orb-2 { animation: float2 10s ease-in-out infinite; }
+        .orb-3 { animation: float1 12s ease-in-out infinite reverse; }
+        /* Card entrance */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .card-enter { animation: fadeInUp 0.6s cubic-bezier(0.16,1,0.3,1) both; }
+        /* Glassmorphism card */
+        .glass-card {
+            background: rgba(255,255,255,0.85);
             backdrop-filter: blur(24px);
-            background: rgba(255, 255, 255, 0.8);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255,255,255,0.6);
+            box-shadow: 0 24px 60px rgba(0,104,117,0.10), 0 4px 16px rgba(0,0,0,0.04);
         }
-        .dark main { background-color: #0A0F1E !important; }
-        .dark section { background-color: #141B2D !important; }
-        .dark .bg-white { background-color: #141B2D !important; }
-        .dark h2,.dark h3,.dark h4 { color: #FFFFFF !important; }
-        .dark p { color: #94A3B8 !important; }
-        .dark input { background-color: #1E2B42 !important; color: #E8EDF5 !important; }
-        .dark textarea { background-color: #1E2B42 !important; color: #E8EDF5 !important; }
-        .glass-effect {
-            backdrop-filter: blur(24px);
-            background: rgba(255, 255, 255, 0.8);
+        /* Shimmer button */
+        @keyframes shimmer {
+            0%   { background-position: -200% center; }
+            100% { background-position: 200% center; }
         }
+        .btn-primary {
+            background: linear-gradient(90deg, #006875 0%, #00daf3 40%, #006875 80%, #00daf3 100%);
+            background-size: 200% auto;
+            color: white;
+            transition: background-position 0.6s, box-shadow 0.3s, transform 0.15s;
+        }
+        .btn-primary:hover {
+            animation: shimmer 1.5s linear infinite;
+            box-shadow: 0 8px 30px rgba(0,218,243,0.35);
+            transform: translateY(-1px);
+        }
+        .btn-primary:active { transform: scale(0.98); }
+        /* Input glow */
+        input:focus {
+            box-shadow: 0 0 0 3px rgba(0,218,243,0.15);
+        }
+        /* Logo pulse */
+        @keyframes logoPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(0,229,255,0.4); }
+            50% { box-shadow: 0 0 0 12px rgba(0,229,255,0); }
+        }
+        .logo-pulse { animation: logoPulse 2.5s ease-in-out infinite; }
     </style>
 </head>
-<body class="bg-background font-body text-on-surface min-h-screen flex items-center justify-center relative overflow-hidden">
+<body class="bg-[#f0f4ff] font-body text-on-surface min-h-screen flex items-center justify-center relative overflow-hidden">
 <!-- Background Decor -->
 <div class="absolute inset-0 bg-grid-pattern pointer-events-none"></div>
-<div class="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-primary-container/10 rounded-full blur-[120px] pointer-events-none"></div>
-<div class="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-secondary-container/20 rounded-full blur-[120px] pointer-events-none"></div>
+<div class="orb-1 absolute top-[-15%] right-[-10%] w-[600px] h-[600px] bg-[#00E5FF]/15 rounded-full blur-[130px] pointer-events-none"></div>
+<div class="orb-2 absolute bottom-[-15%] left-[-10%] w-[500px] h-[500px] bg-[#006875]/15 rounded-full blur-[120px] pointer-events-none"></div>
+<div class="orb-3 absolute top-[40%] left-[30%] w-[300px] h-[300px] bg-[#00daf3]/10 rounded-full blur-[100px] pointer-events-none"></div>
 <!-- Main Content Wrapper -->
 <main class="relative z-10 w-full max-w-[480px] px-6">
 <!-- Header/Logo Area -->
 <div class="flex flex-col items-center mb-10">
-<div class="w-16 h-16 bg-primary-container rounded-xl flex items-center justify-center mb-6 shadow-lg shadow-primary-container/20 border border-white/20">
+<div class="w-16 h-16 bg-gradient-to-br from-[#00E5FF] to-[#006875] rounded-2xl flex items-center justify-center mb-6 logo-pulse border border-white/20">
 <span class="material-symbols-outlined text-on-primary-container text-4xl" data-icon="waves" style="font-variation-settings: 'FILL' 1;">waves</span>
 </div>
 <h1 class="font-headline text-3xl font-extrabold text-on-background tracking-tight mb-2">
@@ -138,7 +178,7 @@
             </p>
 </div>
 <!-- Login Card -->
-<div class="bg-surface-container-lowest rounded-full p-10 shadow-[0_20px_50px_rgba(23,28,35,0.06)] border border-outline-variant/10">
+<div class="card-enter glass-card rounded-2xl p-10">
 <form class="space-y-6">
 <!-- Email Input -->
 <div class="space-y-2">
@@ -166,7 +206,10 @@
 <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
 <span class="material-symbols-outlined text-outline text-xl transition-colors group-focus-within:text-primary" data-icon="lock">lock</span>
 </div>
-<input class="w-full bg-surface-container-low border-0 border-b-2 border-transparent focus:border-primary focus:ring-0 rounded-lg py-4 pl-12 pr-4 text-on-surface font-body text-sm transition-all placeholder:text-outline/50" id="password" placeholder="••••••••••••" type="password"/>
+<input class="w-full bg-surface-container-low border-0 border-b-2 border-transparent focus:border-primary focus:ring-0 rounded-lg py-4 pl-12 pr-10 text-on-surface font-body text-sm transition-all placeholder:text-outline/50" id="password" placeholder="••••••••••••" type="password"/>
+<button type="button" onclick="togglePassword('password', this)" class="absolute inset-y-0 right-0 pr-4 flex items-center text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">visibility_off</span>
+</button>
 </div>
 </div>
 <!-- Options -->
@@ -177,21 +220,9 @@
                     </label>
 </div>
 <!-- Action Button -->
-<button 
-  class="w-full bg-gradient-to-r 
-  from-primary to-primary-container 
-  text-on-primary font-headline font-bold 
-  py-4 px-6 rounded-lg shadow-lg
-  onclick="window.location.href='Dashboard.html'" 
-  shadow-primary/20 hover:shadow-xl 
-  hover:shadow-primary/30 
-  active:scale-[0.98] transition-all  
-  flex items-center justify-center gap-3"
-  type="button"
-  onclick="validateLogin()">
+<button class="btn-primary w-full font-headline font-bold py-4 px-6 rounded-xl flex items-center justify-center gap-3" type="button" onclick="validateLogin()">
     Sign In to Console
-    <span class="material-symbols-outlined 
-    text-xl">arrow_forward</span>
+    <span class="material-symbols-outlined text-xl">arrow_forward</span>
 </button>
 <!-- Error Messages -->
 <div id="emailError" class="text-red-600 text-xs font-semibold mt-2 hidden">Please enter a valid email</div>
@@ -220,33 +251,59 @@
 </main>
 <!-- Decorative Image Layer (Ambient) -->
 <script>
-function validateLogin() {
-    const email = document.getElementById('email').value;
+function togglePassword(inputId, btn) {
+    const input = document.getElementById(inputId);
+    const icon  = btn.querySelector('.material-symbols-outlined');
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.textContent = 'visibility';
+    } else {
+        input.type = 'password';
+        icon.textContent = 'visibility_off';
+    }
+}
+
+async function validateLogin() {
+    const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
     const emailError = document.getElementById('emailError');
     const passwordError = document.getElementById('passwordError');
-    
+
+    // Basic empty check
     let isValid = true;
-    
-    // Validate email
     if (!email || !email.includes('@')) {
-        emailError.classList.remove('hidden');
-        isValid = false;
-    } else {
-        emailError.classList.add('hidden');
-    }
-    
-    // Validate password
+        emailError.classList.remove('hidden'); isValid = false;
+    } else { emailError.classList.add('hidden'); }
+
     if (!password || password.trim() === '') {
+        passwordError.classList.remove('hidden'); isValid = false;
+    } else { passwordError.classList.add('hidden'); }
+
+    if (!isValid) return;
+
+    // Call backend to verify credentials
+    try {
+        const formData = new FormData();
+        formData.append('email', email);
+        formData.append('password', password);
+
+        const response = await fetch('http://localhost:8080/api/auth/login', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (data.status === 'success') {
+            window.location.href = 'Dashboard.html';
+        } else {
+            passwordError.textContent = 'Invalid email or password';
+            passwordError.classList.remove('hidden');
+        }
+    } catch (error) {
+        passwordError.textContent = 'Cannot reach server. Is the backend running?';
         passwordError.classList.remove('hidden');
-        isValid = false;
-    } else {
-        passwordError.classList.add('hidden');
-    }
-    
-    // If valid, redirect to Dashboard
-    if (isValid) {
-        window.location.href = 'Dashboard.html';
+        console.error('Login error:', error);
     }
 }
 
