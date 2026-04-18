@@ -196,6 +196,7 @@ Logout
 <span class="material-symbols-outlined text-slate-300">lock</span>
 </div>
 <div id="registerError" class="text-red-600 text-xs font-semibold hidden">Please fill in all fields</div>
+<div id="apiMessage" class="hidden text-xs font-semibold px-3 py-2 rounded-lg mt-2 transition-all"></div>
 <button class="w-full bg-gradient-to-r from-[#006875] to-[#00E5FF] text-white py-4 rounded-xl font-headline font-extrabold flex items-center justify-center gap-2 shadow-lg shadow-[#00E5FF]/20 hover:shadow-xl hover:scale-[1.01] active:scale-95 transition-all" onclick="registerDataset()">
                             Register Dataset
                             <span class="material-symbols-outlined">arrow_forward</span>
@@ -296,104 +297,16 @@ Logout
             </button>
 </div>
 </div>
+
 <script>
-// Compute SHA-256 hash for uploaded file
-async function computeFileHash(file) {
-    const buffer = await file.arrayBuffer();
-    const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    return hashHex;
-}
+// Stores the selected file so registerDataset() can access it on form submit
+let selectedFile = null;
 
-// Handle file upload and hash computation
-async function handleFileUpload(file) {
-    if (!file) return;
-    
-    try {
-        const hash = await computeFileHash(file);
-        document.getElementById('hashDisplay').textContent = hash;
-        
-        // Check localStorage for duplicate
-        const existingDatasets = JSON.parse(localStorage.getItem('ddas_datasets') || '[]');
-        const isDuplicate = existingDatasets.some(d => d.hash === hash);
-        
-        if (isDuplicate) {
-            showDuplicateAlert(file);
-        } else {
-            // Save to localStorage if not duplicate
-            const newDataset = {
-                name: file.name,
-                size: formatFileSize(file.size),
-                uploadedBy: 'Current User',
-                date: new Date().toISOString().split('T')[0],
-                spatial: document.querySelector('input[placeholder="Lat/Long or Region"]')?.value || 'N/A',
-                period: document.querySelector('input[placeholder="Jan 2024 - Dec 2024"]')?.value || 'N/A',
-                location: '/institute/repo/uploads/',
-                hash: hash
-            };
-            existingDatasets.push(newDataset);
-            localStorage.setItem('ddas_datasets', JSON.stringify(existingDatasets));
-        }
-    } catch (error) {
-        console.error('Error computing hash:', error);
-    }
-}
-
-function formatFileSize(bytes) {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes, k));
-    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
-}
-
-function showDuplicateAlert(file) {
-    const existingDatasets = JSON.parse(localStorage.getItem('ddas_datasets') || '[]');
-    const hash = document.getElementById('hashDisplay').textContent;
-    const duplicate = existingDatasets.find(d => d.hash === hash);
-    
-    if (duplicate) {
-        alert(`Duplicate Detected!\n\nFile: ${duplicate.name}\nSize: ${duplicate.size}\nUploaded By: ${duplicate.uploadedBy}\nDate: ${duplicate.date}\nLocation: ${duplicate.location}`);
-    }
-}
-
-// Attach file upload handler
-document.addEventListener('DOMContentLoaded', function() {
-    const dropZone = document.querySelector('[class*="border-dashed"]');
-    if (dropZone) {
-        dropZone.addEventListener('click', function() {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.onchange = (e) => handleFileUpload(e.target.files[0]);
-            input.click();
-        });
-        
-        // Drag and drop support
-        dropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dropZone.classList.add('border-[#00E5FF]', 'bg-[#E1F3FF]');
-        });
-        
-        dropZone.addEventListener('dragleave', () => {
-            dropZone.classList.remove('border-[#00E5FF]', 'bg-[#E1F3FF]');
-        });
-        
-        dropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropZone.classList.remove('border-[#00E5FF]', 'bg-[#E1F3FF]');
-            if (e.dataTransfer.files[0]) {
-                handleFileUpload(e.dataTransfer.files[0]);
-            }
-        });
-    }
-});
-</script>
-<script>
 // File handling and hash computation
 async function handleFileSelect(event) {
     const file = event.target.files[0];
     if (file) {
+        selectedFile = file;  // save reference for form submit
         document.getElementById('fileName').textContent = 'Selected: ' + file.name;
         document.getElementById('fileName').style.display = 'block';
         await computeAndDisplayHash(file);
@@ -412,7 +325,65 @@ async function computeAndDisplayHash(file) {
     }
 }
 
-function registerDataset() {
+// Safely parse JSON — returns null if response is not valid JSON (e.g. HTML error page)
+async function safeJson(response) {
+    try { return await response.json(); } catch { return null; }
+}
+
+// POST file (binary) + metadata to backend using FormData
+async function sendFileToBackend(file, fileName, fileHash) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000); // 10s timeout
+
+    // Build multipart form — DO NOT set Content-Type header manually;
+    // the browser adds it automatically with the correct boundary.
+    const formData = new FormData();
+    formData.append('file', file);              // binary file
+    formData.append('fileName', fileName);
+    formData.append('fileHash', fileHash);
+    formData.append('uploadedBy', 'User');
+
+    try {
+        const response = await fetch('http://localhost:8080/api/files', {
+            method: 'POST',
+            body: formData,
+            signal: controller.signal
+        });
+
+        const data = await safeJson(response);
+
+        if (!response.ok) {
+            const msg = data?.message || `Server error (${response.status}). Please try again.`;
+            showApiMessage(msg, 'error');
+            console.error('Backend error:', response.status, data);
+        } else {
+            showApiMessage(data?.message || 'File registered successfully.', 'success');
+            console.log('Backend response:', data);
+        }
+    } catch (error) {
+        if (error.name === 'AbortError') {
+            showApiMessage('Request timed out. The server took too long to respond.', 'error');
+        } else {
+            showApiMessage('Cannot connect to server. Check your network or backend.', 'error');
+        }
+        console.error('sendFileToBackend failed:', error);
+    } finally {
+        clearTimeout(timeout);
+    }
+}
+
+// Display backend response message in UI
+function showApiMessage(message, type) {
+    const el = document.getElementById('apiMessage');
+    if (!el) return;
+    el.textContent = message;
+    el.className = type === 'success'
+        ? 'text-xs font-semibold px-3 py-2 rounded-lg mt-2 bg-emerald-50 text-emerald-700 border border-emerald-200'
+        : 'text-xs font-semibold px-3 py-2 rounded-lg mt-2 bg-red-50 text-red-700 border border-red-200';
+    el.classList.remove('hidden');
+}
+
+async function registerDataset() {
     const name = document.getElementById('datasetName').value;
     const desc = document.getElementById('datasetDesc').value;
     const spatial = document.getElementById('spatialDomain').value;
@@ -427,22 +398,8 @@ function registerDataset() {
     
     errorDiv.classList.add('hidden');
     
-    // Save to localStorage
-    const datasets = JSON.parse(localStorage.getItem('ddas_datasets') || '[]');
-    const newDataset = {
-        name: name,
-        size: 'New',
-        uploadedBy: 'Current User',
-        date: new Date().toISOString().split('T')[0],
-        spatial: spatial,
-        period: period,
-        location: '/institute/repo/uploads/',
-        hash: hash
-    };
-    datasets.push(newDataset);
-    localStorage.setItem('ddas_datasets', JSON.stringify(datasets));
-    
-    alert('Dataset registered successfully!');
+    // Send file binary + metadata to backend via FormData
+    await sendFileToBackend(selectedFile, name, hash);
     
     // Clear form
     document.getElementById('datasetName').value = '';
@@ -453,39 +410,55 @@ function registerDataset() {
     document.getElementById('fileName').style.display = 'none';
 }
 
-function checkForDuplicates() {
-    const keyword = document.getElementById('searchKeyword').value.toLowerCase();
-    const spatial = document.getElementById('searchSpatial').value.toLowerCase();
-    const period = document.getElementById('searchPeriod').value.toLowerCase();
+async function checkForDuplicates() {
+    const keyword = document.getElementById('searchKeyword').value.trim();
+    const spatial = document.getElementById('searchSpatial').value.trim();
+    const period = document.getElementById('searchPeriod').value.trim();
     const resultDiv = document.getElementById('searchResults');
-    
+
     if (!keyword && !spatial && !period) {
-        alert('Please enter at least one search criterion');
+        showApiMessage('Please enter at least one search criterion.', 'error');
         return;
     }
-    
-    const datasets = JSON.parse(localStorage.getItem('ddas_datasets') || '[]');
-    const matches = datasets.filter(d => {
-        const nameMatch = !keyword || d.name.toLowerCase().includes(keyword);
-        const spatialMatch = !spatial || d.spatial.toLowerCase().includes(spatial);
-        const periodMatch = !period || d.period.toLowerCase().includes(period);
-        return nameMatch && spatialMatch && periodMatch;
-    });
-    
-    if (matches.length > 0) {
-        let resultText = `Found ${matches.length} matching dataset(s):\n\n`;
-        matches.forEach(m => {
-            resultText += `• ${m.name} (${m.size})\n`;
-        });
-        alert(resultText);
-        resultDiv.textContent = `Found ${matches.length} matching dataset(s)`;
-        resultDiv.className = 'text-sm mt-4 bg-yellow-50 p-3 rounded text-yellow-700';
-    } else {
-        alert('No duplicates found! Safe to download');
-        resultDiv.textContent = 'No duplicates found! Safe to download';
-        resultDiv.className = 'text-sm mt-4 hidden bg-green-50 p-3 rounded text-green-700';
-    }
+
+    resultDiv.textContent = 'Checking...';
+    resultDiv.className = 'text-sm mt-4 bg-blue-50 p-3 rounded text-blue-700';
     resultDiv.classList.remove('hidden');
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000); // 10s timeout
+
+    try {
+        const response = await fetch('http://localhost:8080/api/files/check', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ keyword, spatial, period }),
+            signal: controller.signal
+        });
+
+        const data = await safeJson(response);
+
+        if (!response.ok) {
+            resultDiv.textContent = data?.message || `Server error (${response.status}). Please try again.`;
+            resultDiv.className = 'text-sm mt-4 bg-red-50 p-3 rounded text-red-700';
+        } else {
+            resultDiv.textContent = data?.message || 'Check complete.';
+            resultDiv.className = data?.isDuplicate
+                ? 'text-sm mt-4 bg-yellow-50 p-3 rounded text-yellow-700'
+                : 'text-sm mt-4 bg-green-50 p-3 rounded text-green-700';
+        }
+    } catch (error) {
+        if (error.name === 'AbortError') {
+            resultDiv.textContent = 'Request timed out. The server took too long to respond.';
+        } else {
+            resultDiv.textContent = 'Cannot connect to server. Check your network or backend.';
+        }
+        resultDiv.className = 'text-sm mt-4 bg-red-50 p-3 rounded text-red-700';
+        console.error('checkForDuplicates failed:', error);
+    } finally {
+        clearTimeout(timeout);
+        resultDiv.classList.remove('hidden');
+    }
 }
 
 function showComingSoon(event) {
