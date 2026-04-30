@@ -3,19 +3,6 @@
 .AppleDouble
 .LSOverride
 
-# VS Code
-.vscode/
-
-# IntelliJ IDEA
-.idea/
-*.iml
-*.iws
-*.ipr
-
-# Maven build output
-ddas-backend/target/
-ddas-backend/*.log
-
 # H2 / embedded database data files
 ddas-backend/data/
 
