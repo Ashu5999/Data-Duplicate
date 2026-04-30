@@ -157,6 +157,12 @@
     </style>
 </head>
 <body class="antialiased overflow-hidden">
+<script>
+    // Auth guard — redirect to login if not authenticated
+    if (sessionStorage.getItem('ddas_logged_in') !== 'true') {
+        window.location.href = 'Index.html';
+    }
+</script>
 <!-- SideNavBar Shell -->
 <aside class="fixed left-0 top-0 h-screen w-[220px] bg-[#1A2340] shadow-xl z-50 flex flex-col h-full py-6">
 <div class="px-6 mb-10">
@@ -177,7 +183,7 @@
 </nav>
 <div class="px-6 pt-6 mt-auto border-t border-white/10">
 <!-- Logout -->
-<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white transition-colors" href="Index.html">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white transition-colors" href="Index.html" onclick="sessionStorage.removeItem('ddas_logged_in')">
 <span class="material-symbols-outlined">logout</span>
 <span class="text-sm font-medium">Logout</span>
 </a>
@@ -197,7 +203,7 @@
 <div class="h-8 w-[1px] bg-border"></div>
 <div class="flex items-center gap-3">
 <div class="text-right">
-<p class="text-xs font-bold text-main leading-none">DDAS User</p>
+<p class="text-xs font-bold text-main leading-none" id="navUserEmail">DDAS User</p>
 <p class="text-[10px] text-secondary">Registered User</p>
 </div>
 <img class="w-10 h-10 rounded-full border-2 border-white shadow-md object-cover" data-alt="Professional executive headshot with soft studio lighting and corporate background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDC7x3RJFzPHM0KaNOuWKheoXRtEK1-SdAccg-UIdqa4gr3ZeMqHO9MWiOg0KJnixsMy4dDWUIjfmUqP6m_8jOyZlWwyljP65pClrLTWDfjNSWRMslLwV-MW0AkwYbInBpljF4uPwyJZz6X8Bm6-7Vc6eB3fH9mbkGTveGvUIrmwz38WwCKHQkqfCMMOT7r4QvtVz-LBpeXXP5hjJCnp-9SeCq8EvSyjkKyPxOeuLVXeoG0tnhNR_gihWgDtNxDNVz9nMTzzIgIV5Y"/>
@@ -263,6 +269,8 @@ function renderTable(files) {
 function updateStats(files) {
     document.getElementById('statTotal').textContent = files.length;
     document.getElementById('statClean').textContent = files.length;
+    const sideTotal = document.getElementById('sideStatTotal');
+    if (sideTotal) sideTotal.textContent = files.length;
 }
 
 function setStatus(s) {
@@ -293,7 +301,14 @@ function showHealthReport() { alert('Health Report: All systems normal'); }
 function showAutomateAlert() { alert('Feature coming soon!'); }
 function showComingSoon(e) { e.preventDefault(); alert('Coming Soon!'); }
 
-document.addEventListener('DOMContentLoaded', loadFilesFromBackend);
+document.addEventListener('DOMContentLoaded', () => {
+    loadFilesFromBackend();
+    const userEmail = sessionStorage.getItem('ddas_user_email');
+    if (userEmail) {
+        const navEl = document.getElementById('navUserEmail');
+        if (navEl) navEl.textContent = userEmail;
+    }
+});
 </script>
 <!-- Breadcrumbs -->
 <div class="flex items-center gap-2 mb-6 text-secondary text-xs">

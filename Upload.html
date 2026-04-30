@@ -135,6 +135,12 @@
     </style>
 </head>
 <body class="text-on-surface">
+<script>
+    // Auth guard — redirect to login if not authenticated
+    if (sessionStorage.getItem('ddas_logged_in') !== 'true') {
+        window.location.href = 'Index.html';
+    }
+</script>
 <!-- SideNavBar -->
 <aside class="bg-[#1A2340] h-screen w-64 fixed left-0 top-0 flex flex-col h-full py-6 z-50">
 <div class="px-6 mb-10">
@@ -152,7 +158,7 @@ Upload/Download
 </a>
 </nav>
 <div class="px-6 pt-6 mt-auto border-t border-white/10">
-<a class="flex items-center px-6 py-3 transition-colors duration-200 text-slate-400 hover:text-white font-headline font-bold text-sm tracking-tight" href="Index.html">
+<a class="flex items-center px-6 py-3 transition-colors duration-200 text-slate-400 hover:text-white font-headline font-bold text-sm tracking-tight" href="Index.html" onclick="sessionStorage.removeItem('ddas_logged_in')">
 <span class="material-symbols-outlined mr-3">logout</span>
 Logout
 </a>
@@ -217,7 +223,7 @@ Logout
 <span class="material-symbols-outlined text-slate-300">lock</span>
 </div>
 <div id="registerError" class="text-red-600 text-xs font-semibold hidden">Please fill in all fields</div>
-<div id="apiMessage" class="hidden text-xs font-semibold px-3 py-2 rounded-lg mt-2 transition-all"></div>
+<div id="apiMessage" class="hidden transition-all duration-300 mt-4 mb-4"></div>
 <button class="w-full bg-gradient-to-r from-[#006875] to-[#00E5FF] text-white py-4 rounded-xl font-headline font-extrabold flex items-center justify-center gap-2 shadow-lg shadow-[#00E5FF]/20 hover:shadow-xl hover:scale-[1.01] active:scale-95 transition-all" onclick="registerDataset()">
                             Register Dataset
                             <span class="material-symbols-outlined">arrow_forward</span>
@@ -280,6 +286,9 @@ async function handleFileSelect(event) {
         document.getElementById('fileName').textContent = 'Selected: ' + file.name;
         document.getElementById('fileName').style.display = 'block';
         await computeAndDisplayHash(file);
+        
+        // Reset file input so the same file can be selected again
+        event.target.value = '';
     }
 }
 
@@ -311,7 +320,7 @@ async function sendFileToBackend(file, fileName, fileHash) {
     formData.append('file', file);              // binary file
     formData.append('fileName', fileName);
     formData.append('fileHash', fileHash);
-    formData.append('uploadedBy', 'User');
+    formData.append('uploadedBy', sessionStorage.getItem('ddas_user_email') || 'User');
 
     try {
         const response = await fetch('http://localhost:8080/api/files', {
@@ -322,10 +331,10 @@ async function sendFileToBackend(file, fileName, fileHash) {
 
         const data = await safeJson(response);
 
-        if (!response.ok) {
+        if (!response.ok || (data && data.status === 'error')) {
             const msg = data?.message || `Server error (${response.status}). Please try again.`;
             showApiMessage(msg, 'error');
-            console.error('Backend error:', response.status, data);
+            if (!response.ok) console.error('Backend error:', response.status, data);
         } else {
             showApiMessage(data?.message || 'File registered successfully.', 'success');
             console.log('Backend response:', data);
@@ -346,10 +355,26 @@ async function sendFileToBackend(file, fileName, fileHash) {
 function showApiMessage(message, type) {
     const el = document.getElementById('apiMessage');
     if (!el) return;
-    el.textContent = message;
-    el.className = type === 'success'
-        ? 'text-xs font-semibold px-3 py-2 rounded-lg mt-2 bg-emerald-50 text-emerald-700 border border-emerald-200'
-        : 'text-xs font-semibold px-3 py-2 rounded-lg mt-2 bg-red-50 text-red-700 border border-red-200';
+    
+    if (type === 'success') {
+        el.innerHTML = `
+            <div class="flex items-center gap-3 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 shadow-sm">
+                <span class="material-symbols-outlined text-emerald-500 text-2xl">check_circle</span>
+                <div>
+                    <h4 class="font-bold text-sm">Success</h4>
+                    <p class="text-xs mt-0.5">${message}</p>
+                </div>
+            </div>`;
+    } else {
+        el.innerHTML = `
+            <div class="flex items-center gap-3 p-4 rounded-xl bg-red-50 border-2 border-red-300 text-red-900 shadow-md animate-pulse">
+                <span class="material-symbols-outlined text-red-600 text-3xl">warning</span>
+                <div>
+                    <h4 class="font-bold text-base uppercase tracking-wide text-red-700">Action Blocked</h4>
+                    <p class="text-sm font-medium mt-0.5">${message}</p>
+                </div>
+            </div>`;
+    }
     el.classList.remove('hidden');
 }
 
@@ -397,7 +422,7 @@ async function checkForDuplicates() {
         const response = await fetch('http://localhost:8080/api/files/check', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ keyword, spatial, period }),
+            body: JSON.stringify({ keyword }),
             signal: controller.signal
         });
 
