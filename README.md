@@ -10,7 +10,7 @@ A full-stack web application that prevents duplicate file uploads by generating 
 |---|---|
 | **Frontend** | HTML, Tailwind CSS, Vanilla JavaScript |
 | **Backend** | Spring Boot (Java 17+) |
-| **Database** | MySQL (via Spring Data JPA / Hibernate) |
+| **Database** | H2 Embedded Database (via Spring Data JPA / Hibernate) |
 | **Hashing** | SHA-256 (`crypto.subtle` Web API) |
 | **API** | RESTful endpoints |
 
@@ -41,7 +41,6 @@ DDAS project/
 ├── .gitignore              # Root-level ignores (.DS_Store, data/, etc.)
 └── ddas-backend/
     ├── .gitignore          # Backend-level ignores (target/, .idea/, etc.)
-    ├── mysql-init.sql      # MySQL database initialisation script
     ├── pom.xml
     └── src/main/java/com/ddas/backend/
         ├── controller/
@@ -65,7 +64,7 @@ DDAS project/
 2. **File Selection** — User selects a file on the Upload page.
 3. **Client-Side Hashing** — A SHA-256 hash of the file content is generated in the browser using the Web Crypto API.
 4. **Transmission** — The file data, hash, filename, and uploader info are sent to the Spring Boot backend.
-5. **Backend Validation** — The backend queries MySQL to check if the hash already exists.
+5. **Backend Validation** — The backend queries the H2 database to check if the hash already exists.
 6. **Result** — Duplicate files are rejected with a clear message; unique files are stored successfully.
 7. **Password Reset** — Users can navigate to the Reset Password page, enter their registered email and new password, and update their credentials directly.
 
@@ -95,31 +94,23 @@ DDAS project/
 
 ### Prerequisites
 - Java 17+
-- MySQL 8+
 - Maven
 
 ### 1. Database Setup
 
-```sql
--- Run the provided init script, or manually:
-CREATE DATABASE ddas_db;
-```
-
-Or use the included script:
-
-```bash
-mysql -u root -p < ddas-backend/mysql-init.sql
-```
+The project uses an embedded **H2 Database**. No separate database installation is required! The database file is automatically created in the `ddas-backend/data/` folder when the app runs.
 
 ### 2. Configure the Backend
 
-Open `ddas-backend/src/main/resources/application.properties` and update your credentials:
+Open `ddas-backend/src/main/resources/application.properties`. It is already configured for H2:
 
 ```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/ddas_db
-spring.datasource.username=YOUR_USERNAME
-spring.datasource.password=YOUR_PASSWORD
+spring.datasource.url=jdbc:h2:file:./data/ddas_db
+spring.datasource.username=sa
+spring.datasource.password=password
 ```
+
+**H2 Console:** You can access the database UI while the app is running by visiting `http://localhost:8080/h2-console` (JDBC URL: `jdbc:h2:file:./data/ddas_db`, Username: `sa`, Password: `password`).
 
 ### 3. Run the Backend
 
