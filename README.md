@@ -1,77 +1,153 @@
-# DDAS (Data Duplication Alert System)
+# DDAS — Data Duplication Alert System
 
-A full-stack web application that prevents duplicate file uploads by generating a SHA-256 hash of file content and comparing it with existing records.
+A full-stack web application that prevents duplicate file uploads by generating a **SHA-256 hash** of file content on the client side and comparing it against existing records in the database.
+
+---
 
 ## Tech Stack
 
-* **Frontend:** HTML, Tailwind CSS, Vanilla JavaScript
-* **Backend:** Spring Boot (Java)
-* **API:** REST APIs
-* **Hashing:** SHA-256 (crypto.subtle)
-* **Data Storage:** MySQL Database (via Spring Data JPA / Hibernate)
+| Layer | Technology |
+|---|---|
+| **Frontend** | HTML, Tailwind CSS, Vanilla JavaScript |
+| **Backend** | Spring Boot (Java 17+) |
+| **Database** | MySQL (via Spring Data JPA / Hibernate) |
+| **Hashing** | SHA-256 (`crypto.subtle` Web API) |
+| **API** | RESTful endpoints |
+
+---
 
 ## Core Features
 
-* **User Authentication:** Secure user registration and login endpoints.
-* **Smart File Uploads:** Upload files (PDF, images, text, etc.) with automatic SHA-256 hash generation directly in the browser before sending to the backend.
-* **Duplicate Detection:** Checks for duplicates based on file content hash rather than the file name. 
-* **Duplicate Lookup / Check:** Manual search functionality to verify if a file hash or filename has already been registered in the system.
-* **Clean UI:** Includes login, registration, upload system, and a dashboard for viewing records.
-* **Error Handling:** Robust network, server, and timeout error handling on the frontend.
+- 🔐 **User Authentication** — Secure registration and login with session-based access control.
+- 🔑 **Password Reset** — Direct password recovery page allowing users to reset their security key using their registered email.
+- 📤 **Smart File Uploads** — Upload files (PDF, images, text, etc.) with automatic SHA-256 hash generation in the browser before transmission.
+- 🔍 **Duplicate Detection** — Detects duplicates based on file content hash (not file name), preventing identical files from being stored twice.
+- 🗂️ **Dashboard** — View all uploaded file records with metadata.
+- 🔎 **Manual Lookup** — Search by hash or filename to check if a file already exists in the system.
+- 🛡️ **Auth Guard** — Protected pages redirect unauthenticated users to the login page.
+- ⚠️ **Error Handling** — Robust network, server, and timeout error handling on the frontend.
+
+---
 
 ## Project Structure
 
-* `Index.html` - Login UI
-* `Register.html` - Registration UI
-* `Dashboard.html` - Dashboard to view existing files
-* `Upload.html` - File upload, hashing, and API integration
-* **Backend (Spring Boot)** - Contains controllers (`AuthController`, `FileController`), models, and repositories.
+```
+DDAS project/
+├── Index.html              # Login page
+├── Register.html           # Registration page
+├── Dashboard.html          # File records dashboard
+├── Upload.html             # File upload with hash generation
+├── ResetPassword.html      # Password reset page
+├── .gitignore              # Root-level ignores (.DS_Store, data/, etc.)
+└── ddas-backend/
+    ├── .gitignore          # Backend-level ignores (target/, .idea/, etc.)
+    ├── mysql-init.sql      # MySQL database initialisation script
+    ├── pom.xml
+    └── src/main/java/com/ddas/backend/
+        ├── controller/
+        │   ├── AuthController.java   # /api/auth/* endpoints
+        │   └── FileController.java   # /api/files/* endpoints
+        ├── model/
+        │   ├── User.java             # User entity with JPA annotations
+        │   └── FileData.java         # File metadata entity with checksum field
+        ├── repository/
+        │   ├── UserRepository.java
+        │   └── FileRepository.java
+        └── resources/
+            └── application.properties
+```
+
+---
 
 ## How It Works
 
-1. **Authentication:** User registers and logs in.
-2. **File Selection:** User selects a file to upload.
-3. **Frontend Hashing:** A SHA-256 hash is generated on the client side.
-4. **Transmission:** The file data and hash are sent to the Spring Boot backend.
-5. **Backend Validation:** The backend connects to the MySQL database to check if the generated hash already exists.
-6. **Result:** If a duplicate is found, the upload is rejected. Otherwise, it is stored successfully.
+1. **Register / Login** — User creates an account or logs in.
+2. **File Selection** — User selects a file on the Upload page.
+3. **Client-Side Hashing** — A SHA-256 hash of the file content is generated in the browser using the Web Crypto API.
+4. **Transmission** — The file data, hash, filename, and uploader info are sent to the Spring Boot backend.
+5. **Backend Validation** — The backend queries MySQL to check if the hash already exists.
+6. **Result** — Duplicate files are rejected with a clear message; unique files are stored successfully.
+7. **Password Reset** — Users can navigate to the Reset Password page, enter their registered email and new password, and update their credentials directly.
+
+---
 
 ## API Endpoints
 
-### Authentication
-* **POST /api/auth/register**
-  * **Input:** `email`, `password` (form-data)
-  * **Output:** Success or error message.
-* **POST /api/auth/login**
-  * **Input:** `email`, `password` (form-data)
-  * **Output:** Success or error message.
+### Authentication — `/api/auth`
 
-### Files
-* **GET /api/files**
-  * **Output:** List of all uploaded files.
-* **POST /api/files**
-  * **Input:** `file` (MultipartFile), `fileName`, `fileHash`, `uploadedBy`
-  * **Output:** File uploaded successfully or Duplicate file detected.
-* **POST /api/files/check**
-  * **Input:** JSON payload `{"keyword": "..."}`
-  * **Output:** Details on whether the given keyword (hash or filename) matches any existing records.
+| Method | Endpoint | Input | Response |
+|---|---|---|---|
+| `POST` | `/api/auth/register` | `email`, `password` (form-data) | Success / error message |
+| `POST` | `/api/auth/login` | `email`, `password` (form-data) | Success / error message |
+| `POST` | `/api/auth/reset-password` | `email`, `newPassword` (form-data) | Success / error message |
+
+### Files — `/api/files`
+
+| Method | Endpoint | Input | Response |
+|---|---|---|---|
+| `GET` | `/api/files` | — | List of all uploaded file records |
+| `POST` | `/api/files` | `file` (MultipartFile), `fileName`, `fileHash`, `uploadedBy` | Upload success or duplicate detected |
+| `POST` | `/api/files/check` | JSON `{"keyword": "..."}` | Match result for given hash or filename |
+
+---
 
 ## Setup Instructions
 
-### Backend (Spring Boot)
-1. Ensure you have **Java 17+** and **MySQL** installed.
-2. Create a MySQL database named `ddas_db`.
-3. Open `ddas-backend/src/main/resources/application.properties` and verify your database credentials (`spring.datasource.username` and `spring.datasource.password`).
-4. Run the Spring Boot application (e.g., using your IDE or `mvn spring-boot:run`).
-5. Ensure the backend is running on `http://localhost:8080`.
+### Prerequisites
+- Java 17+
+- MySQL 8+
+- Maven
 
-### Frontend
-1. Open the frontend files (`Index.html`, `Register.html`, etc.) in a modern web browser.
-2. Make sure your browser allows local CORS requests if you are opening files directly via the `file://` protocol, or use a local development server (like VS Code Live Server).
+### 1. Database Setup
+
+```sql
+-- Run the provided init script, or manually:
+CREATE DATABASE ddas_db;
+```
+
+Or use the included script:
+
+```bash
+mysql -u root -p < ddas-backend/mysql-init.sql
+```
+
+### 2. Configure the Backend
+
+Open `ddas-backend/src/main/resources/application.properties` and update your credentials:
+
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/ddas_db
+spring.datasource.username=YOUR_USERNAME
+spring.datasource.password=YOUR_PASSWORD
+```
+
+### 3. Run the Backend
+
+```bash
+cd ddas-backend
+mvn spring-boot:run
+```
+
+The backend will start at `http://localhost:8080`.
+
+### 4. Open the Frontend
+
+Open any of the HTML files in your browser, or use a local development server (e.g., VS Code Live Server) to avoid `file://` CORS restrictions.
+
+> **Tip:** With VS Code Live Server, right-click `Index.html` → *Open with Live Server*.
+
+---
 
 ## Future Improvements
 
-* Store actual files in cloud storage (e.g., AWS S3).
-* Add JWT-based robust authorization.
-* Implement role-based access control (Admin vs User).
-* Containerize the application using Docker for easier deployment.
+- [ ] JWT-based stateless authentication & authorization
+- [ ] Role-based access control (Admin vs User)
+- [ ] Cloud file storage integration (e.g., AWS S3)
+- [ ] Containerise the application with Docker & Docker Compose
+- [ ] Email-based password reset with OTP verification
+
+---
+
+## Author
+
+**Ashutosh Tiwari** · [GitHub](https://github.com/Ashu5999)
