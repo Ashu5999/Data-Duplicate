@@ -103,57 +103,6 @@ DDAS project/
 
 ---
 
-## 🚀 Getting Started
-
-### Prerequisites
-
-- **Java 17** or higher ([Download](https://adoptium.net/))
-- **Git** ([Download](https://git-scm.com/))
-- A modern web browser (Chrome, Firefox, Edge)
-
-> **Note:** Maven is **not** required — the project includes Maven Wrapper (`mvnw`).
-
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/Ashu5999/Data-Duplicate.git
-cd "DDAS project"
-```
-
-### 2. Start the Backend
-
-```bash
-cd ddas-backend
-
-# macOS / Linux
-./mvnw spring-boot:run
-
-# Windows
-mvnw.cmd spring-boot:run
-```
-
-The server starts at **http://localhost:8080**.
-
-### 3. Open the Frontend
-
-Open `Index.html` in your browser (double-click or use Live Server).
-
-### 4. Default Access
-
-| Action | Details |
-|--------|---------|
-| Register | Go to `Register.html` → create an account |
-| Login | Use your registered email & security key |
-| H2 Console | http://localhost:8080/h2-console |
-
-**H2 Console credentials:**
-| Field | Value |
-|-------|-------|
-| JDBC URL | `jdbc:h2:file:./data/ddas_db` |
-| Username | `sa` |
-| Password | `5999` |
-
----
 
 ## 📡 API Endpoints
 
