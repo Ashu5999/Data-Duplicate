@@ -122,7 +122,7 @@
         }
         /* Sidebar gradient */
         aside {
-            background: linear-gradient(160deg, #0f1c38 0%, #1A2340 60%, #0d2233 100%) !important;
+            background: linear-gradient(160deg, #3b0764 0%, #4c1d95 60%, #2e1065 100%) !important;
         }
         /* Top nav glass */
         header {
@@ -137,13 +137,13 @@
             100% { background-position: 200% center; }
         }
         .btn-teal {
-            background: linear-gradient(90deg,#006875 0%,#00daf3 40%,#006875 80%,#00daf3 100%);
+            background: linear-gradient(90deg,#7c3aed 0%,#a78bfa 40%,#7c3aed 80%,#a78bfa 100%);
             background-size: 200% auto;
             transition: background-position 0.6s, box-shadow 0.3s;
         }
         .btn-teal:hover {
             animation: shimmer 1.5s linear infinite;
-            box-shadow: 0 8px 30px rgba(0,218,243,0.35);
+            box-shadow: 0 8px 30px rgba(124,58,237,0.35);
         }
         /* Animated background orbs */
         @keyframes float1 {
@@ -164,14 +164,14 @@
     }
 </script>
 <!-- SideNavBar Shell -->
-<aside class="fixed left-0 top-0 h-screen w-[220px] bg-[#1A2340] shadow-xl z-50 flex flex-col h-full py-6">
+<aside class="fixed left-0 top-0 h-screen w-[220px] bg-[#4c1d95] shadow-xl z-50 flex flex-col h-full py-6">
 <div class="px-6 mb-10">
 <h1 class="text-xl font-bold text-white tracking-tighter">DDAS</h1>
 <p class="text-[10px] text-slate-400 font-medium tracking-widest uppercase mt-1">Data Duplication Alert System</p>
 </div>
 <nav class="flex-1 px-3 space-y-1">
 <!-- Dashboard -->
-<a class="bg-[#00E5FF]/10 text-[#00E5FF] border-r-4 border-[#00E5FF] font-manrope text-sm font-medium tracking-wide flex items-center gap-3 px-4 py-3 duration-150" href="Dashboard.html">
+<a class="bg-white/10 text-white border-r-4 border-white font-manrope text-sm font-medium tracking-wide flex items-center gap-3 px-4 py-3 duration-150" href="Dashboard.html">
 <span class="material-symbols-outlined">dashboard</span>
 <span>Dashboard</span>
 </a>
@@ -216,7 +216,12 @@
 <script>
 async function loadFilesFromBackend() {
     try {
-        const response = await fetch('http://localhost:8080/api/files');
+        const userEmail = sessionStorage.getItem('ddas_user_email');
+        let url = 'http://localhost:8080/api/files';
+        if (userEmail) {
+            url += '?uploadedBy=' + encodeURIComponent(userEmail);
+        }
+        const response = await fetch(url);
         if (!response.ok) throw new Error('Server error');
         const files = await response.json();
         renderTable(files);
@@ -226,6 +231,20 @@ async function loadFilesFromBackend() {
         showEmpty('Cannot reach backend. Make sure the server is running.');
         setStatus('offline');
         console.error(err);
+    }
+}
+
+async function deleteFile(id) {
+    if (!confirm('Are you sure you want to delete this file? This action cannot be undone.')) return;
+    try {
+        const response = await fetch(`http://localhost:8080/api/files/${id}`, {
+            method: 'DELETE'
+        });
+        if (!response.ok) throw new Error('Server error');
+        loadFilesFromBackend(); // Refresh the list
+    } catch (err) {
+        console.error('Failed to delete file', err);
+        alert('Failed to delete file.');
     }
 }
 
@@ -254,13 +273,16 @@ function renderTable(files) {
                     <span class="material-symbols-outlined text-lg">${icon}</span>
                 </div>
                 <div>
-                    <p class="text-sm font-semibold table-text">${file.fileName}</p>
+                    <p class="text-sm font-semibold table-text"><a href="http://localhost:8080/api/files/view/${file.id}" target="_blank" class="hover:text-primary hover:underline transition-colors">${file.fileName}</a></p>
                     <p class="text-[10px] text-secondary font-mono">${hash}</p>
                 </div>
             </div></td>
             <td class="px-6 py-4"><span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-green-50 text-green-600 border border-green-100 uppercase">Clean</span></td>
             <td class="px-6 py-4"><p class="text-xs table-text font-medium">${file.uploadedBy || 'User'}</p></td>
-            <td class="px-6 py-4 text-right"><button class="text-secondary hover:text-primary transition-colors"><span class="material-symbols-outlined">download</span></button></td>
+            <td class="px-6 py-4 text-right">
+                <a href="http://localhost:8080/api/files/download/${file.id}" download class="text-secondary hover:text-primary transition-colors inline-block mr-3" title="Download"><span class="material-symbols-outlined">download</span></a>
+                <button onclick="deleteFile(${file.id})" class="text-secondary hover:text-red-500 transition-colors inline-block" title="Delete"><span class="material-symbols-outlined">delete</span></button>
+            </td>
         `;
         tbody.appendChild(row);
     });
@@ -429,13 +451,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         </button>
 </div>
 <!-- Promo/Action Card -->
-<div class="bg-[#1A2340] p-6 rounded-2xl relative overflow-hidden text-white shadow-xl">
-<div class="absolute -right-8 -top-8 w-32 h-32 bg-[#00E5FF]/10 rounded-full blur-2xl"></div>
+<div class="bg-gradient-to-br from-[#4c1d95] to-[#6d28d9] p-6 rounded-2xl relative overflow-hidden text-white shadow-xl">
+<div class="absolute -right-8 -top-8 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
 <div class="relative z-10">
-<span class="material-symbols-outlined text-[#00E5FF] text-3xl mb-4" data-icon="auto_awesome">auto_awesome</span>
+<span class="material-symbols-outlined text-[#c4b5fd] text-3xl mb-4" data-icon="auto_awesome">auto_awesome</span>
 <h3 class="text-lg font-bold mb-2 leading-tight">Automate Initiatives</h3>
-<p class="text-xs text-slate-300 mb-6 leading-relaxed">Let our AI agent handle the boring data classification for your team.</p>
-<button class="w-full bg-[#00E5FF] text-[#1A2340] py-3 rounded-xl font-bold text-sm hover:brightness-110 transition-all" onclick="showAutomateAlert()">Enable Automation</button>
+<p class="text-xs text-purple-200 mb-6 leading-relaxed">Let our AI agent handle the boring data classification for your team.</p>
+<button class="w-full bg-white text-[#4c1d95] py-3 rounded-xl font-bold text-sm hover:brightness-110 transition-all" onclick="showAutomateAlert()">Enable Automation</button>
 </div>
 </div>
 </div>

@@ -1,369 +1,377 @@
 <!DOCTYPE html>
-
-<html class="light" lang="en"><head>
+<html lang="en">
+<head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>DDAS - Sign In</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            "colors": {
-                    "outline": "#6b7a7d",
-                    "primary": "#006875",
-                    "on-error-container": "#93000a",
-                    "background": "var(--background)",
-                    "secondary-container": "#d0d9ff",
-                    "on-tertiary-container": "#4f5878",
-                    "surface-tint": "#006875",
-                    "on-primary-fixed": "#001f24",
-                    "on-background": "var(--on-background)",
-                    "surface-variant": "#dee2ed",
-                    "on-surface": "var(--on-surface)",
-                    "on-surface-variant": "var(--on-surface-variant)",
-                    "on-primary-fixed-variant": "#004f58",
-                    "primary-container": "#00e5ff",
-                    "surface-container-lowest": "var(--surface-container-lowest)",
-                    "on-error": "#ffffff",
-                    "tertiary": "#545d7d",
-                    "inverse-surface": "#2c3139",
-                    "surface-container": "var(--surface-container)",
-                    "on-primary": "#ffffff",
-                    "tertiary-fixed-dim": "#bdc5ea",
-                    "secondary": "#545d7d",
-                    "error": "#ba1a1a",
-                    "on-secondary": "#ffffff",
-                    "surface": "var(--surface)",
-                    "secondary-fixed-dim": "#bdc5ea",
-                    "inverse-primary": "#00daf3",
-                    "error-container": "#ffdad6",
-                    "on-tertiary-fixed-variant": "#3d4665",
-                    "outline-variant": "#bac9cc",
-                    "surface-container-highest": "#dee2ed",
-                    "inverse-on-surface": "#edf1fc",
-                    "on-secondary-container": "#555e7e",
-                    "on-primary-container": "#00626e",
-                    "primary-fixed": "#9cf0ff",
-                    "secondary-fixed": "#dbe1ff",
-                    "surface-container-low": "var(--surface-container-low)",
-                    "surface-dim": "#d6dae5",
-                    "surface-bright": "var(--surface-bright)",
-                    "on-secondary-fixed": "#111a37",
-                    "surface-container-high": "var(--surface-container-high)",
-                    "tertiary-container": "#c6cff5",
-                    "on-tertiary": "#ffffff",
-                    "primary-fixed-dim": "#00daf3",
-                    "on-secondary-fixed-variant": "#3d4665",
-                    "tertiary-fixed": "#dbe1ff",
-                    "on-tertiary-fixed": "#111a37"
-            },
-            "borderRadius": {
-                    "DEFAULT": "0.125rem",
-                    "lg": "0.25rem",
-                    "xl": "0.5rem",
-                    "full": "0.75rem"
-            },
-            "fontFamily": {
-                    "headline": ["Manrope"],
-                    "body": ["Inter"],
-                    "label": ["Inter"]
-            }
-          },
-        },
-      }
-    </script>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>DDAS – Sign In</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
 <style>
-        :root {
-            --background: #f0f4ff;
-            --surface-container-lowest: #ffffff;
-            --surface-container: #eaeef9;
-            --surface-container-low: #eff3fe;
-            --surface-container-high: #e4e8f3;
-            --surface: #f0f4ff;
-            --surface-bright: #f8f9ff;
-            --on-surface: #171c23;
-            --on-surface-variant: #3b494c;
-            --on-background: #171c23;
-        }
-        .dark {
-            --background: #0f172a;
-            --surface-container-lowest: #1e293b;
-            --surface-container: #1e293b;
-            --surface-container-low: #162032;
-            --surface-container-high: #253348;
-            --surface: #0f172a;
-            --surface-bright: #1e293b;
-            --on-surface: #e2e8f0;
-            --on-surface-variant: #94a3b8;
-            --on-background: #e2e8f0;
-        }
-        .dark .glass-card {
-            background: rgba(30,41,59,0.85);
-            border: 1px solid rgba(255,255,255,0.08);
-        }
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-            display: inline-block;
-            vertical-align: middle;
-        }
-        /* Animated grid */
-        .bg-grid-pattern {
-            background-size: 50px 50px;
-            background-image:
-                linear-gradient(to right, rgba(0,104,117,0.07) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(0,104,117,0.07) 1px, transparent 1px);
-        }
-        /* Floating gradient orbs */
-        @keyframes float1 {
-            0%, 100% { transform: translate(0,0) scale(1); }
-            50% { transform: translate(40px, -30px) scale(1.08); }
-        }
-        @keyframes float2 {
-            0%, 100% { transform: translate(0,0) scale(1); }
-            50% { transform: translate(-30px, 40px) scale(1.05); }
-        }
-        .orb-1 { animation: float1 8s ease-in-out infinite; }
-        .orb-2 { animation: float2 10s ease-in-out infinite; }
-        .orb-3 { animation: float1 12s ease-in-out infinite reverse; }
-        /* Card entrance */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(24px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-        .card-enter { animation: fadeInUp 0.6s cubic-bezier(0.16,1,0.3,1) both; }
-        /* Glassmorphism card */
-        .glass-card {
-            background: rgba(255,255,255,0.85);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255,255,255,0.6);
-            box-shadow: 0 24px 60px rgba(0,104,117,0.10), 0 4px 16px rgba(0,0,0,0.04);
-        }
-        /* Shimmer button */
-        @keyframes shimmer {
-            0%   { background-position: -200% center; }
-            100% { background-position: 200% center; }
-        }
-        .btn-primary {
-            background: linear-gradient(90deg, #006875 0%, #00daf3 40%, #006875 80%, #00daf3 100%);
-            background-size: 200% auto;
-            color: white;
-            transition: background-position 0.6s, box-shadow 0.3s, transform 0.15s;
-        }
-        .btn-primary:hover {
-            animation: shimmer 1.5s linear infinite;
-            box-shadow: 0 8px 30px rgba(0,218,243,0.35);
-            transform: translateY(-1px);
-        }
-        .btn-primary:active { transform: scale(0.98); }
-        /* Input glow */
-        input:focus {
-            box-shadow: 0 0 0 3px rgba(0,218,243,0.15);
-        }
-        /* Logo pulse */
-        @keyframes logoPulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(0,229,255,0.4); }
-            50% { box-shadow: 0 0 0 12px rgba(0,229,255,0); }
-        }
-        .logo-pulse { animation: logoPulse 2.5s ease-in-out infinite; }
-    </style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{min-height:100vh;display:flex;font-family:'Inter',sans-serif;background:#fff;overflow:hidden;}
+
+/* ── Two panels ── */
+.left{flex:1;background:#fff;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.left::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(124,58,237,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(124,58,237,.04) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;}
+.right{width:460px;min-height:100vh;background:linear-gradient(160deg,#f5f0ff,#ede9fe 60%,#faf5ff);display:flex;align-items:center;justify-content:center;padding:40px 48px;overflow-y:auto;}
+
+/* ── Top-right logo ── */
+.top-logo{position:fixed;top:20px;left:20px;display:flex;align-items:center;gap:9px;z-index:100;background:rgba(255,255,255,.85);backdrop-filter:blur(12px);border:1px solid #e9d5ff;border-radius:50px;padding:7px 16px 7px 10px;}
+.top-logo-icon{width:30px;height:30px;background:linear-gradient(135deg,#7c3aed,#a78bfa);border-radius:8px;display:flex;align-items:center;justify-content:center;}
+.top-logo-icon svg{width:16px;height:16px;}
+.top-logo-text{font-family:'Manrope',sans-serif;font-weight:800;font-size:15px;color:#3b0764;letter-spacing:-.3px;}
+
+/* ══ CHARACTER STAGE ══ */
+.stage{position:relative;width:480px;height:380px;flex-shrink:0;}
+
+/* Purple tall – BEHIND orange (z:1), tallest character */
+#cP{position:absolute;bottom:0;left:100px;width:120px;height:310px;background:#7c3aed;border-radius:18px 18px 6px 6px;z-index:1;}
+/* Orange semicircle – IN FRONT of purple (z:2), short dome */
+#cO{position:absolute;bottom:0;left:0;width:280px;height:160px;background:#f97316;border-radius:140px 140px 0 0;z-index:2;}
+/* Dark rect – beside purple, in front (z:3) */
+#cD{position:absolute;bottom:0;left:215px;width:100px;height:230px;background:#1e1b2e;border-radius:12px 12px 5px 5px;z-index:3;}
+/* Yellow capsule – touching dark (z:4) */
+#cY{position:absolute;bottom:0;left:312px;width:82px;height:190px;background:#eab308;border-radius:44px 44px 10px 10px;z-index:4;}
+
+/* ── Eye containers ── */
+.eyes{position:absolute;left:50%;transform:translateX(-50%);display:flex;}
+#eO{bottom:30%;gap:10px;}
+#eP{top:26%;gap:10px;}
+#eD{top:30%;gap:12px;}
+#eY{top:34%;gap:8px;}
+
+/* Large (dark char) – big expressive white eyes */
+.el{width:26px;height:26px;background:#fff;border-radius:50%;position:relative;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,.25);}
+.el .p{width:14px;height:14px;background:#111;border-radius:50%;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);transition:transform .08s linear;}
+.el .p::after{content:'';width:4px;height:4px;background:#fff;border-radius:50%;position:absolute;top:2px;left:2px;}
+/* Medium (purple) */
+.em{width:18px;height:18px;background:#fff;border-radius:50%;position:relative;overflow:hidden;}
+.em .p{width:10px;height:10px;background:#111;border-radius:50%;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);transition:transform .08s linear;}
+.em .p::after{content:'';width:3px;height:3px;background:#fff;border-radius:50%;position:absolute;top:1px;left:1px;}
+/* Small (orange, yellow) – white eyes with movable dark pupils */
+.es{width:12px;height:12px;background:#fff;border-radius:50%;position:relative;overflow:hidden;}
+.es .p{width:7px;height:7px;background:#111;border-radius:50%;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);transition:transform .08s linear;}
+
+/* ── Mouths ── */
+.mouth{position:absolute;left:50%;transform:translateX(-50%);}
+#mO{bottom:15%;width:20px;height:3.5px;background:#6b2a00;border-radius:2px;}
+#mP{bottom:18%;width:24px;height:3.5px;background:#fff;border-radius:2px;opacity:.8;}
+#mD{bottom:18%;width:22px;height:3.5px;background:#fff;border-radius:2px;opacity:.7;}
+#mY{bottom:20%;width:16px;height:3px;background:#6b5200;border-radius:2px;}
+
+/* ── Animations ── */
+@keyframes happyBounce{0%,100%{transform:translateY(0);}30%{transform:translateY(-20px);}60%{transform:translateY(-8px);}80%{transform:translateY(-3px);}}
+@keyframes sadDroop{to{transform:translateY(10px);}}
+@keyframes peekUp{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
+.a-happy{animation:happyBounce .7s ease 2;}
+.a-sad{animation:sadDroop .5s ease forwards;}
+.a-peek{animation:peekUp .5s ease forwards;}
+
+/* ══ LOGIN CARD ══ */
+.card{width:100%;max-width:380px;}
+.logo-row{display:flex;align-items:center;gap:12px;margin-bottom:30px;}
+.logo-icon{width:48px;height:48px;background:linear-gradient(135deg,#7c3aed,#a78bfa);border-radius:14px;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(124,58,237,.3);}
+.logo-text{font-family:'Manrope',sans-serif;font-size:26px;font-weight:800;color:#3b0764;}
+.logo-sub{font-size:10px;font-weight:700;color:#a78bfa;letter-spacing:.07em;text-transform:uppercase;}
+.form-title{font-family:'Manrope',sans-serif;font-size:22px;font-weight:800;color:#1e1b4b;margin-bottom:4px;}
+.form-sub{font-size:13px;color:#6b7280;margin-bottom:28px;}
+
+.field{margin-bottom:18px;}
+.field label{display:block;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#7c3aed;margin-bottom:7px;}
+.field-row{position:relative;}
+.fi{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:#a78bfa;pointer-events:none;}
+.field input{width:100%;background:#fff;border:2px solid #e9d5ff;border-radius:12px;padding:13px 14px 13px 42px;font-size:14px;color:#1e1b4b;font-family:'Inter',sans-serif;outline:none;transition:all .25s;}
+.field input:focus{border-color:#7c3aed;box-shadow:0 0 0 4px rgba(124,58,237,.12);}
+.field input::placeholder{color:#c4b5fd;}
+.pw-btn{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#a78bfa;font-size:16px;padding:4px;}
+.pw-btn:hover{color:#7c3aed;}
+.field-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;}
+.field-meta label{margin-bottom:0;}
+.forgot{font-size:11px;font-weight:700;color:#7c3aed;text-decoration:none;}
+.forgot:hover{color:#5b21b6;}
+.rem{display:flex;align-items:center;gap:8px;margin-bottom:22px;}
+.rem input{accent-color:#7c3aed;width:15px;height:15px;cursor:pointer;}
+.rem label{font-size:12px;color:#6b7280;cursor:pointer;}
+.btn{width:100%;padding:15px;background:linear-gradient(90deg,#7c3aed,#a855f7);border:none;border-radius:12px;color:#fff;font-family:'Manrope',sans-serif;font-size:15px;font-weight:800;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(124,58,237,.4);}
+.btn:active{transform:scale(.98);}
+.btn:disabled{opacity:.7;cursor:not-allowed;transform:none;}
+.msg{font-size:12px;font-weight:600;margin-top:12px;padding:10px 14px;border-radius:10px;display:none;}
+.err{background:#fef2f2;border:1.5px solid #fecaca;color:#dc2626;}
+.ok{background:#f0fdf4;border:1.5px solid #bbf7d0;color:#16a34a;}
+.foot{margin-top:22px;text-align:center;font-size:12px;color:#9ca3af;}
+.foot a{color:#7c3aed;font-weight:700;text-decoration:none;}
+
+.status{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:7px;background:rgba(124,58,237,.07);border:1px solid rgba(124,58,237,.15);border-radius:999px;padding:6px 18px;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#7c3aed;white-space:nowrap;}
+.sdot{width:7px;height:7px;background:#22c55e;border-radius:50%;animation:blink 2s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+</style>
 </head>
-<body class="bg-[#f0f4ff] font-body text-on-surface min-h-screen flex items-center justify-center relative overflow-hidden">
-<!-- Background Decor -->
-<div class="absolute inset-0 bg-grid-pattern pointer-events-none"></div>
-<div class="orb-1 absolute top-[-15%] right-[-10%] w-[600px] h-[600px] bg-[#00E5FF]/15 rounded-full blur-[130px] pointer-events-none"></div>
-<div class="orb-2 absolute bottom-[-15%] left-[-10%] w-[500px] h-[500px] bg-[#006875]/15 rounded-full blur-[120px] pointer-events-none"></div>
-<div class="orb-3 absolute top-[40%] left-[30%] w-[300px] h-[300px] bg-[#00daf3]/10 rounded-full blur-[100px] pointer-events-none"></div>
-<!-- Main Content Wrapper -->
-<main class="relative z-10 w-full max-w-[480px] px-6">
-<!-- Header/Logo Area -->
-<div class="flex flex-col items-center mb-10">
-<div class="w-16 h-16 bg-gradient-to-br from-[#00E5FF] to-[#006875] rounded-2xl flex items-center justify-center mb-6 logo-pulse border border-white/20">
-<span class="material-symbols-outlined text-on-primary-container text-4xl" data-icon="waves" style="font-variation-settings: 'FILL' 1;">waves</span>
-</div>
-<h1 class="font-headline text-3xl font-extrabold text-on-background tracking-tight mb-2">
-                DDAS
-            </h1>
-<p class="text-on-surface-variant font-medium text-center max-w-[280px]">
-                Preventing duplicate downloads across your institute.
-            </p>
-</div>
-<!-- Login Card -->
-<div class="card-enter glass-card rounded-2xl p-10">
-<form class="space-y-6">
-<!-- Email Input -->
-<div class="space-y-2">
-<label class="block font-label text-[11px] font-bold uppercase tracking-wider text-on-surface-variant px-1" for="email">
-                        Institutional Email
-                    </label>
-<div class="relative group">
-<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-<span class="material-symbols-outlined text-outline text-xl transition-colors group-focus-within:text-primary" data-icon="mail">mail</span>
-</div>
-<input class="w-full bg-surface-container-low border-0 border-b-2 border-transparent focus:border-primary focus:ring-0 rounded-lg py-4 pl-12 pr-4 text-on-surface font-body text-sm transition-all placeholder:text-outline/50" id="email" placeholder="name@institute.edu" type="email"/>
-</div>
-</div>
-<!-- Password Input -->
-<div class="space-y-2">
-<div class="flex justify-between items-center px-1">
-<label class="block font-label text-[11px] font-bold uppercase tracking-wider text-on-surface-variant" for="password">
-                            Security Key
-                        </label>
-<a class="text-[11px] font-bold uppercase tracking-wider text-primary hover:text-primary-fixed-dim transition-colors" href="ResetPassword.html">
-                            Forgot Key?
-                        </a>
-</div>
-<div class="relative group">
-<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-<span class="material-symbols-outlined text-outline text-xl transition-colors group-focus-within:text-primary" data-icon="lock">lock</span>
-</div>
-<input class="w-full bg-surface-container-low border-0 border-b-2 border-transparent focus:border-primary focus:ring-0 rounded-lg py-4 pl-12 pr-10 text-on-surface font-body text-sm transition-all placeholder:text-outline/50" id="password" placeholder="••••••••••••" type="password"/>
-<button type="button" onclick="togglePassword('password', this)" class="absolute inset-y-0 right-0 pr-4 flex items-center text-outline hover:text-primary transition-colors">
-<span class="material-symbols-outlined text-xl">visibility_off</span>
-</button>
-</div>
-</div>
-<!-- Options -->
-<div class="flex items-center space-x-2 px-1">
-<input class="w-4 h-4 rounded-lg border-outline-variant text-primary focus:ring-primary transition-all cursor-pointer" id="remember" type="checkbox"/>
-<label class="text-xs font-medium text-on-surface-variant cursor-pointer select-none" for="remember">
-                        Remember this workstation
-                    </label>
-</div>
-<!-- Action Button -->
-<button class="btn-primary w-full font-headline font-bold py-4 px-6 rounded-xl flex items-center justify-center gap-3" type="button" onclick="validateLogin()">
-    Sign In to Console
-    <span class="material-symbols-outlined text-xl">arrow_forward</span>
-</button>
-<!-- Error Messages -->
-<div id="emailError" class="text-red-600 text-xs font-semibold mt-2 hidden">Please enter a valid email</div>
-<div id="passwordError" class="text-red-600 text-xs font-semibold mt-2 hidden">Please enter your security key</div>
-</form>
-<!-- Footer Link -->
-<div class="mt-8 text-center">
-<p class="text-xs text-on-surface-variant">
-                    New initiative at your department? 
-                    <a class="text-primary font-bold hover:underline" href="Register.html">Request access</a>
-</p>
-</div>
-</div>
-<!-- System Status/Metadata -->
-<div class="mt-12 flex flex-col items-center gap-4">
-<div class="flex items-center gap-2 bg-surface-container py-2 px-4 rounded-full border border-outline-variant/10">
-<span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
-<span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Systems Operational: Data Duplication Alert System</span>
-</div>
-<div class="flex gap-6 text-[11px] font-medium text-outline">
-<a class="hover:text-on-surface transition-colors" href="#" onclick="showComingSoon(event)">Privacy Protocol</a>
-<a class="hover:text-on-surface transition-colors" href="#" onclick="showComingSoon(event)">Data Compliance</a>
-<a class="hover:text-on-surface transition-colors" href="#" onclick="showComingSoon(event)">Enterprise Support</a>
-</div>
-</div>
-</main>
-<!-- Decorative Image Layer (Ambient) -->
-<script>
-function togglePassword(inputId, btn) {
-    const input = document.getElementById(inputId);
-    const icon  = btn.querySelector('.material-symbols-outlined');
-    if (input.type === 'password') {
-        input.type = 'text';
-        icon.textContent = 'visibility';
-    } else {
-        input.type = 'password';
-        icon.textContent = 'visibility_off';
-    }
-}
+<body>
 
-async function validateLogin() {
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value;
-    const emailError = document.getElementById('emailError');
-    const passwordError = document.getElementById('passwordError');
+<!-- Top-right DDAS logo -->
+<div class="top-logo">
+  <div class="top-logo-icon">
+    <svg viewBox="0 0 16 16" fill="none"><rect x="1" y="11" width="14" height="3" rx="1.5" fill="white" opacity=".4"/><rect x="1" y="6.5" width="14" height="3" rx="1.5" fill="white" opacity=".7"/><rect x="1" y="2" width="14" height="3" rx="1.5" fill="white"/></svg>
+  </div>
+  <span class="top-logo-text">DDAS</span>
+</div>
 
-    // Basic empty check
-    let isValid = true;
-    if (!email || !email.includes('@')) {
-        emailError.classList.remove('hidden'); isValid = false;
-    } else { emailError.classList.add('hidden'); }
+<!-- LEFT PANEL -->
+<div class="left">
+  <div class="stage" id="stage">
 
-    if (!password || password.trim() === '') {
-        passwordError.classList.remove('hidden'); isValid = false;
-    } else { passwordError.classList.add('hidden'); }
+    <!-- Orange dome (bottom-left, z=1) -->
+    <div id="cO">
+      <div class="eyes" id="eO">
+        <div class="es"><div class="p" id="pOL"></div></div>
+        <div class="es"><div class="p" id="pOR"></div></div>
+      </div>
+      <div class="mouth" id="mO"></div>
+    </div>
 
-    if (!isValid) return;
+    <!-- Purple tall (z=2) -->
+    <div id="cP">
+      <div class="eyes" id="eP">
+        <div class="em"><div class="p" id="pPL"></div></div>
+        <div class="em"><div class="p" id="pPR"></div></div>
+      </div>
+      <div class="mouth" id="mP"></div>
+    </div>
 
-    // Call backend to verify credentials
-    try {
-        const formData = new FormData();
-        formData.append('email', email);
-        formData.append('password', password);
+    <!-- Dark rect (z=3) -->
+    <div id="cD">
+      <div class="eyes" id="eD">
+        <div class="el"><div class="p" id="pDL"></div></div>
+        <div class="el"><div class="p" id="pDR"></div></div>
+      </div>
+      <div class="mouth" id="mD"></div>
+    </div>
 
-        const response = await fetch('http://localhost:8080/api/auth/login', {
-            method: 'POST',
-            body: formData
-        });
+    <!-- Yellow capsule (z=4) -->
+    <div id="cY">
+      <div class="eyes" id="eY">
+        <div class="es"><div class="p" id="pYL"></div></div>
+        <div class="es"><div class="p" id="pYR"></div></div>
+      </div>
+      <div class="mouth" id="mY"></div>
+    </div>
 
-        const data = await response.json();
+  </div>
+</div>
 
-        if (data.status === 'success') {
-            sessionStorage.setItem('ddas_logged_in', 'true');
-            sessionStorage.setItem('ddas_user_email', data.email || email);
-            window.location.href = 'Dashboard.html';
-        } else {
-            passwordError.textContent = 'Invalid email or password';
-            passwordError.classList.remove('hidden');
-        }
-    } catch (error) {
-        passwordError.textContent = 'Cannot reach server. Is the backend running?';
-        passwordError.classList.remove('hidden');
-        console.error('Login error:', error);
-    }
-}
+<!-- RIGHT PANEL -->
+<div class="right">
+  <div class="card">
+    <div class="logo-row">
+      <div class="logo-icon">
+        <svg viewBox="0 0 26 26" fill="none"><rect x="2" y="18" width="22" height="5" rx="2.5" fill="white" opacity=".4"/><rect x="2" y="10" width="22" height="5" rx="2.5" fill="white" opacity=".7"/><rect x="2" y="2" width="22" height="5" rx="2.5" fill="white"/></svg>
+      </div>
+      <div>
+        <div class="logo-text">DDAS</div>
+        <div class="logo-sub">Data Duplication Alert System</div>
+      </div>
+    </div>
+    <div class="form-title">Welcome back 👋</div>
+    <div class="form-sub">Sign in to access the management console.</div>
 
+    <div class="field">
+      <label for="email">Institutional Email</label>
+      <div class="field-row">
+        <svg class="fi" viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg>
+        <input type="email" id="email" placeholder="name@institute.edu" autocomplete="username"/>
+      </div>
+    </div>
 
+    <div class="field">
+      <div class="field-meta">
+        <label for="password">Security Key</label>
+        <a href="ResetPassword.html" class="forgot">Forgot Key?</a>
+      </div>
+      <div class="field-row">
+        <svg class="fi" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
+        <input type="password" id="password" placeholder="••••••••••••" autocomplete="current-password"/>
+        <button type="button" class="pw-btn" id="pwBtn" onclick="togglePw()">👁</button>
+      </div>
+    </div>
 
-function showComingSoon(event) {
-    event.preventDefault();
-    alert('Coming Soon!');
-}
+    <div class="rem">
+      <input type="checkbox" id="remember"/>
+      <label for="remember">Remember this workstation</label>
+    </div>
 
-</script>
-<!-- Dark Mode Toggle Button -->
-<div class="absolute top-4 right-4">
-    <button id="darkModeToggle" class="w-10 h-10 rounded-full flex items-center justify-center bg-surface-container hover:bg-surface-container-high transition-colors">
-        <span class="material-symbols-outlined text-on-surface-variant" id="darkModeIcon">dark_mode</span>
+    <button class="btn" id="loginBtn" type="button" onclick="doLogin()">
+      Sign In to Console
+      <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
     </button>
+
+    <div class="msg err" id="errMsg"></div>
+    <div class="msg ok"  id="okMsg"></div>
+    <div class="foot">New here? <a href="Register.html">Request access</a></div>
+  </div>
 </div>
+
+<div class="status"><div class="sdot"></div>Systems Operational</div>
+
 <script>
-    const darkModeToggle = document.getElementById('darkModeToggle');
-    const darkModeIcon = document.getElementById('darkModeIcon');
-    const html = document.documentElement;
+/* ══ EYE TRACKING ══ */
+const PAIRS = [
+  {l:'pOL',r:'pOR',max:3},
+  {l:'pPL',r:'pPR',max:4},
+  {l:'pDL',r:'pDR',max:5},
+  {l:'pYL',r:'pYR',max:3}
+];
 
-    const applyTheme = (theme) => {
-        if (theme === 'dark') {
-            html.classList.add('dark');
-            darkModeIcon.textContent = 'light_mode';
-        } else {
-            html.classList.remove('dark');
-            darkModeIcon.textContent = 'dark_mode';
-        }
-    };
+function movePair(lId, rId, maxT, tx, ty){
+  [lId,rId].forEach(id=>{
+    const p=document.getElementById(id);
+    if(!p)return;
+    const eye=p.parentElement;
+    const r=eye.getBoundingClientRect();
+    const cx=r.left+r.width/2, cy=r.top+r.height/2;
+    const dx=tx-cx, dy=ty-cy;
+    const d=Math.sqrt(dx*dx+dy*dy)||1;
+    const t=Math.min(d*.15,maxT);
+    p.style.transform=`translate(calc(-50% + ${dx/d*t}px),calc(-50% + ${dy/d*t}px))`;
+  });
+}
+function moveAll(tx,ty){PAIRS.forEach(({l,r,max})=>movePair(l,r,max,tx,ty));}
+function centerAll(){document.querySelectorAll('.p').forEach(p=>{p.style.display='';p.style.transform='translate(-50%,-50%)';});}
+function lookLeft(){
+  document.querySelectorAll('.p').forEach(p=>{p.style.display='';p.style.transform='translate(calc(-50% - 4px),calc(-50% + 2px))';});
+}
+function lookAt(el){
+  const r=el.getBoundingClientRect();
+  const tx=r.left+r.width/2, ty=r.top+r.height/2;
+  PAIRS.forEach(({l,r2,max})=>movePair(l,r2||l.replace('L','R'),max,tx,ty));
+}
 
-    darkModeToggle.addEventListener('click', () => {
-        const currentTheme = localStorage.getItem('theme') || 'light';
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        localStorage.setItem('theme', newTheme);
-        applyTheme(newTheme);
-    });
+let state='idle';
+document.addEventListener('mousemove',e=>{if(state==='idle')moveAll(e.clientX,e.clientY);});
 
-    document.addEventListener('DOMContentLoaded', () => {
-        const savedTheme = localStorage.getItem('theme') || 'light';
-        applyTheme(savedTheme);
-    });
+/* mouths */
+function resetMouths(){
+  ['mO','mP','mD','mY'].forEach(id=>{
+    const m=document.getElementById(id);
+    m.style.cssText='position:absolute;left:50%;transform:translateX(-50%);';
+    if(id==='mO'){m.style.bottom='15%';m.style.width='20px';m.style.height='3.5px';m.style.background='#6b2a00';m.style.borderRadius='2px';}
+    else if(id==='mP'){m.style.bottom='18%';m.style.width='24px';m.style.height='3.5px';m.style.background='#fff';m.style.borderRadius='2px';m.style.opacity='.8';}
+    else if(id==='mD'){m.style.bottom='18%';m.style.width='22px';m.style.height='3.5px';m.style.background='#fff';m.style.borderRadius='2px';m.style.opacity='.7';}
+    else{m.style.bottom='20%';m.style.width='16px';m.style.height='3px';m.style.background='#6b5200';m.style.borderRadius='2px';}
+  });
+}
+function setMouths(type){
+  ['mO','mP','mD','mY'].forEach(id=>{
+    const m=document.getElementById(id);
+    m.style.cssText='position:absolute;left:50%;transform:translateX(-50%);';
+    const isLight=(id==='mO'||id==='mY');
+    const col=isLight?'#3b1500':'#fff';
+    if(type==='happy'){
+      m.style.bottom='18%';m.style.width='22px';m.style.height='11px';
+      m.style.border=`3px solid ${col}`;m.style.borderTop='none';
+      m.style.borderRadius='0 0 999px 999px';m.style.background='transparent';
+    } else if(type==='sad') {
+      m.style.bottom='18%';m.style.width='22px';m.style.height='11px';
+      m.style.border=`3px solid ${col}`;m.style.borderBottom='none';
+      m.style.borderRadius='999px 999px 0 0';m.style.background='transparent';
+      m.style.marginTop='6px';
+    } else if(type==='shy') {
+      /* wavy nervous line for password state */
+      m.style.bottom='18%';m.style.width='20px';m.style.height='5px';
+      m.style.background='transparent';
+      m.style.border='none';
+      m.style.borderBottom=`3px solid ${col}`;
+      m.style.borderRadius='0 50% 0 50%';
+    }
+  });
+}
+
+function animChars(cls){
+  ['cO','cP','cD','cY'].forEach(id=>{
+    const el=document.getElementById(id);
+    el.classList.remove('a-happy','a-sad','a-peek');
+    void el.offsetWidth;
+    if(cls)el.classList.add(cls);
+  });
+}
+
+/* input handlers */
+const emailEl=document.getElementById('email');
+const passEl=document.getElementById('password');
+
+emailEl.addEventListener('focus',()=>{
+  if(state==='happy'||state==='sad')return;
+  state='email'; animChars('a-peek'); resetMouths();
+  const r=emailEl.getBoundingClientRect();
+  moveAll(r.left+r.width/2, r.top+r.height/2);
+});
+emailEl.addEventListener('input',()=>{
+  if(state==='email'){const r=emailEl.getBoundingClientRect();moveAll(r.left+r.width/2,r.top+r.height/2);}
+});
+emailEl.addEventListener('blur',()=>{if(state==='email'){state='idle';animChars('');resetMouths();}});
+
+passEl.addEventListener('focus',()=>{
+  if(state==='happy'||state==='sad')return;
+  state='password'; animChars(''); setMouths('shy'); lookLeft();
+});
+passEl.addEventListener('blur',()=>{if(state==='password'){state='idle';centerAll();resetMouths();}});
+
+resetMouths();
+
+/* ══ PASSWORD TOGGLE ══ */
+function togglePw(){
+  const i=document.getElementById('password'),b=document.getElementById('pwBtn');
+  i.type=i.type==='password'?'text':'password';
+  b.textContent=i.type==='password'?'👁':'🙈';
+}
+
+/* ══ LOGIN ══ */
+async function doLogin(){
+  const email=document.getElementById('email').value.trim();
+  const pass=document.getElementById('password').value;
+  const err=document.getElementById('errMsg'),ok=document.getElementById('okMsg');
+  err.style.display='none'; ok.style.display='none';
+
+  if(!email||!email.includes('@')){
+    err.textContent='Please enter a valid institutional email.';
+    err.style.display='block';
+    state='sad';animChars('a-sad');setMouths('sad');
+    setTimeout(()=>{state='idle';animChars('');resetMouths();centerAll();},3000);return;
+  }
+  if(!pass){
+    err.textContent='Please enter your security key.';
+    err.style.display='block';
+    state='sad';animChars('a-sad');setMouths('sad');
+    setTimeout(()=>{state='idle';animChars('');resetMouths();centerAll();},3000);return;
+  }
+
+  const btn=document.getElementById('loginBtn');
+  btn.textContent='Signing in…';btn.disabled=true;
+  try{
+    const fd=new FormData();fd.append('email',email);fd.append('password',pass);
+    const res=await fetch('http://localhost:8080/api/auth/login',{method:'POST',body:fd});
+    const data=await res.json();
+    if(data.status==='success'){
+      sessionStorage.setItem('ddas_logged_in','true');
+      sessionStorage.setItem('ddas_user_email',data.email||email);
+      state='happy';animChars('a-happy');setMouths('happy');
+      ok.textContent='Login successful! Redirecting…';ok.style.display='block';
+      setTimeout(()=>window.location.href='Dashboard.html',1200);
+    } else {
+      state='sad';animChars('a-sad');setMouths('sad');
+      err.textContent='Invalid email or security key.';err.style.display='block';
+      setTimeout(()=>{state='idle';animChars('');resetMouths();centerAll();},3000);
+    }
+  }catch(e){
+    state='sad';animChars('a-sad');setMouths('sad');
+    err.textContent='Cannot reach server. Is the backend running?';err.style.display='block';
+    setTimeout(()=>{state='idle';animChars('');resetMouths();centerAll();},3000);
+    console.error(e);
+  }finally{
+    btn.innerHTML='Sign In to Console <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>';
+    btn.disabled=false;
+  }
+}
+document.addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 </script>
-</body></html>
+</body>
+</html>

@@ -1,144 +1,213 @@
-# DDAS — Data Duplication Alert System
+# 🔒 DDAS — Data Duplication Alert System
 
-A full-stack web application that prevents duplicate file uploads by generating a **SHA-256 hash** of file content on the client side and comparing it against existing records in the database.
+> A full-stack web application that detects and prevents duplicate file uploads using **SHA-256 hash comparison**. Built with a vanilla HTML/JS frontend and a Spring Boot (Java) backend.
 
 ---
 
-## Tech Stack
+## 📋 Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+- [API Endpoints](#api-endpoints)
+- [Screenshots](#screenshots)
+- [Contributing](#contributing)
+- [License](#license)
+
+---
+
+## Overview
+
+DDAS solves a common enterprise problem: **preventing duplicate files from cluttering storage**. When a user uploads a file, the system computes its SHA-256 hash and checks it against all previously stored hashes. If a match is found, the upload is blocked with a clear warning — saving bandwidth, storage, and confusion.
+
+The login page features an **interactive animated character system** that tracks the user's cursor, responds to input focus, and displays emotions based on login outcomes.
+
+---
+
+## ✨ Features
+
+### 🎭 Interactive Login Page
+- **Cursor tracking** — Four animated characters follow your mouse in real-time
+- **Email focus** — Characters lean forward and watch you type
+- **Password focus** — Characters look away shyly (privacy!)
+- **Login success** — Happy bounce animation with smile
+- **Login failure** — Sad droop animation with frown
+- Purple & white themed UI with DDAS branding
+
+### 📁 File Management
+- **Upload files** with automatic SHA-256 hash computation (client-side)
+- **Duplicate detection** — Server rejects files with matching hashes
+- **Download files** directly from the dashboard
+- **Delete files** with confirmation dialog
+- **View files** in browser (PDF, images, text)
+
+### 🔐 Authentication
+- User **registration** with email & security key
+- Secure **login** with session management
+- **Password reset** without email server (direct database update)
+- Auth guards on protected pages (Dashboard, Upload)
+
+### 📊 Dashboard
+- Real-time file statistics (total, clean, duplicates blocked)
+- Backend health status indicator (online/offline)
+- Search & filter files
+- Operational status panel
+
+---
+
+## 🛠 Tech Stack
 
 | Layer | Technology |
-|---|---|
-| **Frontend** | HTML, Tailwind CSS, Vanilla JavaScript |
-| **Backend** | Spring Boot (Java 17+) |
-| **Database** | H2 Embedded Database (via Spring Data JPA / Hibernate) |
-| **Hashing** | SHA-256 (`crypto.subtle` Web API) |
-| **API** | RESTful endpoints |
+|-------|-----------|
+| **Frontend** | HTML5, CSS3, Vanilla JavaScript |
+| **Backend** | Java 17, Spring Boot 3.x |
+| **Database** | H2 (embedded, file-based) |
+| **Build Tool** | Maven (with Maven Wrapper) |
+| **Hashing** | SHA-256 (Web Crypto API + server-side) |
+| **Fonts** | Google Fonts (Manrope, Inter) |
 
 ---
 
-## Core Features
-
-- 🔐 **User Authentication** — Secure registration and login with session-based access control.
-- 🔑 **Password Reset** — Direct password recovery page allowing users to reset their security key using their registered email.
-- 📤 **Smart File Uploads** — Upload files (PDF, images, text, etc.) with automatic SHA-256 hash generation in the browser before transmission.
-- 🔍 **Duplicate Detection** — Detects duplicates based on file content hash (not file name), preventing identical files from being stored twice.
-- 🗂️ **Dashboard** — View all uploaded file records with metadata.
-- 🔎 **Manual Lookup** — Search by hash or filename to check if a file already exists in the system.
-- 🛡️ **Auth Guard** — Protected pages redirect unauthenticated users to the login page.
-- ⚠️ **Error Handling** — Robust network, server, and timeout error handling on the frontend.
-
----
-
-## Project Structure
+## 📂 Project Structure
 
 ```
 DDAS project/
-├── Index.html              # Login page
-├── Register.html           # Registration page
-├── Dashboard.html          # File records dashboard
-├── Upload.html             # File upload with hash generation
+├── Index.html              # Login page (animated characters)
+├── Register.html           # User registration page
 ├── ResetPassword.html      # Password reset page
-├── .gitignore              # Root-level ignores (.DS_Store, data/, etc.)
-└── ddas-backend/
-    ├── .gitignore          # Backend-level ignores (target/, .idea/, etc.)
-    ├── pom.xml
+├── Dashboard.html          # Main dashboard (file list, stats)
+├── Upload.html             # File upload & duplicate check
+├── README.md               # This file
+├── CHEATSHEET.md           # Quick reference guide
+│
+└── ddas-backend/           # Spring Boot backend
+    ├── pom.xml             # Maven dependencies
+    ├── mvnw / mvnw.cmd     # Maven Wrapper scripts
+    ├── data/
+    │   └── ddas_db.mv.db   # H2 database file (auto-created)
+    │
     └── src/main/java/com/ddas/backend/
+        ├── DdasBackendApplication.java     # Spring Boot entry point
         ├── controller/
-        │   ├── AuthController.java   # /api/auth/* endpoints
-        │   └── FileController.java   # /api/files/* endpoints
+        │   ├── AuthController.java         # Login, Register, Reset APIs
+        │   └── FileController.java         # Upload, Download, Delete APIs
         ├── model/
-        │   ├── User.java             # User entity with JPA annotations
-        │   └── FileData.java         # File metadata entity with checksum field
-        ├── repository/
-        │   ├── UserRepository.java
-        │   └── FileRepository.java
-        └── resources/
-            └── application.properties
+        │   ├── User.java                   # User entity (email, password)
+        │   └── FileData.java               # File entity (name, hash, size)
+        └── repository/
+            ├── UserRepository.java         # User JPA repository
+            └── FileRepository.java         # File JPA repository
 ```
 
 ---
 
-## How It Works
-
-1. **Register / Login** — User creates an account or logs in.
-2. **File Selection** — User selects a file on the Upload page.
-3. **Client-Side Hashing** — A SHA-256 hash of the file content is generated in the browser using the Web Crypto API.
-4. **Transmission** — The file data, hash, filename, and uploader info are sent to the Spring Boot backend.
-5. **Backend Validation** — The backend queries the H2 database to check if the hash already exists.
-6. **Result** — Duplicate files are rejected with a clear message; unique files are stored successfully.
-7. **Password Reset** — Users can navigate to the Reset Password page, enter their registered email and new password, and update their credentials directly.
-
----
-
-## API Endpoints
-
-### Authentication — `/api/auth`
-
-| Method | Endpoint | Input | Response |
-|---|---|---|---|
-| `POST` | `/api/auth/register` | `email`, `password` (form-data) | Success / error message |
-| `POST` | `/api/auth/login` | `email`, `password` (form-data) | Success / error message |
-| `POST` | `/api/auth/reset-password` | `email`, `newPassword` (form-data) | Success / error message |
-
-### Files — `/api/files`
-
-| Method | Endpoint | Input | Response |
-|---|---|---|---|
-| `GET` | `/api/files` | — | List of all uploaded file records |
-| `POST` | `/api/files` | `file` (MultipartFile), `fileName`, `fileHash`, `uploadedBy` | Upload success or duplicate detected |
-| `POST` | `/api/files/check` | JSON `{"keyword": "..."}` | Match result for given hash or filename |
-
----
-
-## Setup Instructions
+## 🚀 Getting Started
 
 ### Prerequisites
-- Java 17+
-- Maven
 
-### 1. Database Setup
+- **Java 17** or higher ([Download](https://adoptium.net/))
+- **Git** ([Download](https://git-scm.com/))
+- A modern web browser (Chrome, Firefox, Edge)
 
-The project uses an embedded **H2 Database**. No separate database installation is required! The database file is automatically created in the `ddas-backend/data/` folder when the app runs.
+> **Note:** Maven is **not** required — the project includes Maven Wrapper (`mvnw`).
 
-### 2. Configure the Backend
+### 1. Clone the Repository
 
-Open `ddas-backend/src/main/resources/application.properties`. It is already configured for H2:
-
-```properties
-spring.datasource.url=jdbc:h2:file:./data/ddas_db
-spring.datasource.username=sa
-spring.datasource.password=password
+```bash
+git clone https://github.com/Ashu5999/Data-Duplicate.git
+cd "DDAS project"
 ```
 
-**H2 Console:** You can access the database UI while the app is running by visiting `http://localhost:8080/h2-console` (JDBC URL: `jdbc:h2:file:./data/ddas_db`, Username: `sa`, Password: `password`).
-
-### 3. Run the Backend
+### 2. Start the Backend
 
 ```bash
 cd ddas-backend
-mvn spring-boot:run
+
+# macOS / Linux
+./mvnw spring-boot:run
+
+# Windows
+mvnw.cmd spring-boot:run
 ```
 
-The backend will start at `http://localhost:8080`.
+The server starts at **http://localhost:8080**.
 
-### 4. Open the Frontend
+### 3. Open the Frontend
 
-Open any of the HTML files in your browser, or use a local development server (e.g., VS Code Live Server) to avoid `file://` CORS restrictions.
+Open `Index.html` in your browser (double-click or use Live Server).
 
-> **Tip:** With VS Code Live Server, right-click `Index.html` → *Open with Live Server*.
+### 4. Default Access
+
+| Action | Details |
+|--------|---------|
+| Register | Go to `Register.html` → create an account |
+| Login | Use your registered email & security key |
+| H2 Console | http://localhost:8080/h2-console |
+
+**H2 Console credentials:**
+| Field | Value |
+|-------|-------|
+| JDBC URL | `jdbc:h2:file:./data/ddas_db` |
+| Username | `sa` |
+| Password | `5999` |
 
 ---
 
-## Future Improvements
+## 📡 API Endpoints
 
-- [ ] JWT-based stateless authentication & authorization
-- [ ] Role-based access control (Admin vs User)
-- [ ] Cloud file storage integration (e.g., AWS S3)
-- [ ] Containerise the application with Docker & Docker Compose
-- [ ] Email-based password reset with OTP verification
+### Authentication
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/auth/register` | Register a new user |
+| `POST` | `/api/auth/login` | Login with email & password |
+| `POST` | `/api/auth/reset-password` | Reset security key |
+
+### File Operations
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/files` | List all files (optional `?uploadedBy=`) |
+| `POST` | `/api/files` | Upload a file (multipart form) |
+| `GET` | `/api/files/download/{id}` | Download a file |
+| `GET` | `/api/files/view/{id}` | View file in browser |
+| `DELETE` | `/api/files/{id}` | Delete a file |
+| `POST` | `/api/files/check` | Check for duplicate by keyword |
 
 ---
 
-## Author
+## 📸 Screenshots
 
-**Ashutosh Tiwari** · [GitHub](https://github.com/Ashu5999)
+### Login Page — Interactive Animated Characters
+The login page features four animated characters that track your cursor, react to input focus, and show emotions based on login results.
+
+### Dashboard
+Enterprise-grade dashboard with file statistics, health monitoring, and a file management table.
+
+### Upload Page
+Drag-and-drop file upload with SHA-256 hash computation and real-time duplicate detection.
+
+---
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+This project is for educational purposes. Built as a minor project for academic submission.
+
+---
+
+<p align="center">
+  <strong>DDAS</strong> — Data Duplication Alert System<br/>
+  Made with 💜 by <a href="https://github.com/Ashu5999">Ashu5999</a>
+</p>

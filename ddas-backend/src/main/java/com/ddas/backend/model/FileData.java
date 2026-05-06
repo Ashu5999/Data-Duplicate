@@ -78,4 +78,16 @@ public class FileData {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
+
+    @jakarta.persistence.Lob
+    @Column(name="file_content", columnDefinition="BLOB")
+    private byte[] fileContent;
+
+    public byte[] getFileContent() {
+        return fileContent;
+    }
+
+    public void setFileContent(byte[] fileContent) {
+        this.fileContent = fileContent;
+    }
 }
