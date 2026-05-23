@@ -1,36 +1,88 @@
 package com.ddas.backend.controller;
 
+// ============================================================
+// FileController.java  —  Package: com.ddas.backend.controller
+// ------------------------------------------------------------
+// PURPOSE:
+//   HTTP entry point for all file-related API calls.
+//   This controller is intentionally THIN — it only:
+//     1. Maps HTTP routes to methods
+//     2. Receives request parameters / body from the frontend
+//     3. Delegates ALL business logic to FileService
+//     4. Returns the response (JSON or file bytes) from the service
+//
+// BASE URL:  /api/files
+//
+// ENDPOINTS:
+//   GET    /api/files                → Get all files (optionally filtered by uploader)
+//   POST   /api/files                → Upload a new file (with duplicate check)
+//   GET    /api/files/download/{id}  → Download a file as attachment
+//   GET    /api/files/view/{id}      → View a file inline in the browser
+//   DELETE /api/files/{id}           → Delete a file by ID
+//   POST   /api/files/check          → Check if a file keyword/hash is a duplicate
+//
+// CALLED BY:
+//   Dashboard.html   (list, delete, view, download files)
+//   Upload.html      (upload files, check duplicates)
+// ============================================================
+
 import com.ddas.backend.model.FileData;
-import com.ddas.backend.repository.FileRepository;
+import com.ddas.backend.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 
-@RestController
-@RequestMapping("/api/files")
-@CrossOrigin
+@RestController                    // Returns JSON responses (not HTML views)
+@RequestMapping("/api/files")      // All routes prefixed with /api/files
+@CrossOrigin                       // Allow CORS from any origin (HTML frontend)
 public class FileController {
 
+    // ── Dependency ───────────────────────────────────────────────
+    // FileService handles all business logic for file operations
     @Autowired
-    private FileRepository repository;
+    private FileService fileService;
+    // ────────────────────────────────────────────────────────────
 
+
+    /**
+     * GET /api/files
+     * GET /api/files?uploadedBy=user@email.com
+     *
+     * Returns a list of all uploaded files.
+     * If the "uploadedBy" query parameter is provided, only returns
+     * files uploaded by that specific user (email).
+     *
+     * Response JSON: Array of FileData objects
+     * Used by: Dashboard.html to populate "My Files" table
+     */
     @GetMapping
     public List<FileData> getAllFiles(@RequestParam(required = false) String uploadedBy) {
-        if (uploadedBy != null && !uploadedBy.trim().isEmpty()) {
-            return repository.findByUploadedBy(uploadedBy);
-        }
-        return repository.findAll();
+        return fileService.getAllFiles(uploadedBy);
     }
 
+
+    /**
+     * POST /api/files
+     *
+     * Uploads a new file to the system.
+     * Performs SHA-256 duplicate detection before saving.
+     *
+     * Request (multipart/form-data):
+     *   file        - The actual file binary
+     *   fileName    - The display name for the file
+     *   fileHash    - SHA-256 hash string (computed in the browser)
+     *   uploadedBy  - Email address of the uploader
+     *
+     * Response JSON:
+     *   { "status": "success", "message": "File added successfully" }
+     *   { "status": "error",   "message": "Duplicate file detected!" }
+     *
+     * Used by: Upload.html
+     */
     @PostMapping
     public Map<String, String> addFile(
             @RequestParam("file")       MultipartFile file,
@@ -38,139 +90,85 @@ public class FileController {
             @RequestParam("fileHash")   String fileHash,
             @RequestParam("uploadedBy") String uploadedBy) {
 
-        Map<String, String> response = new HashMap<>();
-
-        // Duplicate detection — uses the correct repository method name
-        if (repository.existsByFileHash(fileHash)) {
-            response.put("status", "error");
-            response.put("message", "Duplicate file detected!");
-            return response;
-        }
-
-        // Build FileData from individual params
-        FileData fileData = new FileData();
-        fileData.setFileName(fileName);
-        fileData.setFileHash(fileHash);
-        fileData.setUploadedBy(uploadedBy);
-        fileData.setFileSize(file.getSize());
-        fileData.setCreatedAt(LocalDateTime.now());
-        
-        try {
-            fileData.setFileContent(file.getBytes());
-        } catch (java.io.IOException e) {
-            response.put("status", "error");
-            response.put("message", "Failed to read file content");
-            return response;
-        }
-
-        repository.save(fileData);
-
-        response.put("status", "success");
-        response.put("message", "File added successfully");
-
-        return response;
+        return fileService.addFile(file, fileName, fileHash, uploadedBy);
     }
 
+
+    /**
+     * GET /api/files/download/{id}
+     *
+     * Serves the file bytes as a downloadable attachment.
+     * The browser will show a "Save As" dialog.
+     *
+     * Path Variable:
+     *   id - The database ID (Long) of the file to download
+     *
+     * Response: Raw file bytes with Content-Disposition: attachment
+     * Used by: Dashboard.html "Download" button
+     */
     @GetMapping("/download/{id}")
     public ResponseEntity<?> downloadFile(@PathVariable Long id) {
-        FileData fileData = repository.findById(id).orElse(null);
-        if (fileData == null || fileData.getFileContent() == null) {
-            String htmlError = "<html><body style='font-family:sans-serif; text-align:center; padding: 50px;'>" +
-                               "<h2>File Not Found</h2>" +
-                               "<p>This file has no stored content. It was likely uploaded before the download feature was enabled.</p>" +
-                               "<button onclick='window.history.back()'>Go Back</button>" +
-                               "</body></html>";
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .contentType(MediaType.TEXT_HTML)
-                    .body(htmlError.getBytes());
-        }
-
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileData.getFileName() + "\"")
-                .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                .body(fileData.getFileContent());
+        return fileService.downloadFile(id);
     }
 
+
+    /**
+     * GET /api/files/view/{id}
+     *
+     * Serves the file bytes for inline browser viewing.
+     * PDFs open in the browser's PDF viewer.
+     * Text files (CSV, TXT, JSON, etc.) render as plain text.
+     *
+     * Path Variable:
+     *   id - The database ID (Long) of the file to view
+     *
+     * Response: Raw file bytes with Content-Disposition: inline
+     * Used by: Dashboard.html "View" button
+     */
     @GetMapping("/view/{id}")
     public ResponseEntity<?> viewFile(@PathVariable Long id) {
-        FileData fileData = repository.findById(id).orElse(null);
-        if (fileData == null || fileData.getFileContent() == null) {
-            String htmlError = "<html><body style='font-family:sans-serif; text-align:center; padding: 50px;'>" +
-                               "<h2>File Not Found</h2>" +
-                               "<p>This file has no stored content. It was likely uploaded before the view feature was enabled.</p>" +
-                               "<button onclick='window.close()'>Close</button>" +
-                               "</body></html>";
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .contentType(MediaType.TEXT_HTML)
-                    .body(htmlError.getBytes());
-        }
-
-        String fileName = fileData.getFileName();
-        MediaType mediaType = org.springframework.http.MediaTypeFactory.getMediaType(fileName)
-                .orElse(MediaType.APPLICATION_OCTET_STREAM);
-
-        // Force text/plain for text-like files so the browser renders them inline
-        String ext = "";
-        int dotIdx = fileName.lastIndexOf('.');
-        if (dotIdx > 0) {
-            ext = fileName.substring(dotIdx + 1).toLowerCase();
-        }
-        if (ext.equals("csv") || ext.equals("txt") || ext.equals("log") || ext.equals("json") || ext.equals("xml")) {
-            mediaType = MediaType.TEXT_PLAIN;
-        } else if (ext.equals("pdf")) {
-            mediaType = MediaType.APPLICATION_PDF;
-        }
-
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + fileName + "\"")
-                .contentType(mediaType)
-                .body(fileData.getFileContent());
+        return fileService.viewFile(id);
     }
 
+
+    /**
+     * DELETE /api/files/{id}
+     *
+     * Permanently removes a file record (and its stored content)
+     * from the database.
+     *
+     * Path Variable:
+     *   id - The database ID (Long) of the file to delete
+     *
+     * Response JSON:
+     *   { "status": "success", "message": "File deleted successfully" }
+     *   { "status": "error",   "message": "File not found" }
+     *
+     * Used by: Dashboard.html "Delete" button
+     */
     @DeleteMapping("/{id}")
     public Map<String, String> deleteFile(@PathVariable Long id) {
-        Map<String, String> response = new HashMap<>();
-        if (repository.existsById(id)) {
-            repository.deleteById(id);
-            response.put("status", "success");
-            response.put("message", "File deleted successfully");
-        } else {
-            response.put("status", "error");
-            response.put("message", "File not found");
-        }
-        return response;
+        return fileService.deleteFile(id);
     }
 
+
+    /**
+     * POST /api/files/check
+     *
+     * Checks if a file with the given keyword (hash or name) already
+     * exists in the database. Used for manual duplicate checking.
+     *
+     * Request Body (JSON):
+     *   { "keyword": "search-term-or-hash" }
+     *
+     * Response JSON:
+     *   { "isDuplicate": false, "message": "No duplicates found! Safe to download." }
+     *   { "isDuplicate": true,  "message": "⚠️ Found N matching file(s)...", "matches": [...] }
+     *
+     * Used by: Dashboard.html "Check Duplicate" panel
+     */
     @PostMapping("/check")
     public Map<String, Object> checkDuplicate(@RequestBody Map<String, String> body) {
-        String keyword = body.getOrDefault("keyword", "").trim();
-
-        Map<String, Object> response = new HashMap<>();
-
-        if (keyword.isEmpty()) {
-            response.put("isDuplicate", false);
-            response.put("message", "Please provide a keyword to search.");
-            return response;
-        }
-
-        // Check by exact hash match first, then by name contains
-        List<FileData> matches = new java.util.ArrayList<>();
-        for (FileData file : repository.findAll()) {
-            if (file.getFileHash().equalsIgnoreCase(keyword)
-                    || file.getFileName().toLowerCase().contains(keyword.toLowerCase())) {
-                matches.add(file);
-            }
-        }
-
-        if (matches.isEmpty()) {
-            response.put("isDuplicate", false);
-            response.put("message", "No duplicates found! Safe to download.");
-        } else {
-            response.put("isDuplicate", true);
-            response.put("message", "⚠️ Found " + matches.size() + " matching file(s) already registered.");
-            response.put("matches", matches);
-        }
-
-        return response;
+        return fileService.checkDuplicate(body);
     }
 }
