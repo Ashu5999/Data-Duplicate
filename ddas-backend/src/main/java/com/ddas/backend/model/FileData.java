@@ -71,7 +71,7 @@ public class FileData {
     // Stored as a BLOB in H2 so files can be downloaded later.
     // NOTE: Large files will increase database size significantly.
     @jakarta.persistence.Lob
-    @Column(name = "file_content", columnDefinition = "BLOB")
+    @Column(name = "file_content")
     private byte[] fileContent;
 
 
