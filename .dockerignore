@@ -1,0 +1,19 @@
+# Build artifacts
+ddas-backend/target/
+*.jar
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Database files
+ddas-backend/data/
+
+# Git
+.git/
+.gitignore
