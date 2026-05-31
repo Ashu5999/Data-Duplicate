@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DDAS - Upload / Download</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-tint": "#006875",
+                        "primary-container": "#00e5ff",
+                        "on-primary": "#ffffff",
+                        "surface-bright": "var(--surface-bright)",
+                        "surface": "var(--surface)",
+                        "on-surface-variant": "var(--on-surface-variant)",
+                        "primary-fixed": "#9cf0ff",
+                        "outline": "#6b7a7d",
+                        "tertiary": "#765a00",
+                        "secondary-fixed-dim": "#bdc5ea",
+                        "error-container": "#ffdad6",
+                        "surface-container-low": "var(--surface-container-low)",
+                        "inverse-primary": "#00daf3",
+                        "on-secondary-fixed": "#111a37",
+                        "on-secondary-fixed-variant": "#3d4665",
+                        "background": "var(--background)",
+                        "surface-container": "var(--surface-container)",
+                        "inverse-on-surface": "#edf1fc",
+                        "on-tertiary-fixed-variant": "#594400",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-tertiary-container": "#6f5500",
+                        "on-primary-container": "#00626e",
+                        "on-error-container": "#93000a",
+                        "surface-container-highest": "#dee2ed",
+                        "surface-container-high": "var(--surface-container-high)",
+                        "outline-variant": "#bac9cc",
+                        "surface-container-lowest": "var(--surface-container-lowest)",
+                        "on-error": "#ffffff",
+                        "surface-dim": "var(--surface-dim)",
+                        "secondary-fixed": "#dbe1ff",
+                        "on-primary-fixed": "#001f24",
+                        "on-secondary-container": "#555e7e",
+                        "on-surface": "var(--on-surface)",
+                        "tertiary-fixed": "#ffdf96",
+                        "on-primary-fixed-variant": "#004f58",
+                        "on-background": "var(--on-background)",
+                        "tertiary-fixed-dim": "#f3bf26",
+                        "primary": "#006875",
+                        "on-tertiary-fixed": "#251a00",
+                        "inverse-surface": "#2c3139",
+                        "primary-fixed-dim": "#00daf3",
+                        "surface-variant": "#dee2ed",
+                        "secondary-container": "#d0d9ff",
+                        "tertiary-container": "#fec931",
+                        "secondary": "#545d7d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        :root {
+            --background: #f8f9ff;
+            --surface-container-lowest: #ffffff;
+            --surface-container: #eaeef9;
+            --surface-container-low: #eff3fe;
+            --surface-container-high: #e4e8f3;
+            --surface: #f8f9ff;
+            --surface-bright: #f8f9ff;
+            --surface-dim: #d6dae5;
+            --on-surface: #171c23;
+            --on-surface-variant: #3b494c;
+            --on-background: #171c23;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: #f0f4ff; }
+        .font-headline { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .custom-shadow { box-shadow: 0px 12px 32px rgba(26,35,64,0.06); }
+        /* Page entrance */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        main { animation: fadeInUp 0.5s cubic-bezier(0.16,1,0.3,1) both; }
+        /* Sidebar gradient */
+        aside {
+            background: linear-gradient(160deg, #3b0764 0%, #4c1d95 60%, #2e1065 100%) !important;
+        }
+        /* Upload zone pulse */
+        @keyframes uploadPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(0,229,255,0.3); }
+            50% { box-shadow: 0 0 0 10px rgba(0,229,255,0); }
+        }
+        #dropZone:hover { animation: uploadPulse 1.5s ease-in-out infinite; }
+        /* Upload icon bounce */
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+        #dropZone:hover .material-symbols-outlined { animation: bounce 1s ease-in-out infinite; }
+        /* Shimmer button */
+        @keyframes shimmer {
+            0%   { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+        /* Top nav glass */
+        header {
+            background: rgba(240,244,255,0.85) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        /* Card hover lift */
+        section {
+            transition: box-shadow 0.3s;
+        }
+    </style>
+</head>
+<body class="text-on-surface">
+<script>
+    // Auth guard — redirect to login if not authenticated
+    if (sessionStorage.getItem('ddas_logged_in') !== 'true') {
+        window.location.href = 'Index.html';
+    }
+</script>
+<!-- SideNavBar -->
+<aside class="bg-[#4c1d95] h-screen w-64 fixed left-0 top-0 flex flex-col h-full py-6 z-50">
+<div class="px-6 mb-10">
+<h1 class="text-white font-black text-xl font-headline tracking-tight">DDAS</h1>
+<p class="text-purple-300 text-xs font-label uppercase tracking-widest mt-1">Management Console</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center px-6 py-3 transition-colors duration-200 text-slate-400 hover:text-white hover:bg-white/5 font-headline font-bold text-sm tracking-tight" href="Dashboard.html">
+<span class="material-symbols-outlined mr-3">dashboard</span>
+Dashboard
+</a>
+<a class="flex items-center px-6 py-3 transition-colors duration-200 bg-white/10 text-white border-r-4 border-white font-headline font-bold text-sm tracking-tight" href="Upload.html">
+<span class="material-symbols-outlined mr-3">sync_alt</span>
+Upload/Download
+</a>
+</nav>
+<div class="px-6 pt-6 mt-auto border-t border-white/10">
+<a class="flex items-center px-6 py-3 transition-colors duration-200 text-slate-400 hover:text-white font-headline font-bold text-sm tracking-tight" href="Index.html" onclick="sessionStorage.removeItem('ddas_logged_in')">
+<span class="material-symbols-outlined mr-3">logout</span>
+Logout
+</a>
+</div>
+</aside>
+<!-- Main Content Shell -->
+<div class="ml-64 min-h-screen">
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] h-16 bg-white flex items-center justify-between px-8 z-40 transition-all duration-300">
+<div class="flex items-center gap-4">
+<div class="flex flex-col">
+<h2 class="text-[#1A2340] font-headline font-extrabold text-lg leading-tight">Upload / Download</h2>
+<p class="text-slate-500 text-xs font-body">Register or request datasets</p>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative group">
+<span class="absolute inset-y-0 left-3 flex items-center text-slate-400 group-focus-within:text-[#006875]">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-low border-none rounded-xl text-sm w-64 focus:ring-2 focus:ring-[#00E5FF]/20 focus:bg-white transition-all outline-none" placeholder="Search catalog..." type="text"/>
+</div>
+<div class="h-8 w-8 rounded-full bg-slate-200 overflow-hidden ml-2">
+<img alt="User Avatar" class="w-full h-full object-cover" data-alt="close up headshot of a professional man in a dark suite with a neutral background and clean lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC04NTskJxxADAsj14Xw7F7Vqgj6432Nzqw_k5LBY-ZJXcTCYypuGCqaQG4ImRMxAdMcHDxAz8reBXulLnRnebN4_SG7gqXx-_ZIqdxKlRWZSYUMoOzIk_nqHLghFhZk7-CYErcDVgGviZ9GoL3qK47b7aPcLf-TUkCYfB_AUAN9by7qtHwSCmUMZCL1KJFvD87NVQ09tRGqjgvx8EsrJrrlY0enC5_-wPTORKNX0BPGv_yBeUa1kkhQeEeSsPUIi17B4Nb9MviQXE"/>
+</div>
+</div>
+</header>
+<!-- Page Canvas -->
+<main class="mt-16 p-8 bg-[#F8F9FF]">
+<div class="grid grid-cols-12 gap-8 max-w-7xl mx-auto">
+<!-- LEFT CARD: Register a Dataset -->
+<section class="col-span-12 lg:col-span-7 bg-white rounded-xl shadow-[0px_12px_32px_rgba(26,35,64,0.06)] p-8">
+<div class="flex items-center gap-3 mb-8">
+<span class="material-symbols-outlined text-[#00E5FF] text-3xl" style="font-variation-settings: 'FILL' 1;">upload_file</span>
+<h3 class="text-xl font-headline font-extrabold text-[#1A2340]">Register a Dataset</h3>
+</div>
+<div class="mb-8">
+<div class="w-full h-48 border-2 border-dashed border-[#00E5FF]/40 bg-[#EFF8FF] rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-[#00E5FF] hover:bg-[#E1F3FF] transition-all group" id="dropZone" onclick="document.getElementById('fileInput').click()">
+<span class="material-symbols-outlined text-4xl text-[#00E5FF] mb-3 group-hover:scale-110 transition-transform">cloud_upload</span>
+<p class="text-[#006875] font-bold font-headline">Click to browse or drag and drop</p>
+<p class="text-slate-500 text-xs mt-1">Supports all file types (Max 2GB)</p>
+<p class="text-[#006875] font-mono text-xs mt-2" id="fileName" style="display:none;"></p>
+</div>
+<input type="file" id="fileInput" style="display:none;" onchange="handleFileSelect(event)"/>
+</div>
+<div class="space-y-6">
+<div class="grid grid-cols-2 gap-6">
+<div class="col-span-2">
+<label class="block text-[10px] font-label font-bold text-slate-400 uppercase tracking-widest mb-1">Dataset Name</label>
+<input class="w-full bg-white border-b-2 border-slate-100 focus:border-[#7c3aed] outline-none py-2 text-sm font-medium transition-colors" placeholder="e.g. Regional Satellite Imagery 2024" type="text" id="datasetName"/>
+</div>
+<div class="col-span-2">
+<label class="block text-[10px] font-label font-bold text-slate-400 uppercase tracking-widest mb-1">Description</label>
+<textarea class="w-full bg-white border-b-2 border-slate-100 focus:border-[#006875] outline-none py-2 text-sm font-medium transition-colors resize-none" placeholder="Provide a detailed overview of the dataset contents..." rows="3" id="datasetDesc"></textarea>
+</div>
+
+<div class="bg-slate-50 p-4 rounded-lg flex items-center justify-between border border-slate-100">
+<div>
+<p class="text-[10px] font-label font-bold text-slate-400 uppercase tracking-widest mb-1">SHA-256 Hash</p>
+<p class="text-[#006875] font-mono text-xs truncate max-w-xs md:max-w-md" id="hashDisplay">Pending file selection...</p>
+</div>
+<span class="material-symbols-outlined text-slate-300">lock</span>
+</div>
+<div id="registerError" class="text-red-600 text-xs font-semibold hidden">Please fill in all fields</div>
+<div id="apiMessage" class="hidden transition-all duration-300 mt-4 mb-4"></div>
+<button class="w-full bg-gradient-to-r from-[#7c3aed] to-[#a78bfa] text-white py-4 rounded-xl font-headline font-extrabold flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20 hover:shadow-xl hover:scale-[1.01] active:scale-95 transition-all" onclick="registerDataset()">
+                            Register Dataset
+                            <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</section>
+<!-- RIGHT CARD: Check Before Download -->
+<section class="col-span-12 lg:col-span-5 bg-white rounded-xl shadow-[0px_12px_32px_rgba(26,35,64,0.06)] p-8 h-fit">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-[#00E5FF] text-3xl" style="font-variation-settings: 'FILL' 1;">find_in_page</span>
+<h3 class="text-xl font-headline font-extrabold text-[#1A2340]">Check Before Download</h3>
+</div>
+<p class="text-slate-500 text-sm mb-8 font-body leading-relaxed">
+                        Enter details to check if dataset already exists before downloading to prevent duplication and save bandwidth.
+                    </p>
+<div class="space-y-6">
+<div>
+<label class="block text-[10px] font-label font-bold text-slate-400 uppercase tracking-widest mb-1">Dataset Name or Keywords</label>
+<input class="w-full bg-white border-b-2 border-slate-100 focus:border-[#006875] outline-none py-2 text-sm font-medium transition-colors" placeholder="e.g. High-res imagery" type="text" id="searchKeyword"/>
+</div>
+
+<button class="w-full border-2 border-[#00E5FF] text-[#006875] py-4 rounded-xl font-headline font-extrabold flex items-center justify-center gap-2 hover:bg-[#00E5FF]/10 transition-all active:scale-95" onclick="checkForDuplicates()">
+<span class="material-symbols-outlined text-[20px]">search</span>
+                            Check for Duplicates
+                        </button>
+<div id="searchResults" class="text-sm mt-4 hidden bg-green-50 p-3 rounded text-green-700">No duplicates found! Safe to download</div>
+</div>
+</section>
+
+</main>
+</div>
+<!-- Contextual HUD -->
+<div class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-white/80 backdrop-blur-xl border border-slate-200 px-6 py-3 rounded-full shadow-2xl flex items-center gap-8 z-50">
+<div class="flex items-center gap-2 text-[#006875] font-bold text-xs uppercase tracking-widest">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+            System Ready
+        </div>
+<div class="h-4 w-[1px] bg-slate-200"></div>
+<div class="flex items-center gap-6">
+<button class="text-slate-500 hover:text-[#00E5FF] transition-colors text-xs font-bold uppercase tracking-widest flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">info</span>
+                Help
+            </button>
+<button class="text-slate-500 hover:text-[#00E5FF] transition-colors text-xs font-bold uppercase tracking-widest flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">history</span>
+                Log
+            </button>
+</div>
+</div>
+
+<script>
+// Stores the selected file so registerDataset() can access it on form submit
+let selectedFile = null;
+
+// File handling and hash computation
+async function handleFileSelect(event) {
+    const file = event.target.files[0];
+    if (file) {
+        selectedFile = file;  // save reference for form submit
+        document.getElementById('fileName').textContent = 'Selected: ' + file.name;
+        document.getElementById('fileName').style.display = 'block';
+        await computeAndDisplayHash(file);
+        
+        // Reset file input so the same file can be selected again
+        event.target.value = '';
+    }
+}
+
+async function computeAndDisplayHash(file) {
+    try {
+        const buffer = await file.arrayBuffer();
+        const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        document.getElementById('hashDisplay').textContent = hashHex;
+    } catch (error) {
+        console.error('Error computing hash:', error);
+    }
+}
+
+// Safely parse JSON — returns null if response is not valid JSON (e.g. HTML error page)
+async function safeJson(response) {
+    try { return await response.json(); } catch { return null; }
+}
+
+// POST file (binary) + metadata to backend using FormData
+async function sendFileToBackend(file, fileName, fileHash) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000); // 10s timeout
+
+    // Build multipart form — DO NOT set Content-Type header manually;
+    // the browser adds it automatically with the correct boundary.
+    const formData = new FormData();
+    formData.append('file', file);              // binary file
+    formData.append('fileName', fileName);
+    formData.append('fileHash', fileHash);
+    formData.append('uploadedBy', sessionStorage.getItem('ddas_user_email') || 'User');
+
+    try {
+        const response = await fetch('/api/files', {
+            method: 'POST',
+            body: formData,
+            signal: controller.signal
+        });
+
+        const data = await safeJson(response);
+
+        if (!response.ok || (data && data.status === 'error')) {
+            const msg = data?.message || `Server error (${response.status}). Please try again.`;
+            showApiMessage(msg, 'error');
+            if (!response.ok) console.error('Backend error:', response.status, data);
+        } else {
+            showApiMessage(data?.message || 'File registered successfully.', 'success');
+            console.log('Backend response:', data);
+        }
+    } catch (error) {
+        if (error.name === 'AbortError') {
+            showApiMessage('Request timed out. The server took too long to respond.', 'error');
+        } else {
+            showApiMessage('Cannot connect to server. Check your network or backend.', 'error');
+        }
+        console.error('sendFileToBackend failed:', error);
+    } finally {
+        clearTimeout(timeout);
+    }
+}
+
+// Display backend response message in UI
+function showApiMessage(message, type) {
+    const el = document.getElementById('apiMessage');
+    if (!el) return;
+    
+    if (type === 'success') {
+        el.innerHTML = `
+            <div class="flex items-center gap-3 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 shadow-sm">
+                <span class="material-symbols-outlined text-emerald-500 text-2xl">check_circle</span>
+                <div>
+                    <h4 class="font-bold text-sm">Success</h4>
+                    <p class="text-xs mt-0.5">${message}</p>
+                </div>
+            </div>`;
+    } else {
+        el.innerHTML = `
+            <div class="flex items-center gap-3 p-4 rounded-xl bg-red-50 border-2 border-red-300 text-red-900 shadow-md animate-pulse">
+                <span class="material-symbols-outlined text-red-600 text-3xl">warning</span>
+                <div>
+                    <h4 class="font-bold text-base uppercase tracking-wide text-red-700">Action Blocked</h4>
+                    <p class="text-sm font-medium mt-0.5">${message}</p>
+                </div>
+            </div>`;
+    }
+    el.classList.remove('hidden');
+}
+
+async function registerDataset() {
+    const name = document.getElementById('datasetName').value;
+    const desc = document.getElementById('datasetDesc').value;
+    const hash = document.getElementById('hashDisplay').textContent;
+    const errorDiv = document.getElementById('registerError');
+
+    if (!name || !desc || hash === 'Pending file selection...') {
+        errorDiv.classList.remove('hidden');
+        return;
+    }
+
+    errorDiv.classList.add('hidden');
+
+    // Send file binary + metadata to backend via FormData
+    await sendFileToBackend(selectedFile, name, hash);
+
+    // Clear form
+    document.getElementById('datasetName').value = '';
+    document.getElementById('datasetDesc').value = '';
+    document.getElementById('hashDisplay').textContent = 'Pending file selection...';
+    document.getElementById('fileName').style.display = 'none';
+    selectedFile = null;
+}
+
+async function checkForDuplicates() {
+    const keyword = document.getElementById('searchKeyword').value.trim();
+    const resultDiv = document.getElementById('searchResults');
+
+    if (!keyword) {
+        showApiMessage('Please enter a dataset name or keyword.', 'error');
+        return;
+    }
+
+    resultDiv.textContent = 'Checking...';
+    resultDiv.className = 'text-sm mt-4 bg-blue-50 p-3 rounded text-blue-700';
+    resultDiv.classList.remove('hidden');
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000); // 10s timeout
+
+    try {
+        const response = await fetch('/api/files/check', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ keyword }),
+            signal: controller.signal
+        });
+
+        const data = await safeJson(response);
+
+        if (!response.ok) {
+            resultDiv.textContent = data?.message || `Server error (${response.status}). Please try again.`;
+            resultDiv.className = 'text-sm mt-4 bg-red-50 p-3 rounded text-red-700';
+        } else {
+            resultDiv.textContent = data?.message || 'Check complete.';
+            resultDiv.className = data?.isDuplicate
+                ? 'text-sm mt-4 bg-yellow-50 p-3 rounded text-yellow-700'
+                : 'text-sm mt-4 bg-green-50 p-3 rounded text-green-700';
+        }
+    } catch (error) {
+        if (error.name === 'AbortError') {
+            resultDiv.textContent = 'Request timed out. The server took too long to respond.';
+        } else {
+            resultDiv.textContent = 'Cannot connect to server. Check your network or backend.';
+        }
+        resultDiv.className = 'text-sm mt-4 bg-red-50 p-3 rounded text-red-700';
+        console.error('checkForDuplicates failed:', error);
+    } finally {
+        clearTimeout(timeout);
+        resultDiv.classList.remove('hidden');
+    }
+}
+
+function showComingSoon(event) {
+    event.preventDefault();
+    alert('Coming Soon!');
+}
+</script>

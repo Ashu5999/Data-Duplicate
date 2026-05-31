@@ -1,0 +1,19 @@
+# Build artifacts
+target/
+*.jar
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Database files (recreated on startup)
+data/
+
+# Git
+.git/
+.gitignore

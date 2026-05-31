@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DDAS - Enterprise Dashboard</title>
+<!-- Fonts & Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline": "#6b7a7d",
+                        "primary": "#006875",
+                        "on-error-container": "#93000a",
+                        "background": "var(--background)",
+                        "secondary-container": "#d0d9ff",
+                        "on-tertiary-container": "#4f5878",
+                        "surface-tint": "#006875",
+                        "on-primary-fixed": "#001f24",
+                        "on-background": "var(--on-background)",
+                        "surface-variant": "#dee2ed",
+                        "on-surface": "var(--on-surface)",
+                        "on-surface-variant": "var(--on-surface-variant)",
+                        "on-primary-fixed-variant": "#004f58",
+                        "primary-container": "#00e5ff",
+                        "surface-container-lowest": "var(--surface-container-lowest)",
+                        "on-error": "#ffffff",
+                        "tertiary": "#545d7d",
+                        "inverse-surface": "#2c3139",
+                        "surface-container": "var(--surface-container)",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed-dim": "#bdc5ea",
+                        "secondary": "#545d7d",
+                        "error": "#ba1a1a",
+                        "on-secondary": "#ffffff",
+                        "surface": "var(--surface)",
+                        "secondary-fixed-dim": "#bdc5ea",
+                        "inverse-primary": "#00daf3",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#3d4665",
+                        "outline-variant": "#bac9cc",
+                        "surface-container-highest": "#dee2ed",
+                        "inverse-on-surface": "#edf1fc",
+                        "on-secondary-container": "#555e7e",
+                        "on-primary-container": "#00626e",
+                        "primary-fixed": "#9cf0ff",
+                        "secondary-fixed": "#dbe1ff",
+                        "surface-container-low": "var(--surface-container-low)",
+                        "surface-dim": "var(--surface-dim)",
+                        "surface-bright": "var(--surface-bright)",
+                        "on-secondary-fixed": "#111a37",
+                        "surface-container-high": "var(--surface-container-high)",
+                        "tertiary-container": "#c6cff5",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed-dim": "#00daf3",
+                        "on-secondary-fixed-variant": "#3d4665",
+                        "tertiary-fixed": "#dbe1ff",
+                        "on-tertiary-fixed": "#111a37"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        :root {
+            --bg: #f0f4ff;
+            --card: #ffffff;
+            --text: #171c23;
+            --text2: #3b494c;
+            --border: #dee2ed;
+            --top-nav: #f0f4ff;
+            --icon-bg: #e0f7fa;
+            --progress-bg: #e0e0e0;
+        }
+        body { background-color: var(--bg); color: var(--text); }
+        .bg-card { background-color: var(--card); }
+        .text-main { color: var(--text); }
+        .text-secondary { color: var(--text2); }
+        .border-custom { border-color: var(--border); }
+        .bg-top-nav { background-color: var(--top-nav); }
+        .bg-icon { background-color: var(--icon-bg); }
+        .bg-input { background-color: var(--card); }
+        .progress-bg { background-color: var(--progress-bg); }
+        .table-header th { color: var(--text2); }
+        .table-row { background-color: var(--card); }
+        .table-row:hover { background-color: #f0f8ff; transition: background 0.2s; }
+        .table-text { color: var(--text); }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+        /* Page entrance animation */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        main { animation: fadeInUp 0.5s cubic-bezier(0.16,1,0.3,1) both; }
+        /* Stat card hover glow */
+        .stat-card {
+            transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s;
+        }
+        .stat-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0,104,117,0.12);
+        }
+        /* Sidebar gradient */
+        aside {
+            background: linear-gradient(160deg, #3b0764 0%, #4c1d95 60%, #2e1065 100%) !important;
+        }
+        /* Top nav glass */
+        header {
+            background: rgba(240,244,255,0.85) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(186,201,204,0.2);
+        }
+        /* Shimmer button */
+        @keyframes shimmer {
+            0%   { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+        .btn-teal {
+            background: linear-gradient(90deg,#7c3aed 0%,#a78bfa 40%,#7c3aed 80%,#a78bfa 100%);
+            background-size: 200% auto;
+            transition: background-position 0.6s, box-shadow 0.3s;
+        }
+        .btn-teal:hover {
+            animation: shimmer 1.5s linear infinite;
+            box-shadow: 0 8px 30px rgba(124,58,237,0.35);
+        }
+        /* Animated background orbs */
+        @keyframes float1 {
+            0%,100% { transform: translate(0,0) scale(1); }
+            50% { transform: translate(30px,-20px) scale(1.06); }
+        }
+        @keyframes float2 {
+            0%,100% { transform: translate(0,0) scale(1); }
+            50% { transform: translate(-20px,30px) scale(1.04); }
+        }
+    </style>
+</head>
+<body class="antialiased overflow-hidden">
+<script>
+    // Auth guard — redirect to login if not authenticated
+    if (sessionStorage.getItem('ddas_logged_in') !== 'true') {
+        window.location.href = 'Index.html';
+    }
+</script>
+<!-- SideNavBar Shell -->
+<aside class="fixed left-0 top-0 h-screen w-[220px] bg-[#4c1d95] shadow-xl z-50 flex flex-col h-full py-6">
+<div class="px-6 mb-10">
+<h1 class="text-xl font-bold text-white tracking-tighter">DDAS</h1>
+<p class="text-[10px] text-slate-400 font-medium tracking-widest uppercase mt-1">Data Duplication Alert System</p>
+</div>
+<nav class="flex-1 px-3 space-y-1">
+<!-- Dashboard -->
+<a class="bg-white/10 text-white border-r-4 border-white font-manrope text-sm font-medium tracking-wide flex items-center gap-3 px-4 py-3 duration-150" href="Dashboard.html">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<!-- Upload/Download -->
+<a class="text-slate-400 font-manrope text-sm font-medium tracking-wide flex items-center gap-3 px-4 py-3 hover:bg-white/5 hover:text-white transition-colors" href="Upload.html">
+<span class="material-symbols-outlined">sync_alt</span>
+<span>Upload/Download</span>
+</a>
+</nav>
+<div class="px-6 pt-6 mt-auto border-t border-white/10">
+<!-- Logout -->
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white transition-colors" href="Index.html" onclick="sessionStorage.removeItem('ddas_logged_in')">
+<span class="material-symbols-outlined">logout</span>
+<span class="text-sm font-medium">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Wrapper -->
+<div class="ml-[220px] h-screen flex flex-col relative overflow-y-auto">
+<!-- TopNavBar Shell -->
+<header class="fixed top-0 right-0 w-[calc(100%-220px)] h-16 bg-top-nav/80 backdrop-blur-md z-40 flex justify-between items-center px-8 border-none">
+<div class="flex items-center flex-1 max-w-xl">
+<div class="w-full relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary text-sm">search</span>
+<input class="w-full bg-input border-none rounded-full py-2 pl-10 pr-4 text-sm font-inter focus:ring-2 focus:ring-[#00E5FF] transition-all shadow-sm text-main" placeholder="Search enterprise data..." type="text" id="searchInput" onkeyup="filterTable()"/>
+</div>
+</div>
+<div class="flex items-center gap-6 ml-4">
+<div class="h-8 w-[1px] bg-border"></div>
+<div class="flex items-center gap-3">
+<div class="text-right">
+<p class="text-xs font-bold text-main leading-none" id="navUserEmail">DDAS User</p>
+<p class="text-[10px] text-secondary">Registered User</p>
+</div>
+<img class="w-10 h-10 rounded-full border-2 border-white shadow-md object-cover" data-alt="Professional executive headshot with soft studio lighting and corporate background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDC7x3RJFzPHM0KaNOuWKheoXRtEK1-SdAccg-UIdqa4gr3ZeMqHO9MWiOg0KJnixsMy4dDWUIjfmUqP6m_8jOyZlWwyljP65pClrLTWDfjNSWRMslLwV-MW0AkwYbInBpljF4uPwyJZz6X8Bm6-7Vc6eB3fH9mbkGTveGvUIrmwz38WwCKHQkqfCMMOT7r4QvtVz-LBpeXXP5hjJCnp-9SeCq8EvSyjkKyPxOeuLVXeoG0tnhNR_gihWgDtNxDNVz9nMTzzIgIV5Y"/>
+</div>
+</div>
+</header>
+<!-- Page Content -->
+<main class="mt-16 p-8 flex-1 min-h-full">
+<!-- Load real files from backend -->
+<script>
+async function loadFilesFromBackend() {
+    try {
+        const userEmail = sessionStorage.getItem('ddas_user_email');
+        let url = '/api/files';
+        if (userEmail) {
+            url += '?uploadedBy=' + encodeURIComponent(userEmail);
+        }
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('Server error');
+        const files = await response.json();
+        renderTable(files);
+        updateStats(files);
+        setStatus('online');
+    } catch (err) {
+        showEmpty('Cannot reach backend. Make sure the server is running.');
+        setStatus('offline');
+        console.error(err);
+    }
+}
+
+async function deleteFile(id) {
+    if (!confirm('Are you sure you want to delete this file? This action cannot be undone.')) return;
+    try {
+        const response = await fetch(`/api/files/${id}`, {
+            method: 'DELETE'
+        });
+        if (!response.ok) throw new Error('Server error');
+        loadFilesFromBackend(); // Refresh the list
+    } catch (err) {
+        console.error('Failed to delete file', err);
+        alert('Failed to delete file.');
+    }
+}
+
+function renderTable(files) {
+    const tbody = document.getElementById('filesTableBody');
+    tbody.innerHTML = '';
+    if (files.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" class="px-6 py-12 text-center text-secondary text-sm">
+            No files registered yet.
+            <a href="Upload.html" class="text-primary font-semibold hover:underline ml-1">Register your first dataset →</a>
+        </td></tr>`;
+        return;
+    }
+    const iconMap = { pdf:'picture_as_pdf', tif:'description', tiff:'description', csv:'table_chart', zip:'folder_zip', nc:'cloud', xlsx:'table_chart', xls:'table_chart', doc:'description', docx:'description' };
+    const colorMap = { pdf:'bg-red-100 text-red-600', tif:'bg-blue-100 text-blue-600', csv:'bg-amber-100 text-amber-600', zip:'bg-purple-100 text-purple-600', nc:'bg-cyan-100 text-cyan-600' };
+    files.forEach(file => {
+        const ext = (file.fileName || '').split('.').pop().toLowerCase();
+        const icon = iconMap[ext] || 'insert_drive_file';
+        const color = colorMap[ext] || 'bg-slate-100 text-slate-600';
+        const hash = file.fileHash ? file.fileHash.substring(0, 16) + '...' : '—';
+        const row = document.createElement('tr');
+        row.className = 'table-row';
+        row.innerHTML = `
+            <td class="px-6 py-4"><div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded ${color} flex items-center justify-center">
+                    <span class="material-symbols-outlined text-lg">${icon}</span>
+                </div>
+                <div>
+                    <p class="text-sm font-semibold table-text"><a href="/api/files/view/${file.id}" target="_blank" class="hover:text-primary hover:underline transition-colors">${file.fileName}</a></p>
+                    <p class="text-[10px] text-secondary font-mono">${hash}</p>
+                </div>
+            </div></td>
+            <td class="px-6 py-4"><span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-green-50 text-green-600 border border-green-100 uppercase">Clean</span></td>
+            <td class="px-6 py-4"><p class="text-xs table-text font-medium">${file.uploadedBy || 'User'}</p></td>
+            <td class="px-6 py-4 text-right">
+                <a href="/api/files/download/${file.id}" download class="text-secondary hover:text-primary transition-colors inline-block mr-3" title="Download"><span class="material-symbols-outlined">download</span></a>
+                <button onclick="deleteFile(${file.id})" class="text-secondary hover:text-red-500 transition-colors inline-block" title="Delete"><span class="material-symbols-outlined">delete</span></button>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+function updateStats(files) {
+    document.getElementById('statTotal').textContent = files.length;
+    document.getElementById('statClean').textContent = files.length;
+    const sideTotal = document.getElementById('sideStatTotal');
+    if (sideTotal) sideTotal.textContent = files.length;
+}
+
+function setStatus(s) {
+    const dot = document.getElementById('statusDot');
+    const txt = document.getElementById('statusText');
+    if (s === 'online') {
+        dot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse';
+        txt.textContent = 'Backend Online'; txt.className = 'text-sm font-bold text-emerald-600';
+    } else {
+        dot.className = 'w-2.5 h-2.5 rounded-full bg-red-500';
+        txt.textContent = 'Backend Offline'; txt.className = 'text-sm font-bold text-red-500';
+    }
+}
+
+function showEmpty(msg) {
+    document.getElementById('filesTableBody').innerHTML =
+        `<tr><td colspan="4" class="px-6 py-12 text-center text-red-500 text-sm font-medium">${msg}</td></tr>`;
+}
+
+function filterTable() {
+    const q = document.getElementById('searchInput').value.toLowerCase();
+    document.querySelectorAll('#filesTableBody tr').forEach(r => {
+        r.style.display = r.textContent.toLowerCase().includes(q) ? '' : 'none';
+    });
+}
+
+function showHealthReport() { alert('Health Report: All systems normal'); }
+function showAutomateAlert() { alert('Feature coming soon!'); }
+function showComingSoon(e) { e.preventDefault(); alert('Coming Soon!'); }
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadFilesFromBackend();
+    const userEmail = sessionStorage.getItem('ddas_user_email');
+    if (userEmail) {
+        const navEl = document.getElementById('navUserEmail');
+        if (navEl) navEl.textContent = userEmail;
+    }
+});
+</script>
+<!-- Breadcrumbs -->
+<div class="flex items-center gap-2 mb-6 text-secondary text-xs">
+<span class="font-medium">Home</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="font-bold text-primary">Enterprise Dashboard</span>
+</div>
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+<!-- Stat Card 1: Total Files -->
+<div class="bg-card p-6 rounded-xl shadow-[0_8px_30px_rgb(208,217,255,0.2)] border-none flex items-center justify-between group hover:translate-y-[-4px] transition-transform duration-300">
+<div>
+<p class="text-label-sm uppercase font-bold text-secondary tracking-wider text-[10px]">Total Files Registered</p>
+<h3 class="text-2xl font-extrabold text-main mt-1" id="statTotal">—</h3>
+<p class="text-xs text-primary font-semibold mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">upload_file</span> From backend
+</p>
+</div>
+<div class="w-12 h-12 rounded-full bg-icon flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">inventory_2</span>
+</div>
+</div>
+<!-- Stat Card 2: Clean Files -->
+<div class="bg-card p-6 rounded-xl shadow-[0_8px_30px_rgb(208,217,255,0.2)] border-none flex items-center justify-between group hover:translate-y-[-4px] transition-transform duration-300">
+<div>
+<p class="text-label-sm uppercase font-bold text-secondary tracking-wider text-[10px]">Clean Files</p>
+<h3 class="text-2xl font-extrabold text-main mt-1" id="statClean">—</h3>
+<p class="text-xs text-primary font-semibold mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">verified</span> No duplicates
+</p>
+</div>
+<div class="w-12 h-12 rounded-full bg-icon flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">verified_user</span>
+</div>
+</div>
+<!-- Stat Card 3: Duplicates Blocked -->
+<div class="bg-card p-6 rounded-xl shadow-[0_8px_30px_rgb(208,217,255,0.2)] border-none flex items-center justify-between group hover:translate-y-[-4px] transition-transform duration-300">
+<div>
+<p class="text-label-sm uppercase font-bold text-secondary tracking-wider text-[10px]">Duplicates Blocked</p>
+<h3 class="text-2xl font-extrabold text-main mt-1">0</h3>
+<p class="text-xs text-primary font-semibold mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">block</span> Hash-based detection
+</p>
+</div>
+<div class="w-12 h-12 rounded-full bg-icon flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined">security</span>
+</div>
+</div>
+<!-- Stat Card 4: Backend Status -->
+<div class="bg-card p-6 rounded-xl shadow-[0_8px_30px_rgb(208,217,255,0.2)] border-none flex items-center justify-between group hover:translate-y-[-4px] transition-transform duration-300">
+<div>
+<p class="text-label-sm uppercase font-bold text-secondary tracking-wider text-[10px]">System Status</p>
+<h3 class="text-2xl font-extrabold text-main mt-1">Live</h3>
+<p class="text-xs text-primary font-semibold mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">wifi</span> Connected
+</p>
+</div>
+<div class="w-12 h-12 rounded-full bg-icon flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined">cloud_done</span>
+</div>
+</div>
+</div>
+<!-- Bento Grid Main Content -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Large Table Section -->
+<div class="lg:col-span-2 bg-card rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] overflow-hidden flex flex-col">
+<div class="p-6 flex justify-between items-center border-none">
+<div>
+<h2 class="text-lg font-bold text-main">Recent Downloads &amp; Transfers</h2>
+<p class="text-sm text-secondary">Global tracking of all initiative data</p>
+</div>
+<button class="text-primary text-sm font-semibold hover:bg-primary/5 px-4 py-2 rounded-lg transition-colors" onclick="showAllArchive()">View All Archive</button>
+</div>
+<div class="flex-1">
+<table class="w-full text-left">
+<thead class="table-header">
+<tr>
+<th class="px-6 py-4 text-[10px] font-bold uppercase tracking-widest">Resource Name</th>
+<th class="px-6 py-4 text-[10px] font-bold uppercase tracking-widest">Status</th>
+<th class="px-6 py-4 text-[10px] font-bold uppercase tracking-widest">Origin</th>
+<th class="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-right">Actions</th>
+</tr>
+</thead>
+<tbody id="filesTableBody" class="divide-y border-custom">
+<tr><td colspan="4" class="px-6 py-12 text-center text-secondary text-sm">Loading files...</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Side Panel Insights -->
+<div class="space-y-6">
+<!-- Productivity Card -->
+<div class="bg-card p-6 rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] border border-custom">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-bold text-main">Operational Status</h3>
+<span class="material-symbols-outlined text-primary" data-icon="info">info</span>
+</div>
+<div class="space-y-5">
+<div class="flex items-center gap-3">
+<span id="statusDot" class="w-2.5 h-2.5 rounded-full bg-slate-300"></span>
+<span id="statusText" class="text-sm font-bold text-secondary">Connecting...</span>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="text-secondary">Total Files</span>
+<span class="font-bold text-main" id="sideStatTotal">—</span>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="text-secondary">Duplicate Detection</span>
+<span class="font-bold text-emerald-600">Active</span>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="text-secondary">Hash Algorithm</span>
+<span class="font-bold text-main">SHA-256</span>
+</div>
+</div>
+<button class="w-full mt-6 py-3 border border-custom rounded-xl text-sm font-semibold text-main bg-icon hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors" onclick="showHealthReport()">
+                            Full Health Report
+                        </button>
+</div>
+<!-- Promo/Action Card -->
+<div class="bg-gradient-to-br from-[#4c1d95] to-[#6d28d9] p-6 rounded-2xl relative overflow-hidden text-white shadow-xl">
+<div class="absolute -right-8 -top-8 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+<div class="relative z-10">
+<span class="material-symbols-outlined text-[#c4b5fd] text-3xl mb-4" data-icon="auto_awesome">auto_awesome</span>
+<h3 class="text-lg font-bold mb-2 leading-tight">Automate Initiatives</h3>
+<p class="text-xs text-purple-200 mb-6 leading-relaxed">Let our AI agent handle the boring data classification for your team.</p>
+<button class="w-full bg-white text-[#4c1d95] py-3 rounded-xl font-bold text-sm hover:brightness-110 transition-all" onclick="showAutomateAlert()">Enable Automation</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>
